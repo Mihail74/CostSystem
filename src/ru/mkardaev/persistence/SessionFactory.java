@@ -28,25 +28,25 @@ public class SessionFactory
         //@formatter:off
         initialTableQuery.put("category",
                 "CREATE TABLE "
-                        + "category(id INT PRIMARY KEY  GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1),"
+                        + "category(id BIGINT PRIMARY KEY  GENERATED ALWAYS AS IDENTITY,"
                         + "title VARCHAR(255))");
         initialTableQuery.put("account",
                 "CREATE TABLE "
-                        + "account(id INT PRIMARY KEY GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1),"
-                        + "value int)");
+                        + "account(id BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,"
+                        + "value BIGINT)");
         initialTableQuery.put("person",
                 "CREATE TABLE "
-                        + "person(id INT PRIMARY KEY GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1),"
-                        + "account_id INT REFERENCES account(id))");
+                        + "person(id BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,"
+                        + "account_id BIGINT REFERENCES account(id))");
         initialTableQuery.put("money_action",
                 "CREATE TABLE "
-                        + "money_action(id INT PRIMARY KEY GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1),"
-                        + "account_id INT REFERENCES account(id),"
-                        + "category_id INT REFERENCES category(id),"
+                        + "money_action(id BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,"
+                        + "account_id BIGINT REFERENCES account(id),"
+                        + "category_id BIGINT REFERENCES category(id),"
                         + "creation_date TIMESTAMP NOT NULL,"
-                        + "value INT NOT NULL,"
+                        + "value BIGINT NOT NULL,"
                         + "description VARCHAR(255),"
-                        + "type INT NOT NULL)");
+                        + "type BIGINT NOT NULL)");
         //@formatter:on
     }
 
