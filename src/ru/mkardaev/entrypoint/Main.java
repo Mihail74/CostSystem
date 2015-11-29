@@ -1,6 +1,6 @@
 package ru.mkardaev.entrypoint;
 
-import ru.mkardaev.entrypoint.persistence.SessionFactory;
+import ru.mkardaev.persistence.SessionFactory;
 
 public class Main
 {
@@ -29,7 +29,7 @@ public class Main
     // x++;
     // }
     // rs.close();
-
+    //
     // Statement stmt = connection.createStatement();
     // ResultSet rs = stmt.executeQuery("select * from category");
     // while (rs.next())
@@ -38,7 +38,7 @@ public class Main
     // String string = rs.getString(2);
     // System.out.println("id = " + id + " , title = " + string);
     // }
-
+    //
     // } catch(
     //
     // SQLException e)
@@ -46,7 +46,7 @@ public class Main
     // {
     // e.printStackTrace();
     // }
-
+    //
     // ---------------------
     // Display display = new Display();
     // Shell shell = new Shell(display, SWT.RESIZE | SWT.DIALOG_TRIM);

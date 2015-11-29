@@ -1,4 +1,4 @@
-package ru.mkardaev.entrypoint.persistence;
+package ru.mkardaev.persistence;
 
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
