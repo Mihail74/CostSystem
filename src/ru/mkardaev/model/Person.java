@@ -4,32 +4,32 @@ import ru.mkardaev.utils.IdGenerator;
 
 public class Person
 {
-	private Account account;
-	private long id;
+    private long accountId;
+    private long id;
 
-	public Person(Account account)
-	{
-		this.id = IdGenerator.generateId();
-		this.setAccount(account);
-	}
+    public Person(long accountId)
+    {
+        this.id = IdGenerator.generateId();
+        this.accountId = accountId;
+    }
 
-	public Account getAccount()
-	{
-		return account;
-	}
+    public long getAccountId()
+    {
+        return accountId;
+    }
 
-	public long getId()
-	{
-		return id;
-	}
+    public long getId()
+    {
+        return id;
+    }
 
-	public void setAccount(Account account)
-	{
-		this.account = account;
-	}
+    public void setAccountId(long accountId)
+    {
+        this.accountId = accountId;
+    }
 
-	public void setId(long id)
-	{
-		this.id = id;
-	}
+    public void setId(long id)
+    {
+        this.id = id;
+    }
 }

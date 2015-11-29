@@ -20,10 +20,10 @@ public interface IncomeService
      * @param category - категория дохода
      * @param value - величина дохода
      */
-    Income createIncome(Account account, Category category, Long value);
+    Income createIncome(Account account, Category category, long value);
 
     /**
      * См. {@link #createIncome(Account, Category, Long)}, только дата дохода - creationDate
      */
-    Income createIncome(Account account, Category category, Long value, Date creationDate);
+    Income createIncome(Account account, Category category, long value, Date creationDate);
 }

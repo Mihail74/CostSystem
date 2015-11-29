@@ -9,7 +9,7 @@ public class CategoryFactory
         return new Category();
     }
 
-    public static Category createCategory(Long id, String title)
+    public static Category createCategory(long id, String title)
     {
         return new Category(id, title);
     }

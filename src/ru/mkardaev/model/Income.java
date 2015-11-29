@@ -11,20 +11,20 @@ public class Income extends MoneyAction
         super();
     }
 
-    public Income(Account account, Category category, Long value)
+    public Income(long accountId, long categoryId, long value)
     {
-        super(account, category, value);
+        super(accountId, categoryId, value);
     }
 
-    public Income(Account account, Category category, Long value, Date creationDate)
+    public Income(long accountId, long categoryId, long value, Date creationDate)
     {
-        super(account, category, value, creationDate);
+        super(accountId, categoryId, value, creationDate);
     }
 
     @Override
     public String toString()
     {
-        return String.format("Income: %d", this.getId());
+        return String.format("Income: %d", getId());
     }
 
 }

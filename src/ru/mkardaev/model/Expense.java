@@ -11,14 +11,14 @@ public class Expense extends MoneyAction
 
     }
 
-    public Expense(Account account, Category category, Long value)
+    public Expense(long accountId, long categoryId, Long value)
     {
-        super(account, category, value);
+        super(accountId, categoryId, value);
     }
 
-    public Expense(Account account, Category category, Long value, Date creationDate)
+    public Expense(long accountId, long categoryId, Long value, Date creationDate)
     {
-        super(account, category, value, creationDate);
+        super(accountId, categoryId, value, creationDate);
     }
 
     @Override

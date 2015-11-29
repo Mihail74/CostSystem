@@ -11,22 +11,22 @@ import ru.mkardaev.services.income.IncomeService;
 public class IncomeServiceImpl implements IncomeService
 {
 
-	@Override
-	public void commintIncome(Income income)
-	{
-		DataInMemory.moneyActions.add(income);
-	}
+    @Override
+    public void commintIncome(Income income)
+    {
+        DataInMemory.moneyActions.add(income);
+    }
 
-	@Override
-	public Income createIncome(Account account, Category category, Long value)
-	{
-		return new Income(account, category, value);
-	}
+    @Override
+    public Income createIncome(Account account, Category category, long value)
+    {
+        return new Income(account.getId(), category.getId(), value);
+    }
 
-	@Override
-	public Income createIncome(Account account, Category category, Long value, Date creationDate)
-	{
-		return new Income(account, category, value, creationDate);
-	}
+    @Override
+    public Income createIncome(Account account, Category category, long value, Date creationDate)
+    {
+        return new Income(account.getId(), category.getId(), value, creationDate);
+    }
 
 }

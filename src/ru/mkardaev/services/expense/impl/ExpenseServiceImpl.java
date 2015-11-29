@@ -11,22 +11,22 @@ import ru.mkardaev.services.expense.ExpenseService;
 public class ExpenseServiceImpl implements ExpenseService
 {
 
-	@Override
-	public void commintExpense(Expense expense)
-	{
-		DataInMemory.moneyActions.add(expense);
-	}
+    @Override
+    public void commintExpense(Expense expense)
+    {
+        DataInMemory.moneyActions.add(expense);
+    }
 
-	@Override
-	public Expense createExpense(Account account, Category category, Long value)
-	{
-		return new Expense(account, category, value);
-	}
+    @Override
+    public Expense createExpense(Account account, Category category, long value)
+    {
+        return new Expense(account.getId(), category.getId(), value);
+    }
 
-	@Override
-	public Expense createExpense(Account account, Category category, Long value, Date creationDate)
-	{
-		return new Expense(account, category, value, creationDate);
-	}
+    @Override
+    public Expense createExpense(Account account, Category category, long value, Date creationDate)
+    {
+        return new Expense(account.getId(), category.getId(), value, creationDate);
+    }
 
 }

@@ -21,14 +21,15 @@ public class ExpenseStatisticsServiceImpl implements ExpenseStatisticsService
     public List<Expense> getExpenses(Account account, Date startDate, Date endDate)
     {
         return DataInMemory.moneyActions.stream().filter(e -> e instanceof Expense)
-                .map(e -> (Expense) e).filter(e -> e.getAccount().equals(account)
+                .map(e -> (Expense) e).filter(e -> e.getAccountId() == account.getId()
                         && !e.getCreationDate().before(startDate) && !e.getCreationDate().after(endDate))
                 .collect(Collectors.toList());
     }
 
+    @Override
     public List<Expense> getExpenses(Account account, Date startDate, Date endDate, Category category)
     {
-        return getExpenses(account, startDate, endDate).stream().filter(e -> e.getCategory().equals(category))
+        return getExpenses(account, startDate, endDate).stream().filter(e -> e.getCategoryId() == category.getId())
                 .collect(Collectors.toList());
     }
 

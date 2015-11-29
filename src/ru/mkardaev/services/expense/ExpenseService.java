@@ -26,10 +26,10 @@ public interface ExpenseService
      * @param category - категория затраты
      * @param value - величина затраты
      */
-    Expense createExpense(Account account, Category category, Long value);
+    Expense createExpense(Account account, Category category, long value);
 
     /**
      * См. {@link #createExpense(Account, Category, Long)}, только дата затраты - creationDate
      */
-    Expense createExpense(Account account, Category category, Long value, Date creationDate);
+    Expense createExpense(Account account, Category category, long value, Date creationDate);
 }

@@ -12,8 +12,8 @@ public abstract class MoneyAction implements java.io.Serializable
     private static final long serialVersionUID = 1L;
 
     protected long value;
-    private Account account;
-    private Category category;
+    private long accountId;
+    private long categoryId;
     private Date creationDate;
     private String description;
     private long id;
@@ -23,29 +23,29 @@ public abstract class MoneyAction implements java.io.Serializable
 
     }
 
-    public MoneyAction(Account account, Category category, Long value)
+    public MoneyAction(long accountId, long categoryId, long value)
     {
         this.id = IdGenerator.generateId();
-        this.account = account;
+        this.accountId = accountId;
         this.value = value;
-        this.category = category;
+        this.categoryId = categoryId;
         this.creationDate = new Date();
     }
 
-    public MoneyAction(Account account, Category category, Long value, Date creationDate)
+    public MoneyAction(long accountId, long categoryId, long value, Date creationDate)
     {
-        this(account, category, value);
+        this(accountId, categoryId, value);
         this.creationDate = creationDate;
     }
 
-    public Account getAccount()
+    public long getAccountId()
     {
-        return account;
+        return accountId;
     }
 
-    public Category getCategory()
+    public long getCategoryId()
     {
-        return category;
+        return categoryId;
     }
 
     public Date getCreationDate()
@@ -68,14 +68,14 @@ public abstract class MoneyAction implements java.io.Serializable
         return value;
     }
 
-    public void setAccount(Account account)
+    public void setAccountId(long accountId)
     {
-        this.account = account;
+        this.accountId = accountId;
     }
 
-    public void setCategory(Category category)
+    public void setCategoryId(long categoryId)
     {
-        this.category = category;
+        this.categoryId = categoryId;
     }
 
     public void setCreationDate(Date creationDate)
