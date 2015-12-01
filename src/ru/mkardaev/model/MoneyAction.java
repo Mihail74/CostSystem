@@ -2,8 +2,6 @@ package ru.mkardaev.model;
 
 import java.util.Date;
 
-import ru.mkardaev.utils.IdGenerator;
-
 /**
  * @author Kardaev Mihail
  */
@@ -25,7 +23,6 @@ public abstract class MoneyAction implements java.io.Serializable
 
     public MoneyAction(long accountId, long categoryId, long value)
     {
-        this.id = IdGenerator.generateId();
         this.accountId = accountId;
         this.value = value;
         this.categoryId = categoryId;

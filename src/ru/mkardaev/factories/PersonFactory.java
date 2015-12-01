@@ -2,10 +2,7 @@ package ru.mkardaev.factories;
 
 import ru.mkardaev.model.Person;
 
-public class PersonFactory
+public interface PersonFactory
 {
-    public static Person createPerson(long accountId)
-    {
-        return new Person(accountId);
-    }
+    Person createPerson(long id, long accountId);
 }

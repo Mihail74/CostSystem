@@ -2,10 +2,9 @@ package ru.mkardaev.factories;
 
 import ru.mkardaev.model.Account;
 
-public class AccountFactory
+public interface AccountFactory
 {
-	public static Account createAccount()
-	{
-		return new Account();
-	}
+    Account createAccount(long id);
+
+    Account createAccount(long id, long value);
 }

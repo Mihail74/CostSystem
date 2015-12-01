@@ -1,15 +1,13 @@
 package ru.mkardaev.model;
 
-import ru.mkardaev.utils.IdGenerator;
-
 public class Person
 {
     private long accountId;
     private long id;
 
-    public Person(long accountId)
+    public Person(long id, long accountId)
     {
-        this.id = IdGenerator.generateId();
+        this.id = id;
         this.accountId = accountId;
     }
 

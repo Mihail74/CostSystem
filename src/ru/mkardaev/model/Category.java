@@ -2,8 +2,6 @@ package ru.mkardaev.model;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
-import ru.mkardaev.utils.IdGenerator;
-
 @XmlRootElement
 public class Category
 {
@@ -11,20 +9,9 @@ public class Category
     private long id;
     private String title;
 
-    public Category()
-    {
-        id = IdGenerator.generateId();
-    }
-
     public Category(Long id, String title)
     {
         this.id = id;
-        this.title = title;
-    }
-
-    public Category(String title)
-    {
-        this();
         this.title = title;
     }
 
