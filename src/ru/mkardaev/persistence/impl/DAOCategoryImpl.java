@@ -21,7 +21,7 @@ public class DAOCategoryImpl implements DAOCategory
 
     private static final String DELETE_CATEGORY = "DELETE FROM category WHERE id = ?";
     private static final String INSERT_CATEGORY = "INSERT INTO category(title) VALUES(?)";
-    private static final String SELECT_CATEGORY = "SELECT id, title, FROM category WHERE id = ?";
+    private static final String SELECT_CATEGORY = "SELECT id, title FROM category WHERE id = ?";
     private static final String UPDATE_CATEGORY = "UPDATE category SET title = ? WHERE id = ?";
     private CategoryFactory categoryFactory;
 

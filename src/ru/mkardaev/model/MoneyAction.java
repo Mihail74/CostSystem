@@ -7,6 +7,8 @@ import java.util.Date;
  */
 public abstract class MoneyAction implements java.io.Serializable
 {
+    public static final int EXPENSE_TYPE = 2;
+    public static final int INCOME_TYPE = 1;
     private static final long serialVersionUID = 1L;
 
     protected long value;

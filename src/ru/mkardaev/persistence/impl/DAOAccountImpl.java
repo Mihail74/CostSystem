@@ -1,0 +1,123 @@
+package ru.mkardaev.persistence.impl;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+
+import org.apache.log4j.Logger;
+
+import ru.mkardaev.exception.ApException;
+import ru.mkardaev.factories.AccountFactory;
+import ru.mkardaev.model.Account;
+import ru.mkardaev.persistence.ConnectionService;
+import ru.mkardaev.persistence.DAOAccount;
+
+public class DAOAccountImpl implements DAOAccount
+{
+    final static Logger logger = Logger.getLogger(DAOAccountImpl.class);
+    private static final String DELETE_ACCOUNT = "DELETE FROM account WHERE id = ?";
+    private static final String INSERT_ACCOUNT = "INSERT INTO account(title) VALUES(?)";
+    private static final String SELECT_ACCOUNT = "SELECT id, value FROM account WHERE id = ?";
+    private static final String UPDATE_ACCOUNT = "UPDATE account SET value = ? WHERE id = ?";
+    private AccountFactory accountFactory;
+
+    @Override
+    public void create(Account account) throws ApException, SQLException
+    {
+        try (Connection connection = ConnectionService.getInstance().getConnection())
+        {
+            try (PreparedStatement stmt = connection.prepareStatement(INSERT_ACCOUNT, Statement.RETURN_GENERATED_KEYS))
+            {
+                stmt.setLong(1, account.getValue());
+                stmt.executeUpdate();
+
+                try (ResultSet rs = stmt.getGeneratedKeys())
+                {
+                    if (!rs.next())
+                    {
+                        throw new ApException("Can't save category");
+                    }
+                    account.setId(rs.getInt(1));
+                }
+            }
+
+        }
+        catch (SQLException e)
+        {
+            logger.error("Error on save account", e);
+            throw e;
+        }
+
+    }
+
+    @Override
+    public void delete(long accountId) throws SQLException
+    {
+        try (Connection connection = ConnectionService.getInstance().getConnection())
+        {
+            try (PreparedStatement stmt = connection.prepareStatement(DELETE_ACCOUNT, Statement.RETURN_GENERATED_KEYS))
+            {
+                stmt.setLong(1, accountId);
+                stmt.executeUpdate();
+            }
+        }
+        catch (SQLException e)
+        {
+            logger.error("Error delete category", e);
+            throw e;
+        }
+    }
+
+    @Override
+    public Account get(long accountId) throws SQLException
+    {
+        Account account = null;
+        try (Connection connection = ConnectionService.getInstance().getConnection())
+        {
+            try (PreparedStatement stmt = connection.prepareStatement(SELECT_ACCOUNT))
+            {
+                stmt.setLong(1, accountId);
+                try (ResultSet rs = stmt.executeQuery())
+                {
+                    if (rs.next())
+                    {
+                        account = accountFactory.createAccount(rs.getLong(1), rs.getLong(2));
+                    }
+                }
+            }
+        }
+        catch (SQLException e)
+        {
+            logger.error("Error on load account", e);
+            throw e;
+        }
+        return account;
+    }
+
+    public void init(AccountFactory accountFactory)
+    {
+        this.accountFactory = accountFactory;
+    }
+
+    @Override
+    public void update(Account account) throws SQLException
+    {
+        try (Connection connection = ConnectionService.getInstance().getConnection())
+        {
+            try (PreparedStatement stmt = connection.prepareStatement(UPDATE_ACCOUNT))
+            {
+                stmt.setLong(1, account.getId());
+                stmt.setLong(2, account.getValue());
+                stmt.executeUpdate();
+            }
+        }
+        catch (SQLException e)
+        {
+            logger.error("Error on update account", e);
+            throw e;
+        }
+    }
+
+}
