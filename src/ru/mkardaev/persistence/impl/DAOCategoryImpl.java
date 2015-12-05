@@ -10,8 +10,8 @@ import org.apache.log4j.Logger;
 
 import ru.mkardaev.exception.ApException;
 import ru.mkardaev.factories.CategoryFactory;
+import ru.mkardaev.factories.ServicesFactory;
 import ru.mkardaev.model.Category;
-import ru.mkardaev.persistence.ConnectionService;
 import ru.mkardaev.persistence.DAOCategory;
 
 public class DAOCategoryImpl implements DAOCategory
@@ -33,7 +33,7 @@ public class DAOCategoryImpl implements DAOCategory
     @Override
     public void create(Category category) throws ApException, SQLException
     {
-        try (Connection connection = ConnectionService.getInstance().getConnection())
+        try (Connection connection = getConnection())
         {
             try (PreparedStatement stmt = connection.prepareStatement(INSERT_CATEGORY, Statement.RETURN_GENERATED_KEYS))
             {
@@ -61,7 +61,7 @@ public class DAOCategoryImpl implements DAOCategory
     @Override
     public void delete(long categoryId) throws SQLException
     {
-        try (Connection connection = ConnectionService.getInstance().getConnection())
+        try (Connection connection = getConnection())
         {
             try (PreparedStatement stmt = connection.prepareStatement(DELETE_CATEGORY, Statement.RETURN_GENERATED_KEYS))
             {
@@ -80,7 +80,7 @@ public class DAOCategoryImpl implements DAOCategory
     public Category get(long categoryId) throws SQLException
     {
         Category category = null;
-        try (Connection connection = ConnectionService.getInstance().getConnection())
+        try (Connection connection = getConnection())
         {
             try (PreparedStatement stmt = connection.prepareStatement(SELECT_CATEGORY))
             {
@@ -105,7 +105,7 @@ public class DAOCategoryImpl implements DAOCategory
     @Override
     public void update(Category category) throws SQLException
     {
-        try (Connection connection = ConnectionService.getInstance().getConnection())
+        try (Connection connection = getConnection())
         {
             try (PreparedStatement stmt = connection.prepareStatement(UPDATE_CATEGORY))
             {
@@ -119,6 +119,11 @@ public class DAOCategoryImpl implements DAOCategory
             logger.error("Error update category", e);
             throw e;
         }
+    }
+
+    private Connection getConnection()
+    {
+        return ServicesFactory.getInstance().getConnectionService().getConnection();
     }
 
 }

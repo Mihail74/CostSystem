@@ -1,15 +1,17 @@
 package ru.mkardaev.entrypoint;
 
+import java.sql.SQLException;
+
 import ru.mkardaev.factories.ServicesFactory;
 
 public class Main
 {
-    public static void initializeAllServices() throws ClassNotFoundException
+    public static void initializeAllServices() throws ClassNotFoundException, SQLException
     {
         ServicesFactory.getInstance().init();
     }
 
-    public static void main(String[] args) throws ClassNotFoundException, InterruptedException
+    public static void main(String[] args) throws ClassNotFoundException, InterruptedException, SQLException
     {
         initializeAllServices();
         // Display display = new Display();

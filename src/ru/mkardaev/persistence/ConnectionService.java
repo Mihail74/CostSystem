@@ -32,6 +32,7 @@ public class ConnectionService
 {
     final static Logger logger = Logger.getLogger(ConnectionService.class);
     private static final String CONNECTION_STRING = "jdbc:derby:CS;create=true";
+
     private static Map<String, String> initialTableQuery = new LinkedHashMap<>();
     private static ConnectionService instance = new ConnectionService();
 
@@ -126,7 +127,7 @@ public class ConnectionService
             @Override
             public void run()
             {
-                ConnectionService.getInstance().closeConnection();
+                getInstance().closeConnection();
             }
         });
     }

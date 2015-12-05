@@ -13,10 +13,10 @@ import org.apache.log4j.Logger;
 
 import ru.mkardaev.exception.ApException;
 import ru.mkardaev.factories.MoneyActionFactory;
+import ru.mkardaev.factories.ServicesFactory;
 import ru.mkardaev.model.Account;
 import ru.mkardaev.model.Income;
 import ru.mkardaev.model.MoneyAction;
-import ru.mkardaev.persistence.ConnectionService;
 import ru.mkardaev.persistence.DAOMoneyAction;
 import ru.mkardaev.utils.DateUtils;
 
@@ -40,7 +40,7 @@ public class DAOMoneyActionImpl implements DAOMoneyAction
     @Override
     public void create(MoneyAction moneyAction) throws ApException, SQLException
     {
-        try (Connection connection = ConnectionService.getInstance().getConnection())
+        try (Connection connection = getConnection())
         {
             try (PreparedStatement stmt = connection.prepareStatement(INSERT_SQL, Statement.RETURN_GENERATED_KEYS))
             {
@@ -74,7 +74,7 @@ public class DAOMoneyActionImpl implements DAOMoneyAction
     @Override
     public void delete(long moneyActionId) throws SQLException
     {
-        try (Connection connection = ConnectionService.getInstance().getConnection())
+        try (Connection connection = getConnection())
         {
             try (PreparedStatement stmt = connection.prepareStatement(DELETE_SQL, Statement.RETURN_GENERATED_KEYS))
             {
@@ -93,7 +93,7 @@ public class DAOMoneyActionImpl implements DAOMoneyAction
     public MoneyAction get(long moneyActionId) throws SQLException
     {
         MoneyAction moneyAction = null;
-        try (Connection connection = ConnectionService.getInstance().getConnection())
+        try (Connection connection = getConnection())
         {
             try (PreparedStatement stmt = connection.prepareStatement(SELECT_SQL))
             {
@@ -118,11 +118,10 @@ public class DAOMoneyActionImpl implements DAOMoneyAction
     }
 
     @Override
-    public List<MoneyAction> getByCreationDate(Account account, Date startDate, Date endDate)
-            throws ApException
+    public List<MoneyAction> getByCreationDate(Account account, Date startDate, Date endDate) throws ApException
     {
         List<MoneyAction> result = new ArrayList<>();
-        try (Connection connection = ConnectionService.getInstance().getConnection())
+        try (Connection connection = getConnection())
         {
             try (PreparedStatement stmt = connection.prepareStatement(SELECT_BY_CREATION_DATE_SQL))
             {
@@ -151,7 +150,7 @@ public class DAOMoneyActionImpl implements DAOMoneyAction
     @Override
     public void update(MoneyAction moneyAction) throws SQLException
     {
-        try (Connection connection = ConnectionService.getInstance().getConnection())
+        try (Connection connection = getConnection())
         {
             try (PreparedStatement stmt = connection.prepareStatement(UPDATE_SQL))
             {
@@ -170,6 +169,11 @@ public class DAOMoneyActionImpl implements DAOMoneyAction
             throw e;
         }
 
+    }
+
+    private Connection getConnection()
+    {
+        return ServicesFactory.getInstance().getConnectionService().getConnection();
     }
 
 }

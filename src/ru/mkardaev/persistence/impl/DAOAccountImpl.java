@@ -10,8 +10,8 @@ import org.apache.log4j.Logger;
 
 import ru.mkardaev.exception.ApException;
 import ru.mkardaev.factories.AccountFactory;
+import ru.mkardaev.factories.ServicesFactory;
 import ru.mkardaev.model.Account;
-import ru.mkardaev.persistence.ConnectionService;
 import ru.mkardaev.persistence.DAOAccount;
 
 public class DAOAccountImpl implements DAOAccount
@@ -31,7 +31,7 @@ public class DAOAccountImpl implements DAOAccount
     @Override
     public void create(Account account) throws ApException, SQLException
     {
-        try (Connection connection = ConnectionService.getInstance().getConnection())
+        try (Connection connection = getConnection())
         {
             try (PreparedStatement stmt = connection.prepareStatement(INSERT_ACCOUNT, Statement.RETURN_GENERATED_KEYS))
             {
@@ -60,7 +60,7 @@ public class DAOAccountImpl implements DAOAccount
     @Override
     public void delete(long accountId) throws SQLException
     {
-        try (Connection connection = ConnectionService.getInstance().getConnection())
+        try (Connection connection = getConnection())
         {
             try (PreparedStatement stmt = connection.prepareStatement(DELETE_ACCOUNT, Statement.RETURN_GENERATED_KEYS))
             {
@@ -79,7 +79,7 @@ public class DAOAccountImpl implements DAOAccount
     public Account get(long accountId) throws SQLException
     {
         Account account = null;
-        try (Connection connection = ConnectionService.getInstance().getConnection())
+        try (Connection connection = getConnection())
         {
             try (PreparedStatement stmt = connection.prepareStatement(SELECT_ACCOUNT))
             {
@@ -104,7 +104,7 @@ public class DAOAccountImpl implements DAOAccount
     @Override
     public void update(Account account) throws SQLException
     {
-        try (Connection connection = ConnectionService.getInstance().getConnection())
+        try (Connection connection = getConnection())
         {
             try (PreparedStatement stmt = connection.prepareStatement(UPDATE_ACCOUNT))
             {
@@ -118,6 +118,11 @@ public class DAOAccountImpl implements DAOAccount
             logger.error("Error update account", e);
             throw e;
         }
+    }
+
+    private Connection getConnection()
+    {
+        return ServicesFactory.getInstance().getConnectionService().getConnection();
     }
 
 }
