@@ -5,11 +5,15 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 import org.apache.log4j.Logger;
 
 import ru.mkardaev.exception.ApException;
 import ru.mkardaev.factories.MoneyActionFactory;
+import ru.mkardaev.model.Account;
 import ru.mkardaev.model.Income;
 import ru.mkardaev.model.MoneyAction;
 import ru.mkardaev.persistence.ConnectionService;
@@ -22,6 +26,7 @@ public class DAOMoneyActionImpl implements DAOMoneyAction
 
     private static final String DELETE_SQL = "DELETE FROM money_action WHERE id = ?";
     private static final String INSERT_SQL = "INSERT INTO money_action(account_id, category_id, creation_date, value, description, type) VALUES(?,?,?,?,?,?)";
+    private static final String SELECT_BY_CREATION_DATE_SQL = "SELECT id, account_id, category_id, creation_date, value, description, type FROM money_action WHERE creation_date >= ? AND creation_date <= ?";
     private static final String SELECT_SQL = "SELECT id, account_id, category_id, creation_date, value, description, type FROM money_action WHERE id = ?";
     private static final String UPDATE_SQL = "UPDATE money_action SET account_id = ?, category_id = ?, creation_date = ?, value = ?, description = ?  WHERE id = ?";
     private MoneyActionFactory moneyActionFactory;
@@ -110,6 +115,37 @@ public class DAOMoneyActionImpl implements DAOMoneyAction
             throw e;
         }
         return moneyAction;
+    }
+
+    @Override
+    public List<MoneyAction> getMoneyActionByCreationDate(Account account, Date startDate, Date endDate)
+            throws SQLException
+    {
+        List<MoneyAction> result = new ArrayList<>();
+        try (Connection connection = ConnectionService.getInstance().getConnection())
+        {
+            try (PreparedStatement stmt = connection.prepareStatement(SELECT_BY_CREATION_DATE_SQL))
+            {
+                stmt.setLong(1, DateUtils.convertToGMT0LongFromDefaultTimeZone(startDate));
+                stmt.setLong(2, DateUtils.convertToGMT0LongFromDefaultTimeZone(endDate));
+                stmt.executeUpdate();
+                try (ResultSet rs = stmt.executeQuery())
+                {
+                    if (rs.next())
+                    {
+                        result.add(moneyActionFactory.createMoneyAction(rs.getLong(7), rs.getLong(1), rs.getLong(2),
+                                rs.getLong(3), DateUtils.convertToDateWithDefaultTimeZone(rs.getLong(4)), rs.getLong(5),
+                                rs.getString(6)));
+                    }
+                }
+            }
+        }
+        catch (SQLException e)
+        {
+            logger.error("Error load money action", e);
+            throw e;
+        }
+        return result;
     }
 
     @Override

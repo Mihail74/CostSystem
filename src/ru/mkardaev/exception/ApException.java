@@ -1,5 +1,11 @@
 package ru.mkardaev.exception;
 
+/**
+ * Базовый класс ошибок в приложении
+ * 
+ * @author Mihail
+ *
+ */
 public class ApException extends Exception
 {
     private static final long serialVersionUID = 3885485281805565825L;

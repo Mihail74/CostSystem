@@ -3,6 +3,12 @@ package ru.mkardaev.resources;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Контекст приложения, используется для хранения данных в оперативной памяти во время работы приложения.
+ * 
+ * @author Mihail
+ *
+ */
 public class ApplicationContext
 {
     public static final String CURRENT_ACCOUNT = "currentAccount";

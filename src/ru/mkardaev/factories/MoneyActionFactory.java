@@ -12,7 +12,7 @@ public interface MoneyActionFactory
 {
 
     /**
-     * Создать затрату с текущей датой.
+     * Создаёт затрату с текущей датой создания.
      * 
      * @param account - account на котором произошла затрара
      * @param category - категория затраты
@@ -21,12 +21,12 @@ public interface MoneyActionFactory
     Expense createExpense(Account account, Category category, long value);
 
     /**
-     * См. {@link #createExpense(Account, Category, Long)}, только дата затраты - creationDate
+     * См. {@link #createExpense(Account, Category, Long)}, только дата создания - creationDate
      */
     Expense createExpense(Account account, Category category, long value, Date creationDate);
 
     /**
-     * Создать доход с текущей датой.
+     * Создать доход с текущей датой создания.
      * 
      * @param account - account для которого произошёл доход
      * @param category - категория дохода
@@ -35,7 +35,7 @@ public interface MoneyActionFactory
     Income createIncome(Account account, Category category, long value);
 
     /**
-     * См. {@link #createIncome(Account, Category, Long)}, только дата дохода - creationDate
+     * См. {@link #createIncome(Account, Category, Long)}, только дата создания - creationDate
      */
     Income createIncome(Account account, Category category, long value, Date creationDate);
 

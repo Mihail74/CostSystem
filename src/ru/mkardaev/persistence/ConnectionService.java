@@ -22,6 +22,12 @@ import ru.mkardaev.model.Account;
 import ru.mkardaev.model.Person;
 import ru.mkardaev.resources.ApplicationContext;
 
+/**
+ * Сервис подключений к БД.
+ * 
+ * @author Mihail
+ *
+ */
 public class ConnectionService
 {
     final static Logger logger = Logger.getLogger(ConnectionService.class);
@@ -209,6 +215,10 @@ public class ConnectionService
         return existingTables;
     }
 
+    /**
+     * Производит создание всех таблиц, если это необходимо.
+     * 
+     */
     private void initTables(Connection con) throws SQLException
     {
         List<String> existingTables = getExistingTableNames(con);

@@ -5,7 +5,8 @@ import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
 /**
- * Утилитарный класс для работы с локализованными константами
+ * Утилитарный класс для работы с локализованными константами.
+ * 
  * 
  * @author Mihail
  *
@@ -15,7 +16,7 @@ public class Messages
     /**
      * Ключи для сообщений
      */
-    public static class Keys
+    public static class MessagesKeys
     {
         public static final String CATEGORY_ADDED = "categoryAdded";
         public static final String CATEGORY_FINDED = "categoryFinded";
@@ -51,7 +52,7 @@ public class Messages
     }
 
     /**
-     * Возвращает локализованное сообщение по его ключу
+     * Возвращает локализованное сообщение по его ключу. В случае, если локализованного сообщения не сущетвует, вернётся сообщение в русской локали.
      * 
      * @param key - ключ сообщения
      * @param args - аргументы, если нужны
@@ -71,7 +72,7 @@ public class Messages
     }
 
     /**
-     * Инициализирует сервис сообщений заданной локалью
+     * Инициализирует сервис сообщений заданной локалью.
      * 
      * @param locale - локаль в которой будут выводиться сообщения
      */

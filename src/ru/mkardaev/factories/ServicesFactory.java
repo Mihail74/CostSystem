@@ -15,6 +15,12 @@ import ru.mkardaev.persistence.impl.DAOCategoryImpl;
 import ru.mkardaev.persistence.impl.DAOMoneyActionImpl;
 import ru.mkardaev.utils.Messages;
 
+/**
+ * Фабрика сервисов. Данный класс предназначен для получения корректно настроенных сервисов
+ * 
+ * @author Mihail
+ *
+ */
 public class ServicesFactory
 {
     private static ServicesFactory instance = new ServicesFactory();
@@ -78,6 +84,10 @@ public class ServicesFactory
         return personFactory;
     }
 
+    /**
+     * Производит инициализацию всех сервисов.
+     * 
+     */
     public void init() throws ClassNotFoundException
     {
         messages = Messages.getInstance();
