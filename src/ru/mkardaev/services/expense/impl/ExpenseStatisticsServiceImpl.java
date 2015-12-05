@@ -4,6 +4,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import ru.mkardaev.exception.ApException;
+import ru.mkardaev.factories.ServicesFactory;
 import ru.mkardaev.model.Account;
 import ru.mkardaev.model.Category;
 import ru.mkardaev.model.Expense;
@@ -17,31 +19,32 @@ import ru.mkardaev.services.expense.ExpenseStatisticsService;
 public class ExpenseStatisticsServiceImpl implements ExpenseStatisticsService
 {
     @Override
-    public List<Expense> getExpenses(Account account, Date startDate, Date endDate)
+    public List<Expense> getExpenses(Account account, Date startDate, Date endDate) throws ApException
     {
-        // return DataInMemory.moneyActions.stream().filter(e -> e instanceof Expense)
-        // .map(e -> (Expense) e).filter(e -> e.getAccountId() == account.getId()
-        // && !e.getCreationDate().before(startDate) && !e.getCreationDate().after(endDate))
-        // .collect(Collectors.toList());
-        return null;
+        return ServicesFactory.getInstance().getDaoMoneyAction().getByCreationDate(account, startDate, endDate).stream()
+                .filter(e -> e instanceof Expense)
+                .map(e -> (Expense) e).filter(e -> e.getAccountId() == account.getId()
+                        && !e.getCreationDate().before(startDate) && !e.getCreationDate().after(endDate))
+                .collect(Collectors.toList());
     }
 
     @Override
     public List<Expense> getExpenses(Account account, Date startDate, Date endDate, Category category)
+            throws ApException
     {
         return getExpenses(account, startDate, endDate).stream().filter(e -> e.getCategoryId() == category.getId())
                 .collect(Collectors.toList());
     }
 
     @Override
-    public Long getExpenseValue(Account account, Date startDate, Date endDate)
+    public Long getExpenseValue(Account account, Date startDate, Date endDate) throws ApException
     {
         List<Expense> expenses = getExpenses(account, startDate, endDate);
         return getTotalExpenseValue(expenses);
     }
 
     @Override
-    public Long getExpenseValue(Account account, Date startDate, Date endDate, Category category)
+    public Long getExpenseValue(Account account, Date startDate, Date endDate, Category category) throws ApException
     {
         List<Expense> expenses = getExpenses(account, startDate, endDate, category);
         return getTotalExpenseValue(expenses);

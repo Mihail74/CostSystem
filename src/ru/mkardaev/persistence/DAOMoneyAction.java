@@ -17,11 +17,10 @@ public interface DAOMoneyAction
     MoneyAction get(long moneyActionId) throws SQLException;
 
     /**
-     * Достаёт из БД список действий с финансами для заданного аккаунта для заданного диапазона дат, включая границы диапазона.
+     * список действий с финансами для заданного аккаунта для заданного диапазона дат, включая границы диапазона.
      * 
-     * @throws SQLException
      */
-    List<MoneyAction> getMoneyActionByCreationDate(Account account, Date startDate, Date endDate) throws SQLException;
+    List<MoneyAction> getByCreationDate(Account account, Date startDate, Date endDate) throws ApException;
 
     void update(MoneyAction moneyAction) throws SQLException;
 }

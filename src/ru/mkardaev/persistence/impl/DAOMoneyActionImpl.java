@@ -118,8 +118,8 @@ public class DAOMoneyActionImpl implements DAOMoneyAction
     }
 
     @Override
-    public List<MoneyAction> getMoneyActionByCreationDate(Account account, Date startDate, Date endDate)
-            throws SQLException
+    public List<MoneyAction> getByCreationDate(Account account, Date startDate, Date endDate)
+            throws ApException
     {
         List<MoneyAction> result = new ArrayList<>();
         try (Connection connection = ConnectionService.getInstance().getConnection())
@@ -143,7 +143,7 @@ public class DAOMoneyActionImpl implements DAOMoneyAction
         catch (SQLException e)
         {
             logger.error("Error load money action", e);
-            throw e;
+            throw new ApException("Error load money action", e);
         }
         return result;
     }
