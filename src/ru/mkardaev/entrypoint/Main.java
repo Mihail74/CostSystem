@@ -1,24 +1,47 @@
 package ru.mkardaev.entrypoint;
 
+import ru.mkardaev.factories.ServicesFactory;
+
 public class Main
 {
+    public static void initializeAllServices() throws ClassNotFoundException
+    {
+        ServicesFactory.getInstance().init();
+    }
+
     public static void main(String[] args) throws ClassNotFoundException, InterruptedException
     {
-        // ConnectionService.getInstance().init();
-
+        initializeAllServices();
         // Display display = new Display();
         // Shell shell = new Shell(display, SWT.RESIZE | SWT.DIALOG_TRIM);
         //
-        // Composite composite = new Composite(shell, SWT.NULL);
-        // composite.setLayout(new GridLayout());
+        // shell.setLayout(new GridLayout(1, true));
+        // Label label = new Label(shell, SWT.BORDER);
+        // label.setText("I am a Label");
         //
         // FormToolkit toolKit = new FormToolkit(display);
         //
         // Form form = toolKit.createForm(shell);
-        // form.setLayoutData(new GridData(GridData.FILL_BOTH));
-        // form.setText("my form");
+        // // form.setLayoutData(new GridData(GridData.FILL_BOTH));
+        // form.setText("Eclipse Forms");
+        //
         // form.getBody().setLayout(new GridLayout());
         // Button button = toolKit.createButton(form.getBody(), "Test", SWT.NULL);
+        // toolKit.createLabel(form.getBody(), "label?");
+        //
+        // // tool bar
+        // form.getToolBarManager().add(new Action("TEST")
+        // {
+        // @Override
+        // public void run()
+        // {
+        // }
+        // });
+        //
+        // Menu menu = new Menu(form.getBody());
+        // MenuItem item = new MenuItem(menu, SWT.NULL);
+        // item.setText("Testing item");
+        // form.setMenu(menu);
         //
         // shell.pack();
         // shell.open();
@@ -31,14 +54,5 @@ public class Main
         // }
         // display.dispose();
 
-        // System.out.println(new Date());
-        // Calendar calendar = Calendar.getInstance(TimeZone.getDefault());
-        // System.out.println(calendar.getTime());
-        // calendar.add(Calendar.MILLISECOND, -calendar.getTimeZone().getRawOffset());
-        // System.out.println(calendar.getTime());
-        // Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("GMT+2"));
-        // System.out.println(calendar.getTime());
-
     }
-
 }

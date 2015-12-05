@@ -35,7 +35,6 @@
 	<classpathentry kind="lib" path="E:/eclipse/plugins/org.eclipse.core.variables_3.2.800.v20130819-1716.jar"/>
 	<classpathentry kind="lib" path="E:/eclipse/plugins/org.eclipse.debug.core_3.10.0.v20150303-1130.jar"/>
 	<classpathentry kind="lib" path="E:/eclipse/plugins/org.eclipse.debug.ui_3.11.0.v20150514-0917.jar"/>
-	<classpathentry kind="lib" path="E:/eclipse/plugins/org.eclipse.draw2d_3.10.0.201506010206.jar"/>
 	<classpathentry kind="lib" path="E:/eclipse/plugins/org.eclipse.dstore.core_3.4.0.201501311530.jar"/>
 	<classpathentry kind="lib" path="E:/eclipse/plugins/org.eclipse.dstore.extra_2.1.400.201403100950.jar"/>
 	<classpathentry kind="lib" path="E:/eclipse/plugins/org.eclipse.equinox.app_1.3.300.v20150423-1356.jar"/>

@@ -23,6 +23,11 @@ public class DAOAccountImpl implements DAOAccount
     private static final String UPDATE_ACCOUNT = "UPDATE account SET value = ? WHERE id = ?";
     private AccountFactory accountFactory;
 
+    public DAOAccountImpl(AccountFactory accountFactory)
+    {
+        this.accountFactory = accountFactory;
+    }
+
     @Override
     public void create(Account account) throws ApException, SQLException
     {
@@ -37,7 +42,7 @@ public class DAOAccountImpl implements DAOAccount
                 {
                     if (!rs.next())
                     {
-                        throw new ApException("Can't save category");
+                        throw new ApException("Failed to save category");
                     }
                     account.setId(rs.getInt(1));
                 }
@@ -46,7 +51,7 @@ public class DAOAccountImpl implements DAOAccount
         }
         catch (SQLException e)
         {
-            logger.error("Error on save account", e);
+            logger.error("Error save account", e);
             throw e;
         }
 
@@ -65,7 +70,7 @@ public class DAOAccountImpl implements DAOAccount
         }
         catch (SQLException e)
         {
-            logger.error("Error delete category", e);
+            logger.error("Error delete account", e);
             throw e;
         }
     }
@@ -90,15 +95,10 @@ public class DAOAccountImpl implements DAOAccount
         }
         catch (SQLException e)
         {
-            logger.error("Error on load account", e);
+            logger.error("Error load account", e);
             throw e;
         }
         return account;
-    }
-
-    public void init(AccountFactory accountFactory)
-    {
-        this.accountFactory = accountFactory;
     }
 
     @Override
@@ -115,7 +115,7 @@ public class DAOAccountImpl implements DAOAccount
         }
         catch (SQLException e)
         {
-            logger.error("Error on update account", e);
+            logger.error("Error update account", e);
             throw e;
         }
     }

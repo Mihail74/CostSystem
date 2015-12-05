@@ -4,7 +4,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import ru.mkardaev.DataInMemory;
 import ru.mkardaev.model.Account;
 import ru.mkardaev.model.Category;
 import ru.mkardaev.model.Expense;
@@ -20,10 +19,11 @@ public class ExpenseStatisticsServiceImpl implements ExpenseStatisticsService
     @Override
     public List<Expense> getExpenses(Account account, Date startDate, Date endDate)
     {
-        return DataInMemory.moneyActions.stream().filter(e -> e instanceof Expense)
-                .map(e -> (Expense) e).filter(e -> e.getAccountId() == account.getId()
-                        && !e.getCreationDate().before(startDate) && !e.getCreationDate().after(endDate))
-                .collect(Collectors.toList());
+        // return DataInMemory.moneyActions.stream().filter(e -> e instanceof Expense)
+        // .map(e -> (Expense) e).filter(e -> e.getAccountId() == account.getId()
+        // && !e.getCreationDate().before(startDate) && !e.getCreationDate().after(endDate))
+        // .collect(Collectors.toList());
+        return null;
     }
 
     @Override

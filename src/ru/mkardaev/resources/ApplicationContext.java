@@ -14,7 +14,6 @@ public class ApplicationContext
 
     private ApplicationContext()
     {
-
     }
 
     @SuppressWarnings("unchecked")

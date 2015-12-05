@@ -4,7 +4,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import ru.mkardaev.DataInMemory;
 import ru.mkardaev.model.Account;
 import ru.mkardaev.model.Category;
 import ru.mkardaev.model.Income;
@@ -15,10 +14,11 @@ public class IncomeStatisticsServiceImpl implements IncomeStatisticsService
     @Override
     public List<Income> getIncomes(Account account, Date startDate, Date endDate)
     {
-        return DataInMemory.moneyActions.stream().filter(e -> e instanceof Income)
-                .map(e -> (Income) e).filter(e -> e.getAccountId() == account.getId()
-                        && !e.getCreationDate().before(startDate) && !e.getCreationDate().after(endDate))
-                .collect(Collectors.toList());
+        // return DataInMemory.moneyActions.stream().filter(e -> e instanceof Income)
+        // .map(e -> (Income) e).filter(e -> e.getAccountId() == account.getId()
+        // && !e.getCreationDate().before(startDate) && !e.getCreationDate().after(endDate))
+        // .collect(Collectors.toList());
+        return null;
     }
 
     @Override

@@ -25,6 +25,11 @@ public class DAOCategoryImpl implements DAOCategory
     private static final String UPDATE_CATEGORY = "UPDATE category SET title = ? WHERE id = ?";
     private CategoryFactory categoryFactory;
 
+    public DAOCategoryImpl(CategoryFactory categoryFactory)
+    {
+        this.categoryFactory = categoryFactory;
+    }
+
     @Override
     public void create(Category category) throws ApException, SQLException
     {
@@ -39,7 +44,7 @@ public class DAOCategoryImpl implements DAOCategory
                 {
                     if (!rs.next())
                     {
-                        throw new ApException("Can't save category");
+                        throw new ApException("Failed to save category");
                     }
                     category.setId(rs.getInt(1));
                 }
@@ -48,7 +53,7 @@ public class DAOCategoryImpl implements DAOCategory
         }
         catch (SQLException e)
         {
-            logger.error("Error on save category", e);
+            logger.error("Error save category", e);
             throw e;
         }
     }
@@ -91,15 +96,10 @@ public class DAOCategoryImpl implements DAOCategory
         }
         catch (SQLException e)
         {
-            logger.error("Error on load category", e);
+            logger.error("Error load category", e);
             throw e;
         }
         return category;
-    }
-
-    public void init(CategoryFactory categoryFactory)
-    {
-        this.categoryFactory = categoryFactory;
     }
 
     @Override
@@ -116,7 +116,7 @@ public class DAOCategoryImpl implements DAOCategory
         }
         catch (SQLException e)
         {
-            logger.error("Error on update category", e);
+            logger.error("Error update category", e);
             throw e;
         }
     }

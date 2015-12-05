@@ -34,15 +34,14 @@ public class Messages
         public static final String WRONG_FORMAT_ID = "wrongFormatId";
     }
 
-    public static Messages INSTANCE = new Messages();
-
     private static Locale defaultLocale;
+
     private static ResourceBundle defaultResourceBundle;
+    private static Messages INSTANCE = new Messages();
     /**
      * Название файла с константами локализации
      */
     private static final String MESSAGES_FILE_NAME = "messages";
-
     private ResourceBundle resourceBundle = null;
 
     private Messages()
@@ -79,6 +78,11 @@ public class Messages
     public void initalize(Locale locale)
     {
         this.resourceBundle = ResourceBundle.getBundle(MESSAGES_FILE_NAME, locale);
+    }
+
+    public static Messages getInstance()
+    {
+        return INSTANCE;
     }
 
 }
