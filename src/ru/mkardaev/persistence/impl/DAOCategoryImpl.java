@@ -5,6 +5,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.log4j.Logger;
 
@@ -21,6 +23,7 @@ public class DAOCategoryImpl implements DAOCategory
 
     private static final String DELETE_CATEGORY = "DELETE FROM category WHERE id = ?";
     private static final String INSERT_CATEGORY = "INSERT INTO category(title) VALUES(?)";
+    private static final String SELECT_ALL_CATEGORY = "SELECT id, title FROM category";
     private static final String SELECT_CATEGORY = "SELECT id, title FROM category WHERE id = ?";
     private static final String UPDATE_CATEGORY = "UPDATE category SET title = ? WHERE id = ?";
     private CategoryFactory categoryFactory;
@@ -100,6 +103,32 @@ public class DAOCategoryImpl implements DAOCategory
             throw e;
         }
         return category;
+    }
+
+    @Override
+    public List<Category> getAllCategories() throws ApException
+    {
+        List<Category> result = new ArrayList<>();
+        try (Connection connection = getConnection())
+        {
+            try (PreparedStatement stmt = connection.prepareStatement(SELECT_ALL_CATEGORY))
+            {
+                stmt.executeUpdate();
+                try (ResultSet rs = stmt.executeQuery())
+                {
+                    if (rs.next())
+                    {
+                        result.add(categoryFactory.createCategory(rs.getLong(1), rs.getString(2)));
+                    }
+                }
+            }
+        }
+        catch (SQLException e)
+        {
+            logger.error("Error load categories", e);
+            throw new ApException("Error load categories", e);
+        }
+        return result;
     }
 
     @Override
