@@ -18,21 +18,8 @@ public class Messages
      */
     public static class MessagesKeys
     {
-        public static final String CATEGORY_ADDED = "categoryAdded";
-        public static final String CATEGORY_FINDED = "categoryFinded";
-        public static final String CATEGORY_NOT_FINDED = "categoryNotFinded";
-        public static final String CHOOSE_OPERATION = "chooseOperation";
-        public static final String ERROR_READ_FILE = "errorReadFile";
-        public static final String ERROR_WRITE_FILE = "errorWriteFile";
-        public static final String INPUT_CATEGORY_ID = "inputCategoryId";
-        public static final String INPUT_CATEGORY_TITLE = "inputCategoryTitle";
-        public static final String INPUT_NUMBER_IN_RANGE = "inputNumberInRange";
-        public static final String NOT_ALLOW_TO_READ = "notAllowToRead";
-        public static final String OPERATION_ADD = "operationAdd";
-        public static final String OPERATION_EXIT = "operationExit";
-        public static final String OPERATION_FIND = "operationFind";
-        public static final String WELCOME = "welcome";
-        public static final String WRONG_FORMAT_ID = "wrongFormatId";
+        public static final String APPLICATION_TITLE = "applicationTitle";
+        public static final String MAIN_FORM_DESCRIPTION = "mainFormDescription";
     }
 
     private static Locale defaultLocale;
