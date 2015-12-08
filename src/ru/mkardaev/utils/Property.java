@@ -6,6 +6,8 @@ import java.util.Properties;
 
 import org.apache.log4j.Logger;
 
+import ru.mkardaev.resources.Resources;
+
 public class Property
 {
     final static Logger logger = Logger.getLogger(Property.class);
@@ -16,15 +18,23 @@ public class Property
     {
         properties = new Properties();
 
-        String filename = "config.properties";
-        try (InputStream input = getClass().getClassLoader().getResourceAsStream(filename))
+        String fileName = Resources.PROPERTIES_FILE;
+        try (InputStream input = getClass().getClassLoader().getResourceAsStream(fileName))
         {
-            properties.load(input);
-            logger.info("Properies load from file: " + filename);
+            if (input != null)
+            {
+                properties.load(input);
+                logger.info(String.format("Properies load from file: %S", fileName));
+            }
+            else
+            {
+                logger.error(String.format("Error open properties file: %s", fileName));
+            }
         }
-        catch (IOException ex)
+        catch (IOException e)
         {
-            ex.printStackTrace();
+            logger.error(String.format("Error load properties from file: %s", fileName), e);
+            e.printStackTrace();
         }
     }
 
