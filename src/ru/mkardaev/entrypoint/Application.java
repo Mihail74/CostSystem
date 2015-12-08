@@ -1,6 +1,7 @@
 package ru.mkardaev.entrypoint;
 
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
@@ -23,6 +24,7 @@ public class Application
         Shell shell = new Shell(display, SWT.SHELL_TRIM);
         shell.setLayout(new GridLayout(1, true));
         shell.setText(messages.getMessage(Messages.MessagesKeys.APPLICATION_TITLE));
+        shell.setImage(new Image(display, "icon.png"));
 
         MainForm mainForm = new MainForm(shell, display, messages);
         mainForm.build();

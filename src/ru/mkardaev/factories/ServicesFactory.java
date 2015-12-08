@@ -14,6 +14,7 @@ import ru.mkardaev.persistence.impl.DAOAccountImpl;
 import ru.mkardaev.persistence.impl.DAOCategoryImpl;
 import ru.mkardaev.persistence.impl.DAOMoneyActionImpl;
 import ru.mkardaev.utils.Messages;
+import ru.mkardaev.utils.Property;
 
 /**
  * Фабрика сервисов. Данный класс предназначен для получения корректно настроенных сервисов
@@ -34,6 +35,7 @@ public class ServicesFactory
     private Messages messages;
     private MoneyActionFactory moneyActionFactory;
     private PersonFactory personFactory;
+    private Property property;
 
     private ServicesFactory()
     {
@@ -101,11 +103,22 @@ public class ServicesFactory
         daoAccount = new DAOAccountImpl(accountFactory);
         daoCategory = new DAOCategoryImpl(categoryFactory);
         daoMoneyAction = new DAOMoneyActionImpl(moneyActionFactory);
+        property = Property.getInstance();
     }
 
     public static ServicesFactory getInstance()
     {
         return instance;
 
+    }
+
+    public Property getProperty()
+    {
+        return property;
+    }
+
+    public void setProperty(Property property)
+    {
+        this.property = property;
     }
 }

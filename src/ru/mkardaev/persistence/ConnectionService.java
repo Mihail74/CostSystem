@@ -40,12 +40,7 @@ public class ConnectionService
 
     private ConnectionService()
     {
-
-    }
-
-    static
-    {
-        //@formatter:off
+      //@formatter:off
         initialTableQuery.put("category",
                 "CREATE TABLE "
                         + "category(id BIGINT PRIMARY KEY  GENERATED ALWAYS AS IDENTITY,"
