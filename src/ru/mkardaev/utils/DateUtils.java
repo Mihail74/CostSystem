@@ -4,6 +4,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
 
+import ru.mkardaev.factories.ServicesFactory;
+
 public class DateUtils
 {
     /**
@@ -18,9 +20,16 @@ public class DateUtils
         return calendar.getTime();
     }
 
+    /**
+     * Конвертирует дату в long GMT+0 для часового пояса из property файла
+     * 
+     * @param gmt0Long
+     * @return
+     */
     public static Date convertToDateWithDefaultTimeZone(long gmt0Long)
     {
-        return convertToDate(gmt0Long, TimeZone.getDefault());
+        return convertToDate(gmt0Long,
+                TimeZone.getTimeZone(Property.getInstance().getProperty(Property.Keys.TIME_ZONE)));
     }
 
     /**
@@ -38,9 +47,16 @@ public class DateUtils
         return calendar.getTime().getTime();
     }
 
+    /**
+     * Конвертирует дату в long GMT+0. При конвертации в GMT+0 используется часовой пояс из property файла
+     * 
+     * @param gmt0Long
+     * @return
+     */
     public static long convertToGMT0LongFromDefaultTimeZone(Date date)
     {
-        return convertToGMT0Long(date, TimeZone.getDefault());
+        return convertToGMT0Long(date,
+                TimeZone.getTimeZone(ServicesFactory.getInstance().getProperty().getProperty(Property.Keys.TIME_ZONE)));
     }
 
 }

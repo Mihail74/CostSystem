@@ -3,7 +3,6 @@ package ru.mkardaev.entrypoint;
 import java.sql.SQLException;
 
 import ru.mkardaev.factories.ServicesFactory;
-import ru.mkardaev.utils.Messages;
 
 public class Main
 {
@@ -15,7 +14,7 @@ public class Main
     public static void main(String[] args) throws ClassNotFoundException, InterruptedException, SQLException
     {
         initializeAllServices();
-        Application application = new Application(Messages.getInstance());
-        application.run();
+        ApplicationGUI applicationGUI = new ApplicationGUI();
+        applicationGUI.run();
     }
 }

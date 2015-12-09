@@ -16,9 +16,12 @@ public class Messages
     /**
      * Ключи для сообщений
      */
-    public static class MessagesKeys
+    public static class Keys
     {
         public static final String APPLICATION_TITLE = "applicationTitle";
+        public static final String EXPENSES = "expenses";
+        public static final String INCOMES = "incomes";
+        public static final String INCOMES_AND_EXPENSES = "incomesAndExpenses";
         public static final String MAIN_FORM_DESCRIPTION = "mainFormDescription";
     }
 

@@ -1,7 +1,5 @@
 package ru.mkardaev.ui;
 
-import org.eclipse.jface.viewers.ArrayContentProvider;
-import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.ListViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
@@ -15,6 +13,7 @@ import org.eclipse.swt.widgets.TabItem;
 import org.eclipse.ui.forms.widgets.Form;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
+import ru.mkardaev.factories.ServicesFactory;
 import ru.mkardaev.utils.Messages;
 
 /**
@@ -25,70 +24,52 @@ import ru.mkardaev.utils.Messages;
  */
 public class MainForm
 {
-    private class Text
-    {
-        String x, y;
-
-        Text(String x, String y)
-        {
-            this.x = x;
-            this.y = y;
-        }
-    }
-
     private Display display;
-
     private Messages messages;
-
     private Shell shell;
 
-    public MainForm(Shell shell, Display display, Messages messages)
+    public MainForm(Shell shell, Display display)
     {
         this.shell = shell;
         this.display = display;
-        this.messages = messages;
+        this.messages = ServicesFactory.getInstance().getMessages();
     }
 
     /**
      * Запускает процесс построения формы
      */
-    public void build()
+    public void bind()
     {
         FormToolkit toolKit = new FormToolkit(display);
+
         Form form = toolKit.createForm(shell);
         form.setLayoutData(new GridData(GridData.FILL_BOTH));
-        form.setText(messages.getMessage(Messages.MessagesKeys.MAIN_FORM_DESCRIPTION));
+        form.setText(messages.getMessage(Messages.Keys.MAIN_FORM_DESCRIPTION));
+        form.getBody().setLayout(new GridLayout(1, true));
 
-        form.getBody().setLayout(new GridLayout());
+        DateIntervalPicker dateIntervalPicker = new DateIntervalPicker(form.getBody());
+        dateIntervalPicker.bind();
 
-        TabFolder folder = new TabFolder(form.getBody(), SWT.NONE);
-        folder.setLayout(new GridLayout(1, true));
-        folder.setLayoutData(new GridData(GridData.FILL_BOTH));
+        TabFolder tablFolder = new TabFolder(form.getBody(), SWT.NONE);
+        tablFolder.setLayout(new GridLayout(1, true));
+        tablFolder.setLayoutData(new GridData(GridData.FILL_BOTH));
 
-        TabItem tab1 = new TabItem(folder, SWT.NONE);
-        tab1.setText("Tab 1");
+        TabItem commonTab = new TabItem(tablFolder, SWT.NONE);
+        commonTab.setText(messages.getMessage(Messages.Keys.INCOMES_AND_EXPENSES));
 
-        TabItem tab2 = new TabItem(folder, SWT.NONE);
-        tab2.setText("Tab 2");
+        TabItem expenseTab = new TabItem(tablFolder, SWT.NONE);
+        expenseTab.setText(messages.getMessage(Messages.Keys.EXPENSES));
 
-        ListViewer lw = new ListViewer(folder, SWT.DROP_DOWN);
-        lw.setContentProvider(new ArrayContentProvider());
-        lw.setInput(new Text[] { new Text("a", "b"), new Text("C", "d") });
-        lw.setLabelProvider(new LabelProvider()
-        {
-            @Override
-            public String getText(Object element)
-            {
+        TabItem incomeTab = new TabItem(tablFolder, SWT.NONE);
+        incomeTab.setText(messages.getMessage(Messages.Keys.INCOMES));
 
-                return ((Text) element).x;
-            };
-        });
-        tab1.setControl(lw.getControl());
+        ListViewer lw = new ListViewer(tablFolder, SWT.DROP_DOWN);
+        expenseTab.setControl(lw.getControl());
 
-        Composite composite2 = new Composite(folder, SWT.NONE);
+        Composite composite2 = new Composite(tablFolder, SWT.NONE);
         composite2.setLayout(new GridLayout(1, true));
         composite2.setLayoutData(new GridData(SWT.FILL));
-        tab2.setControl(composite2);
+        incomeTab.setControl(composite2);
 
         Button button = toolKit.createButton(composite2, "Test", SWT.NULL);
         toolKit.createLabel(composite2, "label?");

@@ -86,39 +86,38 @@ public class ServicesFactory
         return personFactory;
     }
 
+    public Property getProperty()
+    {
+        return property;
+    }
+
     /**
      * Производит инициализацию всех сервисов.
      * 
      */
     public void init() throws ClassNotFoundException
     {
+        property = Property.getInstance();
+
         messages = Messages.getInstance();
-        messages.initalize(new Locale("RU"));
+        messages.initalize(new Locale(property.getProperty(Property.Keys.LOCALE)));
+
         connectionService = ConnectionService.getInstance();
         connectionService.init();
+
         accountFactory = new AccountFactoryImpl();
         categoryFactory = new CategoryFactoryImpl();
         personFactory = new PersonFactoryImpl();
         moneyActionFactory = new MoneyActionFactoryImpl();
+
         daoAccount = new DAOAccountImpl(accountFactory);
         daoCategory = new DAOCategoryImpl(categoryFactory);
         daoMoneyAction = new DAOMoneyActionImpl(moneyActionFactory);
-        property = Property.getInstance();
     }
 
     public static ServicesFactory getInstance()
     {
         return instance;
 
-    }
-
-    public Property getProperty()
-    {
-        return property;
-    }
-
-    public void setProperty(Property property)
-    {
-        this.property = property;
     }
 }
