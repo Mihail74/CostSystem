@@ -6,6 +6,8 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.TabFolder;
 import org.eclipse.swt.widgets.TabItem;
@@ -53,7 +55,30 @@ public class MainForm
         DateIntervalPickerWidget dateIntervalPicker = new DateIntervalPickerWidget(toolComposite);
         dateIntervalPicker.bind();
 
-        toolKit.createButton(toolComposite, "test", SWT.PUSH);
+        Button but = toolKit.createButton(toolComposite, "test", SWT.PUSH);
+        but.addListener(SWT.Selection, new Listener()
+        {
+            @Override
+            public void handleEvent(Event e)
+            {
+                switch (e.type) {
+                case SWT.Selection:
+                    Display display = Display.getDefault();
+                    Shell dialogShell = new Shell(display, SWT.APPLICATION_MODAL | SWT.SHELL_TRIM);
+                    // populate dialogShell
+                    dialogShell.pack();
+                    dialogShell.open();
+                    while (!dialogShell.isDisposed())
+                    {
+                        if (!display.readAndDispatch())
+                        {
+                            display.sleep();
+                        }
+                    }
+                    break;
+                }
+            }
+        });
         // Composite emptyComposite = toolKit.createComposite(form.getBody());
 
         TotalMoneyActionsWidget totalMoneyActionsWidget = new TotalMoneyActionsWidget(toolComposite);

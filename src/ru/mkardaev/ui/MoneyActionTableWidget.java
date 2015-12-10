@@ -42,6 +42,7 @@ public class MoneyActionTableWidget
 
         Table table = tableViewer.getTable();
 
+        tableViewer.setSorter(new MoneyActionSorter());
         TableViewerColumn column1 = new TableViewerColumn(tableViewer, SWT.NONE);
         column1.getColumn().setText("test1");
         column1.setLabelProvider(new ColumnLabelProvider()
