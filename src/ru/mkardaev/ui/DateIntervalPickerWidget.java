@@ -1,5 +1,9 @@
 package ru.mkardaev.ui;
 
+import java.util.Calendar;
+import java.util.Date;
+import java.util.TimeZone;
+
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -9,7 +13,9 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
 import ru.mkardaev.factories.ServicesFactory;
+import ru.mkardaev.resources.ApplicationContext;
 import ru.mkardaev.utils.Messages;
+import ru.mkardaev.utils.Property;
 
 /**
  * Виджет выбора интервала дат
@@ -17,7 +23,7 @@ import ru.mkardaev.utils.Messages;
  * @author Mihail
  *
  */
-public class DateIntervalPicker
+public class DateIntervalPickerWidget
 {
     private DateTime fromDateTimePicker;
     private Messages messages;
@@ -25,7 +31,7 @@ public class DateIntervalPicker
     private DateTime toDateTimePicker;
     private FormToolkit toolKit;
 
-    public DateIntervalPicker(Composite parent)
+    public DateIntervalPickerWidget(Composite parent)
     {
         this.parent = parent;
         toolKit = new FormToolkit(parent.getDisplay());
@@ -49,6 +55,24 @@ public class DateIntervalPicker
         fromDateTimePicker.setLayoutData(new GridData(GridData.FILL_BOTH));
         toLabel.setLayoutData(new GridData(GridData.FILL_BOTH));
         toDateTimePicker.setLayoutData(new GridData(GridData.FILL_BOTH));
+    }
+
+    public Date getFromDate()
+    {
+        return getDate(fromDateTimePicker.getYear(), fromDateTimePicker.getMonth(), fromDateTimePicker.getDay());
+    }
+
+    public Date getToDate()
+    {
+        return getDate(toDateTimePicker.getYear(), toDateTimePicker.getMonth(), toDateTimePicker.getDay());
+    }
+
+    private Date getDate(int year, int month, int day)
+    {
+        String TimeZoneId = ApplicationContext.getContext().<String> getData(Property.Keys.TIME_ZONE);
+        Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone(TimeZoneId));
+        calendar.set(year, month, day);
+        return calendar.getTime();
     }
 
 }

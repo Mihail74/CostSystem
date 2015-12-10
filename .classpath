@@ -9,5 +9,6 @@
 	<classpathentry kind="lib" path="E:/eclipse/plugins/org.eclipse.core.commands_3.7.0.v20150422-0725.jar"/>
 	<classpathentry kind="lib" path="E:/eclipse/plugins/org.eclipse.jface_3.11.0.v20150602-1400.jar"/>
 	<classpathentry kind="lib" path="E:/eclipse/plugins/org.eclipse.ui.forms_3.6.200.v20150506-2029.jar"/>
+	<classpathentry kind="lib" path="E:/eclipse/plugins/org.eclipse.core.runtime_3.11.0.v20150405-1723.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

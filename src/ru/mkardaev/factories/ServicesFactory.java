@@ -118,6 +118,5 @@ public class ServicesFactory
     public static ServicesFactory getInstance()
     {
         return instance;
-
     }
 }

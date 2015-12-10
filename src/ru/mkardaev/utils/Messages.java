@@ -21,8 +21,9 @@ public class Messages
         public static final String APPLICATION_TITLE = "applicationTitle";
         public static final String EXPENSES = "expenses";
         public static final String INCOMES = "incomes";
-        public static final String INCOMES_AND_EXPENSES = "incomesAndExpenses";
         public static final String MAIN_FORM_DESCRIPTION = "mainFormDescription";
+        public static final String TOTAL_EXPENSE = "totalExpense";
+        public static final String TOTAL_INCOME = "totalIncome";
     }
 
     private static Locale defaultLocale;

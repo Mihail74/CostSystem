@@ -1,6 +1,5 @@
 package ru.mkardaev.ui;
 
-import org.eclipse.jface.viewers.ListViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -47,15 +46,25 @@ public class MainForm
         form.setText(messages.getMessage(Messages.Keys.MAIN_FORM_DESCRIPTION));
         form.getBody().setLayout(new GridLayout(1, true));
 
-        DateIntervalPicker dateIntervalPicker = new DateIntervalPicker(form.getBody());
+        Composite toolComposite = toolKit.createComposite(form.getBody());
+        toolComposite.setLayout(new GridLayout(2, true));
+        toolComposite.setLayoutData(new GridData(GridData.FILL_BOTH));
+
+        DateIntervalPickerWidget dateIntervalPicker = new DateIntervalPickerWidget(toolComposite);
         dateIntervalPicker.bind();
+
+        toolKit.createButton(toolComposite, "test", SWT.PUSH);
+        // Composite emptyComposite = toolKit.createComposite(form.getBody());
+
+        TotalMoneyActionsWidget totalMoneyActionsWidget = new TotalMoneyActionsWidget(toolComposite);
+        totalMoneyActionsWidget.bind();
+        totalMoneyActionsWidget.setTotalExpeseValue("123");
+
+        toolKit.createButton(toolComposite, "test", SWT.PUSH);
 
         TabFolder tablFolder = new TabFolder(form.getBody(), SWT.NONE);
         tablFolder.setLayout(new GridLayout(1, true));
         tablFolder.setLayoutData(new GridData(GridData.FILL_BOTH));
-
-        TabItem commonTab = new TabItem(tablFolder, SWT.NONE);
-        commonTab.setText(messages.getMessage(Messages.Keys.INCOMES_AND_EXPENSES));
 
         TabItem expenseTab = new TabItem(tablFolder, SWT.NONE);
         expenseTab.setText(messages.getMessage(Messages.Keys.EXPENSES));
@@ -63,8 +72,9 @@ public class MainForm
         TabItem incomeTab = new TabItem(tablFolder, SWT.NONE);
         incomeTab.setText(messages.getMessage(Messages.Keys.INCOMES));
 
-        ListViewer lw = new ListViewer(tablFolder, SWT.DROP_DOWN);
-        expenseTab.setControl(lw.getControl());
+        MoneyActionTableWidget commonTableWidget = new MoneyActionTableWidget(tablFolder);
+        commonTableWidget.bind();
+        expenseTab.setControl(commonTableWidget.getControl());
 
         Composite composite2 = new Composite(tablFolder, SWT.NONE);
         composite2.setLayout(new GridLayout(1, true));

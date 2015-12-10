@@ -28,8 +28,8 @@ public class DateUtils
      */
     public static Date convertToDateWithDefaultTimeZone(long gmt0Long)
     {
-        return convertToDate(gmt0Long,
-                TimeZone.getTimeZone(Property.getInstance().getProperty(Property.Keys.TIME_ZONE)));
+        Property properties = ServicesFactory.getInstance().getProperty();
+        return convertToDate(gmt0Long, TimeZone.getTimeZone(properties.getProperty(Property.Keys.TIME_ZONE)));
     }
 
     /**
@@ -55,8 +55,8 @@ public class DateUtils
      */
     public static long convertToGMT0LongFromDefaultTimeZone(Date date)
     {
-        return convertToGMT0Long(date,
-                TimeZone.getTimeZone(ServicesFactory.getInstance().getProperty().getProperty(Property.Keys.TIME_ZONE)));
+        Property properties = ServicesFactory.getInstance().getProperty();
+        return convertToGMT0Long(date, TimeZone.getTimeZone(properties.getProperty(Property.Keys.TIME_ZONE)));
     }
 
 }
