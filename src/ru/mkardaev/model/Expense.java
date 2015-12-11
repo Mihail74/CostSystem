@@ -8,7 +8,7 @@ public class Expense extends MoneyAction
 
     public Expense()
     {
-
+        super();
     }
 
     public Expense(long accountId, long categoryId, Long value)

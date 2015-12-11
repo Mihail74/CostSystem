@@ -15,6 +15,7 @@ import org.eclipse.ui.forms.widgets.Form;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
 import ru.mkardaev.factories.ServicesFactory;
+import ru.mkardaev.ui.form.MoneyActionFormBase;
 import ru.mkardaev.utils.Messages;
 
 /**
@@ -25,15 +26,20 @@ import ru.mkardaev.utils.Messages;
  */
 public class MainForm
 {
+    private Button addExpenseButton;
+    private Button addIncomeButton;
     private Display display;
+    private Form form;
     private Messages messages;
     private Shell shell;
+    private FormToolkit toolKit;
 
     public MainForm(Shell shell, Display display)
     {
         this.shell = shell;
         this.display = display;
-        this.messages = ServicesFactory.getInstance().getMessages();
+        messages = ServicesFactory.getInstance().getMessages();
+        toolKit = new FormToolkit(this.display);
     }
 
     /**
@@ -41,52 +47,20 @@ public class MainForm
      */
     public void bind()
     {
-        FormToolkit toolKit = new FormToolkit(display);
-
-        Form form = toolKit.createForm(shell);
+        form = toolKit.createForm(shell);
         form.setLayoutData(new GridData(GridData.FILL_BOTH));
         form.setText(messages.getMessage(Messages.Keys.MAIN_FORM_DESCRIPTION));
         form.getBody().setLayout(new GridLayout(1, true));
 
-        Composite toolComposite = toolKit.createComposite(form.getBody());
-        toolComposite.setLayout(new GridLayout(2, true));
-        toolComposite.setLayoutData(new GridData(GridData.FILL_BOTH));
+        createToolComposite();
+        createTable();
+    }
 
-        DateIntervalPickerWidget dateIntervalPicker = new DateIntervalPickerWidget(toolComposite);
-        dateIntervalPicker.bind();
-
-        Button but = toolKit.createButton(toolComposite, "test", SWT.PUSH);
-        but.addListener(SWT.Selection, new Listener()
-        {
-            @Override
-            public void handleEvent(Event e)
-            {
-                switch (e.type) {
-                case SWT.Selection:
-                    Display display = Display.getDefault();
-                    Shell dialogShell = new Shell(display, SWT.APPLICATION_MODAL | SWT.SHELL_TRIM);
-                    // populate dialogShell
-                    dialogShell.pack();
-                    dialogShell.open();
-                    while (!dialogShell.isDisposed())
-                    {
-                        if (!display.readAndDispatch())
-                        {
-                            display.sleep();
-                        }
-                    }
-                    break;
-                }
-            }
-        });
-        // Composite emptyComposite = toolKit.createComposite(form.getBody());
-
-        TotalMoneyActionsWidget totalMoneyActionsWidget = new TotalMoneyActionsWidget(toolComposite);
-        totalMoneyActionsWidget.bind();
-        totalMoneyActionsWidget.setTotalExpeseValue("123");
-
-        toolKit.createButton(toolComposite, "test", SWT.PUSH);
-
+    /**
+     * Создаёт таблицу
+     */
+    private void createTable()
+    {
         TabFolder tablFolder = new TabFolder(form.getBody(), SWT.NONE);
         tablFolder.setLayout(new GridLayout(1, true));
         tablFolder.setLayoutData(new GridData(GridData.FILL_BOTH));
@@ -106,7 +80,48 @@ public class MainForm
         composite2.setLayoutData(new GridData(SWT.FILL));
         incomeTab.setControl(composite2);
 
-        Button button = toolKit.createButton(composite2, "Test", SWT.NULL);
-        toolKit.createLabel(composite2, "label?");
+    }
+
+    /**
+     * Создаёт верхную часть формы(над таблицей)
+     * 
+     * @param form
+     */
+    private void createToolComposite()
+    {
+        Composite toolComposite = toolKit.createComposite(form.getBody());
+        toolComposite.setLayout(new GridLayout(2, true));
+        toolComposite.setLayoutData(new GridData(GridData.FILL_BOTH));
+
+        TotalMoneyActionsWidget totalMoneyActionsWidget = new TotalMoneyActionsWidget(toolComposite);
+        totalMoneyActionsWidget.bind();
+
+        Composite balanceComposite = toolKit.createComposite(toolComposite);
+        balanceComposite.setLayout(new GridLayout(2, true));
+        balanceComposite.setLayoutData(new GridData(GridData.FILL_BOTH));
+        toolKit.createLabel(balanceComposite, messages.getMessage(Messages.Keys.ACCOUNT_BALANCE));
+
+        DateIntervalPickerWidget dateIntervalPicker = new DateIntervalPickerWidget(toolComposite);
+        dateIntervalPicker.bind();
+
+        Composite buttonComposite = toolKit.createComposite(toolComposite);
+        buttonComposite.setLayout(new GridLayout(1, true));
+        buttonComposite.setLayoutData(new GridData(GridData.FILL_BOTH));
+        addExpenseButton = toolKit.createButton(buttonComposite, messages.getMessage(Messages.Keys.ADD_EXPENSE),
+                SWT.PUSH);
+        addIncomeButton = toolKit.createButton(buttonComposite, messages.getMessage(Messages.Keys.ADD_INCOME),
+                SWT.PUSH);
+
+        addExpenseButton.addListener(SWT.Selection, new Listener()
+        {
+            @Override
+            public void handleEvent(Event e)
+            {
+                if (e.type == SWT.Selection)
+                {
+                    new MoneyActionFormBase().bind();
+                }
+            }
+        });
     }
 }

@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.TimeZone;
 
 import ru.mkardaev.factories.ServicesFactory;
+import ru.mkardaev.resources.ApplicationContext;
 
 public class DateUtils
 {
@@ -57,6 +58,13 @@ public class DateUtils
     {
         Property properties = ServicesFactory.getInstance().getProperty();
         return convertToGMT0Long(date, TimeZone.getTimeZone(properties.getProperty(Property.Keys.TIME_ZONE)));
+    }
+
+    public static Calendar getCurrentDate()
+    {
+        String TimeZoneId = ApplicationContext.getContext().<String> getData(Property.Keys.TIME_ZONE);
+        Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone(TimeZoneId));
+        return calendar;
     }
 
 }
