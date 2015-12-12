@@ -3,7 +3,7 @@ package ru.mkardaev.model;
 public class Person
 {
     private long accountId;
-    private long id;
+    private long id = 0L;
 
     public Person(long id, long accountId)
     {

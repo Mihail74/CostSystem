@@ -24,6 +24,7 @@ public class Messages
         public static final String APPLICATION_TITLE = "applicationTitle";
         public static final String CATEGORY = "category";
         public static final String CREATION_DATE = "creationDate";
+        public static final String DESCRIPTION = "description";
         public static final String EXPENSES = "expenses";
         public static final String INCOMES = "incomes";
         public static final String MAIN_FORM_DESCRIPTION = "mainFormDescription";

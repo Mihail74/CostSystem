@@ -113,10 +113,9 @@ public class DAOCategoryImpl implements DAOCategory
         {
             try (PreparedStatement stmt = connection.prepareStatement(SELECT_ALL_CATEGORY))
             {
-                stmt.executeUpdate();
                 try (ResultSet rs = stmt.executeQuery())
                 {
-                    if (rs.next())
+                    while (rs.next())
                     {
                         result.add(categoryFactory.createCategory(rs.getLong(1), rs.getString(2)));
                     }

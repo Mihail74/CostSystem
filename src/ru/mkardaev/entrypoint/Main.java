@@ -2,6 +2,7 @@ package ru.mkardaev.entrypoint;
 
 import java.sql.SQLException;
 
+import ru.mkardaev.exception.ApException;
 import ru.mkardaev.factories.ServicesFactory;
 import ru.mkardaev.resources.ApplicationContext;
 import ru.mkardaev.utils.Property;
@@ -13,7 +14,8 @@ public class Main
         ServicesFactory.getInstance().init();
     }
 
-    public static void main(String[] args) throws ClassNotFoundException, InterruptedException, SQLException
+    public static void main(String[] args)
+            throws ClassNotFoundException, InterruptedException, SQLException, ApException
     {
         initializeAllServices();
         initializeApplicationContext();
