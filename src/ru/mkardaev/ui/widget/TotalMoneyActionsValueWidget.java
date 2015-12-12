@@ -1,4 +1,4 @@
-package ru.mkardaev.ui;
+package ru.mkardaev.ui.widget;
 
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -9,7 +9,13 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 import ru.mkardaev.factories.ServicesFactory;
 import ru.mkardaev.utils.Messages;
 
-public class TotalMoneyActionsWidget
+/**
+ * Виджет величин суммарных MoneyAction
+ * 
+ * @author Mihail
+ *
+ */
+public class TotalMoneyActionsValueWidget
 {
     private Messages messages;
     private Composite parent;
@@ -17,7 +23,7 @@ public class TotalMoneyActionsWidget
     private Label totalExpenseValueLabel;
     private Label totalIncomeValueLabel;
 
-    public TotalMoneyActionsWidget(Composite parent)
+    public TotalMoneyActionsValueWidget(Composite parent)
     {
         this.parent = parent;
         toolKit = new FormToolkit(parent.getDisplay());

@@ -1,9 +1,15 @@
-package ru.mkardaev.ui.providers;
+package ru.mkardaev.ui.utils.category;
 
 import org.eclipse.jface.viewers.LabelProvider;
 
 import ru.mkardaev.model.Category;
 
+/**
+ * LabelProvider Категорий
+ * 
+ * @author Mihail
+ *
+ */
 public class CategoryLabelProvider extends LabelProvider
 {
     @Override

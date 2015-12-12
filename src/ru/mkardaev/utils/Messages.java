@@ -20,14 +20,20 @@ public class Messages
     {
         public static final String ACCOUNT_BALANCE = "accountBalance";
         public static final String ADD_EXPENSE = "addExpense";
+        public static final String ADD_EXPENSE_FORM_TITLE = "addExpenseFormTitle";
         public static final String ADD_INCOME = "addIncome";
+        public static final String ADD_INCOME_FORM_TITLE = "addIncomeFormTitle";
         public static final String APPLICATION_TITLE = "applicationTitle";
+        public static final String CANCEL = "cancel";
         public static final String CATEGORY = "category";
         public static final String CREATION_DATE = "creationDate";
         public static final String DESCRIPTION = "description";
         public static final String EXPENSES = "expenses";
+        public static final String FROM_DATE_LABEL = "fromDateLabel";
         public static final String INCOMES = "incomes";
         public static final String MAIN_FORM_DESCRIPTION = "mainFormDescription";
+        public static final String SAVE = "save";
+        public static final String TO_DATE_LABEL = "toDateLabel";
         public static final String TOTAL_EXPENSE = "totalExpense";
         public static final String TOTAL_INCOME = "totalIncome";
         public static final String VALUE = "value";

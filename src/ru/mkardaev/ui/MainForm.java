@@ -1,5 +1,7 @@
 package ru.mkardaev.ui;
 
+import java.util.concurrent.Callable;
+
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -15,7 +17,12 @@ import org.eclipse.ui.forms.widgets.Form;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
 import ru.mkardaev.factories.ServicesFactory;
-import ru.mkardaev.ui.form.MoneyActionFormBase;
+import ru.mkardaev.ui.form.AddExpenseForm;
+import ru.mkardaev.ui.form.AddIncomeForm;
+import ru.mkardaev.ui.services.FormRegistry;
+import ru.mkardaev.ui.widget.DateIntervalPickerWidget;
+import ru.mkardaev.ui.widget.MoneyActionTableWidget;
+import ru.mkardaev.ui.widget.TotalMoneyActionsValueWidget;
 import ru.mkardaev.utils.Messages;
 
 /**
@@ -31,6 +38,7 @@ public class MainForm
     private Display display;
     private Form form;
     private Messages messages;
+    private Callable<Void> refreshCallback;
     private Shell shell;
     private FormToolkit toolKit;
 
@@ -40,6 +48,17 @@ public class MainForm
         this.display = display;
         messages = ServicesFactory.getInstance().getMessages();
         toolKit = new FormToolkit(this.display);
+        refreshCallback = new Callable<Void>()
+        {
+
+            @Override
+            public Void call() throws Exception
+            {
+                refreshForm();
+                return null;
+            }
+
+        };
     }
 
     /**
@@ -54,6 +73,11 @@ public class MainForm
 
         createToolComposite();
         createTable();
+    }
+
+    public void refreshForm()
+    {
+
     }
 
     /**
@@ -93,7 +117,7 @@ public class MainForm
         toolComposite.setLayout(new GridLayout(2, true));
         toolComposite.setLayoutData(new GridData(GridData.FILL_BOTH));
 
-        TotalMoneyActionsWidget totalMoneyActionsWidget = new TotalMoneyActionsWidget(toolComposite);
+        TotalMoneyActionsValueWidget totalMoneyActionsWidget = new TotalMoneyActionsValueWidget(toolComposite);
         totalMoneyActionsWidget.bind();
 
         Composite balanceComposite = toolKit.createComposite(toolComposite);
@@ -119,7 +143,25 @@ public class MainForm
             {
                 if (e.type == SWT.Selection)
                 {
-                    new MoneyActionFormBase().bind();
+                    AddExpenseForm form = FormRegistry.getInstance()
+                            .<AddExpenseForm> getForm(FormRegistry.ADD_EXPENSE_FORM);
+                    form.setSaveCallback(refreshCallback);
+                    form.bind();
+                }
+            }
+        });
+
+        addIncomeButton.addListener(SWT.Selection, new Listener()
+        {
+            @Override
+            public void handleEvent(Event e)
+            {
+                if (e.type == SWT.Selection)
+                {
+                    AddIncomeForm form = FormRegistry.getInstance()
+                            .<AddIncomeForm> getForm(FormRegistry.ADD_INCOME_FORM);
+                    form.setSaveCallback(refreshCallback);
+                    form.bind();
                 }
             }
         });

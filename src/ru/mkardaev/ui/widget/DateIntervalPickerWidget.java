@@ -1,4 +1,4 @@
-package ru.mkardaev.ui;
+package ru.mkardaev.ui.widget;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -44,10 +44,10 @@ public class DateIntervalPickerWidget
         composite.setLayout(new GridLayout(2, true));
         composite.setLayoutData(new GridData(GridData.FILL_BOTH));
 
-        Label fromLabel = toolKit.createLabel(composite, messages.getMessage("fromDateLabel"));
+        Label fromLabel = toolKit.createLabel(composite, messages.getMessage(Messages.Keys.FROM_DATE_LABEL));
         fromDateTimePicker = new DateTime(composite, SWT.DROP_DOWN);
 
-        Label toLabel = toolKit.createLabel(composite, messages.getMessage("toDateLabel"));
+        Label toLabel = toolKit.createLabel(composite, messages.getMessage(Messages.Keys.TO_DATE_LABEL));
         toDateTimePicker = new DateTime(composite, SWT.DROP_DOWN);
 
         // для autoresize

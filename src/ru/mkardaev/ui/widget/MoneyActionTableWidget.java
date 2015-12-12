@@ -1,4 +1,4 @@
-package ru.mkardaev.ui;
+package ru.mkardaev.ui.widget;
 
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
@@ -19,6 +19,7 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 
 import ru.mkardaev.factories.ServicesFactory;
 import ru.mkardaev.model.Person;
+import ru.mkardaev.ui.utils.MoneyActionSorter;
 import ru.mkardaev.utils.Messages;
 
 public class MoneyActionTableWidget

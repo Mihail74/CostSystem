@@ -1,28 +1,31 @@
 package ru.mkardaev.ui.form;
 
 import java.util.Calendar;
+import java.util.concurrent.Callable;
 
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ComboViewer;
-import org.eclipse.jface.viewers.ISelectionChangedListener;
-import org.eclipse.jface.viewers.SelectionChangedEvent;
-import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.DateTime;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
 import ru.mkardaev.exception.ApException;
 import ru.mkardaev.factories.ServicesFactory;
 import ru.mkardaev.resources.Resources;
-import ru.mkardaev.ui.providers.CategoryLabelProvider;
+import ru.mkardaev.ui.InputProvider;
+import ru.mkardaev.ui.utils.category.CategoryLabelProvider;
+import ru.mkardaev.ui.utils.category.CategorySorter;
 import ru.mkardaev.utils.DateUtils;
 import ru.mkardaev.utils.Messages;
 
@@ -32,28 +35,45 @@ import ru.mkardaev.utils.Messages;
  * @author Mihail
  *
  */
-public class MoneyActionFormBase
+public abstract class MoneyActionFormBase
 {
-    private ComboViewer categoryCombo;
-    private Text desriptionText;
+    protected Button cancelButton;
+    protected ComboViewer categoryCombo;
+    protected InputProvider categoryInputProvider;
+    protected Text desriptionText;
+    protected Shell dialogShell;
+    protected Messages messages;
+    protected Button okButton;
+    protected Text valueText;
     private Point dialogSize = new Point(400, 250);
-    private Messages messages;
-    private Text valueText;
 
-    public MoneyActionFormBase()
+    private int MIN_BUTTON_WIDTH = 100;
+
+    /**
+     * Действия, которые необходимо выполнить при сохранении
+     */
+    private Callable<Void> saveAction;
+    /**
+     * CallBack сохранения
+     */
+    private Callable<Void> saveCallback;
+
+    public MoneyActionFormBase(InputProvider categoryInputProvider)
     {
         messages = ServicesFactory.getInstance().getMessages();
+        this.categoryInputProvider = categoryInputProvider;
     }
 
     public void bind()
     {
         Display display = Display.getDefault();
-        Shell dialogShell = new Shell(display, SWT.APPLICATION_MODAL | SWT.SHELL_TRIM);
+        dialogShell = new Shell(display, SWT.APPLICATION_MODAL | SWT.SHELL_TRIM);
         dialogShell.setLayout(new GridLayout(1, true));
         dialogShell.setImage(new Image(display, Resources.ICON_PATH));
 
         createFormContent(dialogShell);
-
+        createButtons(dialogShell);
+        initializeValue();
         dialogShell.setSize(dialogSize);
         dialogShell.open();
         while (!dialogShell.isDisposed())
@@ -67,45 +87,96 @@ public class MoneyActionFormBase
 
     public void init()
     {
-
     }
 
+    public void setSaveAction(Callable<Void> saveAction)
+    {
+        this.saveAction = saveAction;
+    }
+
+    public void setSaveCallback(Callable<Void> saveCallback)
+    {
+        this.saveCallback = saveCallback;
+    }
+
+    protected abstract void initializeValue();
+
+    private Button createButton(Composite parent, String text, int horizontalAlignment)
+    {
+        GridData gridData = new GridData();
+        gridData.horizontalAlignment = horizontalAlignment;
+        gridData.grabExcessHorizontalSpace = true;
+        gridData.minimumWidth = MIN_BUTTON_WIDTH;
+
+        Button button = new Button(parent, SWT.PUSH);
+        button.setText(text);
+        button.setLayoutData(gridData);
+
+        return button;
+    }
+
+    /**
+     * Создаёт кнопки "Сохранить" и "Отмена"
+     * 
+     */
+    private void createButtons(Shell dialogShell)
+    {
+        Composite composite = new Composite(dialogShell, SWT.NONE);
+        composite.setLayout(new GridLayout(2, true));
+        composite.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+
+        okButton = createButton(composite, messages.getMessage(Messages.Keys.SAVE), SWT.RIGHT);
+        cancelButton = createButton(composite, messages.getMessage(Messages.Keys.CANCEL), SWT.LEFT);
+        okButton.addListener(SWT.Selection, new Listener()
+        {
+            @Override
+            public void handleEvent(Event e)
+            {
+                if (e.type == SWT.Selection)
+                {
+                    onSave();
+                }
+            }
+        });
+        cancelButton.addListener(SWT.Selection, new Listener()
+        {
+            @Override
+            public void handleEvent(Event e)
+            {
+                if (e.type == SWT.Selection)
+                {
+                    dialogShell.dispose();
+                }
+            }
+        });
+    }
+
+    /**
+     * Создаёт combo для выбора категорий
+     * 
+     * @param composite
+     */
     private void createCategoryCombo(Composite composite)
     {
         categoryCombo = new ComboViewer(composite, SWT.BORDER);
         categoryCombo.setContentProvider(ArrayContentProvider.getInstance());
         categoryCombo.setLabelProvider(new CategoryLabelProvider());
+        categoryCombo.setSorter(new CategorySorter());
 
-        Object[] categories = null;
         try
         {
-            categories = ServicesFactory.getInstance().getDaoCategory().getAllCategories().toArray();
+            categoryCombo.setInput(categoryInputProvider.getInput());
         }
         catch (ApException e)
         {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            // TODO: Сделать нормальное сообщение об ошибке
         }
-
-        categoryCombo.setInput(categories);
-
-        /* within the selection event, tell the object it was selected */
-        categoryCombo.addSelectionChangedListener(new ISelectionChangedListener()
-        {
-            @Override
-            public void selectionChanged(SelectionChangedEvent event)
-            {
-                // IStructuredSelection selection = (IStructuredSelection) event.getSelection();
-                // Person person = (Person) selection.getFirstElement();
-
-                categoryCombo.refresh();
-            }
-        });
-
-        categoryCombo.setSelection(new StructuredSelection(categories[0]), true);
-
+        // categoryCombo.setSelection(new StructuredSelection(categories[0]), true);
     }
 
+    /**
+     * Создаёт весь контент на форме
+     */
     private void createFormContent(Shell dialogShell)
     {
         Composite composite = new Composite(dialogShell, SWT.NONE);
@@ -115,7 +186,6 @@ public class MoneyActionFormBase
         Label categoryLabel = new Label(composite, SWT.NONE);
         categoryLabel.setText(messages.getMessage(Messages.Keys.CATEGORY));
 
-        // ListView
         createCategoryCombo(composite);
 
         Label valueLabel = new Label(composite, SWT.NONE);
@@ -147,7 +217,29 @@ public class MoneyActionFormBase
 
         desriptionLabel.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
         desriptionText.setLayoutData(new GridData(GridData.FILL_BOTH));
+    }
 
+    /**
+     * Метод, выполняющийся при сохранении
+     */
+    private void onSave()
+    {
+        try
+        {
+            saveAction.call();
+        }
+        catch (Exception e1)
+        {
+            e1.printStackTrace();
+        }
+        try
+        {
+            saveCallback.call();
+        }
+        catch (Exception e1)
+        {
+            e1.printStackTrace();
+        }
     }
 
 }
