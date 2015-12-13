@@ -19,7 +19,7 @@ public interface DAO<T>
      * @throws ApException
      * @throws SQLException
      */
-    void create(T object) throws ApException, SQLException;
+    void create(T object) throws ApException;
 
     /**
      * Удаляет объект с заданным id из базы данных.

@@ -29,7 +29,7 @@ public class DAOAccountImpl implements DAOAccount
     }
 
     @Override
-    public void create(Account account) throws ApException, SQLException
+    public void create(Account account) throws ApException
     {
         try (Connection connection = getConnection())
         {
@@ -52,7 +52,7 @@ public class DAOAccountImpl implements DAOAccount
         catch (SQLException e)
         {
             logger.error("Error save account", e);
-            throw e;
+            throw new ApException("Error save account", e);
         }
 
     }
@@ -84,6 +84,7 @@ public class DAOAccountImpl implements DAOAccount
             try (PreparedStatement stmt = connection.prepareStatement(SELECT_ACCOUNT))
             {
                 stmt.setLong(1, accountId);
+                stmt.executeQuery();
                 try (ResultSet rs = stmt.executeQuery())
                 {
                     if (rs.next())

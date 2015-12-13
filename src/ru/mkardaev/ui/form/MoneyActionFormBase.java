@@ -20,10 +20,11 @@ import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
+import ru.mkardaev.command.ICommand;
 import ru.mkardaev.exception.ApException;
 import ru.mkardaev.factories.ServicesFactory;
 import ru.mkardaev.resources.Resources;
-import ru.mkardaev.ui.InputProvider;
+import ru.mkardaev.ui.utils.InputProvider;
 import ru.mkardaev.ui.utils.category.CategoryLabelProvider;
 import ru.mkardaev.ui.utils.category.CategorySorter;
 import ru.mkardaev.utils.DateUtils;
@@ -44,15 +45,15 @@ public abstract class MoneyActionFormBase
     protected Shell dialogShell;
     protected Messages messages;
     protected Button okButton;
-    protected Text valueText;
-    private Point dialogSize = new Point(400, 250);
-
-    private int MIN_BUTTON_WIDTH = 100;
-
     /**
      * Действия, которые необходимо выполнить при сохранении
      */
-    private Callable<Void> saveAction;
+    protected ICommand saveCommand;
+    protected Text valueText;
+
+    private Point dialogSize = new Point(400, 250);
+
+    private int MIN_BUTTON_WIDTH = 100;
     /**
      * CallBack сохранения
      */
@@ -89,17 +90,23 @@ public abstract class MoneyActionFormBase
     {
     }
 
-    public void setSaveAction(Callable<Void> saveAction)
-    {
-        this.saveAction = saveAction;
-    }
-
     public void setSaveCallback(Callable<Void> saveCallback)
     {
         this.saveCallback = saveCallback;
     }
 
+    public void setSaveCommand(ICommand saveAction)
+    {
+        this.saveCommand = saveAction;
+    }
+
     protected abstract void initializeValue();
+    // categoryCombo.setSelection(new StructuredSelection(categories[0]), true);
+
+    /**
+     * Выполняется при нажатии кнопки "сохранить"
+     */
+    protected abstract void onApply();
 
     private Button createButton(Composite parent, String text, int horizontalAlignment)
     {
@@ -134,7 +141,7 @@ public abstract class MoneyActionFormBase
             {
                 if (e.type == SWT.Selection)
                 {
-                    onSave();
+                    save();
                 }
             }
         });
@@ -171,7 +178,6 @@ public abstract class MoneyActionFormBase
         {
             // TODO: Сделать нормальное сообщение об ошибке
         }
-        // categoryCombo.setSelection(new StructuredSelection(categories[0]), true);
     }
 
     /**
@@ -222,11 +228,12 @@ public abstract class MoneyActionFormBase
     /**
      * Метод, выполняющийся при сохранении
      */
-    private void onSave()
+    private void save()
     {
+        onApply();
         try
         {
-            saveAction.call();
+            saveCommand.perform();
         }
         catch (Exception e1)
         {
@@ -240,6 +247,6 @@ public abstract class MoneyActionFormBase
         {
             e1.printStackTrace();
         }
+        dialogShell.dispose();
     }
-
 }

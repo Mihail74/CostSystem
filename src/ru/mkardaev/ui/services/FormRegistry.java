@@ -3,6 +3,8 @@ package ru.mkardaev.ui.services;
 import java.util.HashMap;
 import java.util.Map;
 
+import ru.mkardaev.command.AddExpenseCommand;
+import ru.mkardaev.command.AddIncomeCommand;
 import ru.mkardaev.factories.ServicesFactory;
 import ru.mkardaev.ui.form.AddExpenseForm;
 import ru.mkardaev.ui.form.AddIncomeForm;
@@ -26,12 +28,12 @@ public class FormRegistry
     {
         AddIncomeForm addIncomeForm = new AddIncomeForm(
                 new CategoryInputProvider(ServicesFactory.getInstance().getDaoCategory()));
-        // addIncomeForm.setSaveAction(saveAction);
+        addIncomeForm.setSaveCommand(new AddIncomeCommand());
         registry.put(ADD_INCOME_FORM, addIncomeForm);
 
         AddExpenseForm addExpenseForm = new AddExpenseForm(
                 new CategoryInputProvider(ServicesFactory.getInstance().getDaoCategory()));
-        // addExpenseForm.setSaveAction(saveAction);
+        addExpenseForm.setSaveCommand(new AddExpenseCommand());
         registry.put(ADD_EXPENSE_FORM, addExpenseForm);
     }
 

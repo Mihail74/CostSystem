@@ -15,6 +15,12 @@ public class Category
         this.title = title;
     }
 
+    public Category(String title)
+    {
+        this.title = title;
+        id = 0L;
+    }
+
     @Override
     public boolean equals(Object obj)
     {

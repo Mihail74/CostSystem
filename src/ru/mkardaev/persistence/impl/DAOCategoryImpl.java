@@ -34,7 +34,7 @@ public class DAOCategoryImpl implements DAOCategory
     }
 
     @Override
-    public void create(Category category) throws ApException, SQLException
+    public void create(Category category) throws ApException
     {
         try (Connection connection = getConnection())
         {
@@ -57,7 +57,7 @@ public class DAOCategoryImpl implements DAOCategory
         catch (SQLException e)
         {
             logger.error("Error save category", e);
-            throw e;
+            throw new ApException("Error save category", e);
         }
     }
 

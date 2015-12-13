@@ -67,4 +67,38 @@ public class DateUtils
         return calendar;
     }
 
+    /**
+     * Возвращает время конца дня, т.е. для даты устанавливается время 23:59:59
+     * 
+     * @param date
+     * @return
+     */
+    public static Date getEndDayOfDate(Date date)
+    {
+        String TimeZoneId = ApplicationContext.getContext().<String> getData(Property.Keys.TIME_ZONE);
+        Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone(TimeZoneId));
+        calendar.set(Calendar.HOUR_OF_DAY, 23);
+        calendar.set(Calendar.MINUTE, 59);
+        calendar.set(Calendar.SECOND, 59);
+        calendar.set(Calendar.MILLISECOND, 999);
+        return calendar.getTime();
+    }
+
+    /**
+     * Возвращает время, убирая часы минуты и секунды. Т.е. возвращает начало дня
+     * 
+     * @param date
+     * @return
+     */
+    public static Date getStartDayOfDate(Date date)
+    {
+        String TimeZoneId = ApplicationContext.getContext().<String> getData(Property.Keys.TIME_ZONE);
+        Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone(TimeZoneId));
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
+        return calendar.getTime();
+    }
+
 }

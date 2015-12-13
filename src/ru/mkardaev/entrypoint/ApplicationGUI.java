@@ -9,6 +9,7 @@ import org.eclipse.swt.widgets.Shell;
 import ru.mkardaev.factories.ServicesFactory;
 import ru.mkardaev.resources.Resources;
 import ru.mkardaev.ui.MainForm;
+import ru.mkardaev.ui.utils.category.ExpenseInputProvider;
 import ru.mkardaev.utils.Messages;
 
 /**
@@ -35,6 +36,8 @@ public class ApplicationGUI
         shell.setImage(new Image(display, Resources.ICON_PATH));
 
         MainForm mainForm = new MainForm(shell, display);
+        mainForm.setExpensesInputProvider(new ExpenseInputProvider(ServicesFactory.getInstance().getDaoCategory(),
+                ServicesFactory.getInstance().getDaoMoneyAction()));
         mainForm.bind();
 
         shell.pack();

@@ -26,7 +26,7 @@ public class DAOMoneyActionImpl implements DAOMoneyAction
 
     private static final String DELETE_SQL = "DELETE FROM money_action WHERE id = ?";
     private static final String INSERT_SQL = "INSERT INTO money_action(account_id, category_id, creation_date, value, description, type) VALUES(?,?,?,?,?,?)";
-    private static final String SELECT_BY_CREATION_DATE_SQL = "SELECT id, account_id, category_id, creation_date, value, description, type FROM money_action WHERE creation_date >= ? AND creation_date <= ?";
+    private static final String SELECT_BY_CREATION_DATE_SQL = "SELECT id, account_id, category_id, creation_date, value, description, type FROM money_action WHERE creation_date >= ? AND creation_date <= ? AND account_id = ?";
     private static final String SELECT_SQL = "SELECT id, account_id, category_id, creation_date, value, description, type FROM money_action WHERE id = ?";
     private static final String UPDATE_SQL = "UPDATE money_action SET account_id = ?, category_id = ?, creation_date = ?, value = ?, description = ?  WHERE id = ?";
     private MoneyActionFactory moneyActionFactory;
@@ -38,7 +38,7 @@ public class DAOMoneyActionImpl implements DAOMoneyAction
     }
 
     @Override
-    public void create(MoneyAction moneyAction) throws ApException, SQLException
+    public void create(MoneyAction moneyAction) throws ApException
     {
         try (Connection connection = getConnection())
         {
@@ -66,7 +66,7 @@ public class DAOMoneyActionImpl implements DAOMoneyAction
         catch (SQLException e)
         {
             logger.error("Error save money action", e);
-            throw e;
+            throw new ApException("Error save money action", e);
         }
 
     }
@@ -98,6 +98,7 @@ public class DAOMoneyActionImpl implements DAOMoneyAction
             try (PreparedStatement stmt = connection.prepareStatement(SELECT_SQL))
             {
                 stmt.setLong(1, moneyActionId);
+                stmt.executeQuery();
                 try (ResultSet rs = stmt.executeQuery())
                 {
                     if (rs.next())
@@ -127,10 +128,11 @@ public class DAOMoneyActionImpl implements DAOMoneyAction
             {
                 stmt.setLong(1, DateUtils.convertToGMT0LongFromDefaultTimeZone(startDate));
                 stmt.setLong(2, DateUtils.convertToGMT0LongFromDefaultTimeZone(endDate));
-                stmt.executeUpdate();
+                stmt.setLong(3, account.getId());
+                stmt.executeQuery();
                 try (ResultSet rs = stmt.executeQuery())
                 {
-                    if (rs.next())
+                    while (rs.next())
                     {
                         result.add(moneyActionFactory.createMoneyAction(rs.getLong(7), rs.getLong(1), rs.getLong(2),
                                 rs.getLong(3), DateUtils.convertToDateWithDefaultTimeZone(rs.getLong(4)), rs.getLong(5),

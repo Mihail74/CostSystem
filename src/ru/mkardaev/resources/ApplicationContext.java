@@ -13,6 +13,8 @@ public class ApplicationContext
 {
     public static final String CURRENT_ACCOUNT = "currentAccount";
     public static final String CURRENT_PERSON = "currentPerson";
+    public static final String EXPENSE = "expense";
+    public static final String INCOME = "icnome";
 
     private static ApplicationContext instance = new ApplicationContext();
 

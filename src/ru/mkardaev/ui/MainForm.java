@@ -20,6 +20,8 @@ import ru.mkardaev.factories.ServicesFactory;
 import ru.mkardaev.ui.form.AddExpenseForm;
 import ru.mkardaev.ui.form.AddIncomeForm;
 import ru.mkardaev.ui.services.FormRegistry;
+import ru.mkardaev.ui.utils.category.ExpenseInputProvider;
+import ru.mkardaev.ui.utils.category.IncomeInputProvider;
 import ru.mkardaev.ui.widget.DateIntervalPickerWidget;
 import ru.mkardaev.ui.widget.MoneyActionTableWidget;
 import ru.mkardaev.ui.widget.TotalMoneyActionsValueWidget;
@@ -35,11 +37,16 @@ public class MainForm
 {
     private Button addExpenseButton;
     private Button addIncomeButton;
+    private DateIntervalPickerWidget dateIntervalPicker;
     private Display display;
+    private ExpenseInputProvider expensesInputProvider;
     private Form form;
+    private IncomeInputProvider incomesInputProvider;
     private Messages messages;
+    private int MIN_BUTTON_WIDTH = 100;
     private Callable<Void> refreshCallback;
     private Shell shell;
+
     private FormToolkit toolKit;
 
     public MainForm(Shell shell, Display display)
@@ -75,9 +82,29 @@ public class MainForm
         createTable();
     }
 
+    public ExpenseInputProvider getExpensesInputProvider()
+    {
+        return expensesInputProvider;
+    }
+
+    public IncomeInputProvider getIncomesInputProvider()
+    {
+        return incomesInputProvider;
+    }
+
     public void refreshForm()
     {
 
+    }
+
+    public void setExpensesInputProvider(ExpenseInputProvider expensesInputProvider)
+    {
+        this.expensesInputProvider = expensesInputProvider;
+    }
+
+    public void setIncomesInputProvider(IncomeInputProvider incomesInputProvider)
+    {
+        this.incomesInputProvider = incomesInputProvider;
     }
 
     /**
@@ -95,9 +122,11 @@ public class MainForm
         TabItem incomeTab = new TabItem(tablFolder, SWT.NONE);
         incomeTab.setText(messages.getMessage(Messages.Keys.INCOMES));
 
-        MoneyActionTableWidget commonTableWidget = new MoneyActionTableWidget(tablFolder);
-        commonTableWidget.bind();
-        expenseTab.setControl(commonTableWidget.getControl());
+        MoneyActionTableWidget expenseTableWidget = new MoneyActionTableWidget(tablFolder);
+        expenseTableWidget.setMoneyActionInputProvider(expensesInputProvider);
+        expenseTableWidget.setDateInterval(dateIntervalPicker.getFromDate(), dateIntervalPicker.getToDate());
+        expenseTableWidget.bind();
+        expenseTab.setControl(expenseTableWidget.getControl());
 
         Composite composite2 = new Composite(tablFolder, SWT.NONE);
         composite2.setLayout(new GridLayout(1, true));
@@ -125,7 +154,7 @@ public class MainForm
         balanceComposite.setLayoutData(new GridData(GridData.FILL_BOTH));
         toolKit.createLabel(balanceComposite, messages.getMessage(Messages.Keys.ACCOUNT_BALANCE));
 
-        DateIntervalPickerWidget dateIntervalPicker = new DateIntervalPickerWidget(toolComposite);
+        dateIntervalPicker = new DateIntervalPickerWidget(toolComposite);
         dateIntervalPicker.bind();
 
         Composite buttonComposite = toolKit.createComposite(toolComposite);
@@ -135,6 +164,11 @@ public class MainForm
                 SWT.PUSH);
         addIncomeButton = toolKit.createButton(buttonComposite, messages.getMessage(Messages.Keys.ADD_INCOME),
                 SWT.PUSH);
+
+        GridData buttonGridData = new GridData();
+        buttonGridData.minimumWidth = MIN_BUTTON_WIDTH;
+        addExpenseButton.setLayoutData(buttonGridData);
+        addIncomeButton.setLayoutData(buttonGridData);
 
         addExpenseButton.addListener(SWT.Selection, new Listener()
         {

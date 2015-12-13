@@ -22,10 +22,7 @@ public class ExpenseStatisticsServiceImpl implements ExpenseStatisticsService
     public List<Expense> getExpenses(Account account, Date startDate, Date endDate) throws ApException
     {
         return ServicesFactory.getInstance().getDaoMoneyAction().getByCreationDate(account, startDate, endDate).stream()
-                .filter(e -> e instanceof Expense)
-                .map(e -> (Expense) e).filter(e -> e.getAccountId() == account.getId()
-                        && !e.getCreationDate().before(startDate) && !e.getCreationDate().after(endDate))
-                .collect(Collectors.toList());
+                .filter(e -> e instanceof Expense).map(e -> (Expense) e).collect(Collectors.toList());
     }
 
     @Override
