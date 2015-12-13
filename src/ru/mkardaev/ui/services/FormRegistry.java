@@ -5,9 +5,11 @@ import java.util.Map;
 
 import ru.mkardaev.command.AddExpenseCommand;
 import ru.mkardaev.command.AddIncomeCommand;
+import ru.mkardaev.command.EditExpenseCommand;
 import ru.mkardaev.factories.ServicesFactory;
 import ru.mkardaev.ui.form.AddExpenseForm;
 import ru.mkardaev.ui.form.AddIncomeForm;
+import ru.mkardaev.ui.form.EditExpenseForm;
 import ru.mkardaev.ui.utils.category.CategoryInputProvider;
 
 /**
@@ -20,6 +22,7 @@ public class FormRegistry
 {
     public static final String ADD_EXPENSE_FORM = "addExpeneForm";
     public static final String ADD_INCOME_FORM = "addIncomeForm";
+    public static final String EDIT_EXPENSE_FORM = "editExpeneForm";
     private static FormRegistry instancte;
 
     private Map<String, Object> registry = new HashMap<>();
@@ -35,6 +38,11 @@ public class FormRegistry
                 new CategoryInputProvider(ServicesFactory.getInstance().getDaoCategory()));
         addExpenseForm.setSaveCommand(new AddExpenseCommand());
         registry.put(ADD_EXPENSE_FORM, addExpenseForm);
+
+        EditExpenseForm editExpenseForm = new EditExpenseForm(
+                new CategoryInputProvider(ServicesFactory.getInstance().getDaoCategory()));
+        editExpenseForm.setSaveCommand(new EditExpenseCommand());
+        registry.put(EDIT_EXPENSE_FORM, editExpenseForm);
     }
 
     @SuppressWarnings("unchecked")

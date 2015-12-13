@@ -103,7 +103,7 @@ public class DAOAccountImpl implements DAOAccount
     }
 
     @Override
-    public void update(Account account) throws SQLException
+    public void update(Account account) throws ApException
     {
         try (Connection connection = getConnection())
         {
@@ -117,7 +117,7 @@ public class DAOAccountImpl implements DAOAccount
         catch (SQLException e)
         {
             logger.error("Error update account", e);
-            throw e;
+            throw new ApException("Error update account", e);
         }
     }
 

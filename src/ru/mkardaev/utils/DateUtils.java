@@ -60,11 +60,27 @@ public class DateUtils
         return convertToGMT0Long(date, TimeZone.getTimeZone(properties.getProperty(Property.Keys.TIME_ZONE)));
     }
 
-    public static Calendar getCurrentDate()
+    public static Calendar getCaledar(Date date)
     {
         String TimeZoneId = ApplicationContext.getContext().<String> getData(Property.Keys.TIME_ZONE);
         Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone(TimeZoneId));
+        calendar.setTime(date);
         return calendar;
+    }
+
+    public static Calendar getCurrentDate()
+    {
+        return getCaledar(new Date());
+    }
+
+    public static Date getDate(int year, int month, int day)
+    {
+        String TimeZoneId = ApplicationContext.getContext().<String> getData(Property.Keys.TIME_ZONE);
+        Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone(TimeZoneId));
+        calendar.set(Calendar.YEAR, year);
+        calendar.set(Calendar.MONTH, month);
+        calendar.set(Calendar.DAY_OF_MONTH, day);
+        return calendar.getTime();
     }
 
     /**

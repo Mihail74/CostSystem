@@ -44,5 +44,5 @@ public interface DAO<T>
      * @param object - объект с обновленными полями.
      * @throws SQLException - если не удалось обновить объект или объект ещё не существует в БД.
      */
-    void update(T object) throws SQLException;
+    void update(T object) throws ApException;
 }

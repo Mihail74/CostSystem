@@ -23,6 +23,7 @@ import org.eclipse.swt.widgets.Text;
 import ru.mkardaev.command.ICommand;
 import ru.mkardaev.exception.ApException;
 import ru.mkardaev.factories.ServicesFactory;
+import ru.mkardaev.model.MoneyAction;
 import ru.mkardaev.resources.Resources;
 import ru.mkardaev.ui.utils.InputProvider;
 import ru.mkardaev.ui.utils.category.CategoryLabelProvider;
@@ -41,9 +42,11 @@ public abstract class MoneyActionFormBase
     protected Button cancelButton;
     protected ComboViewer categoryCombo;
     protected InputProvider categoryInputProvider;
-    protected Text desriptionText;
+    protected DateTime creationDatePicker;
+    protected Text descriptionText;
     protected Shell dialogShell;
     protected Messages messages;
+    protected MoneyAction moneyAction;
     protected Button okButton;
     /**
      * Действия, которые необходимо выполнить при сохранении
@@ -86,8 +89,9 @@ public abstract class MoneyActionFormBase
         }
     }
 
-    public void init()
+    public void init(MoneyAction moneyAction)
     {
+        this.moneyAction = moneyAction;
     }
 
     public void setSaveCallback(Callable<Void> saveCallback)
@@ -101,7 +105,6 @@ public abstract class MoneyActionFormBase
     }
 
     protected abstract void initializeValue();
-    // categoryCombo.setSelection(new StructuredSelection(categories[0]), true);
 
     /**
      * Выполняется при нажатии кнопки "сохранить"
@@ -200,7 +203,7 @@ public abstract class MoneyActionFormBase
 
         Label creationDateLabel = new Label(composite, SWT.NONE);
         creationDateLabel.setText(messages.getMessage(Messages.Keys.CREATION_DATE));
-        DateTime creationDatePicker = new DateTime(composite, SWT.DROP_DOWN);
+        creationDatePicker = new DateTime(composite, SWT.DROP_DOWN);
 
         Calendar currentDate = DateUtils.getCurrentDate();
         creationDatePicker.setYear(currentDate.get(Calendar.YEAR));
@@ -209,7 +212,7 @@ public abstract class MoneyActionFormBase
 
         Label desriptionLabel = new Label(composite, SWT.NONE);
         desriptionLabel.setText(messages.getMessage(Messages.Keys.DESCRIPTION));
-        desriptionText = new Text(composite, SWT.MULTI | SWT.BORDER | SWT.WRAP | SWT.V_SCROLL);
+        descriptionText = new Text(composite, SWT.MULTI | SWT.BORDER | SWT.WRAP | SWT.V_SCROLL);
 
         // layoutData
         categoryLabel.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
@@ -222,7 +225,7 @@ public abstract class MoneyActionFormBase
         creationDatePicker.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
         desriptionLabel.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-        desriptionText.setLayoutData(new GridData(GridData.FILL_BOTH));
+        descriptionText.setLayoutData(new GridData(GridData.FILL_BOTH));
     }
 
     /**
@@ -241,7 +244,10 @@ public abstract class MoneyActionFormBase
         }
         try
         {
-            saveCallback.call();
+            if (saveCallback != null)
+            {
+                saveCallback.call();
+            }
         }
         catch (Exception e1)
         {

@@ -40,13 +40,13 @@ public class MainForm
     private DateIntervalPickerWidget dateIntervalPicker;
     private Display display;
     private ExpenseInputProvider expensesInputProvider;
+    private MoneyActionTableWidget expenseTableWidget;
     private Form form;
     private IncomeInputProvider incomesInputProvider;
     private Messages messages;
     private int MIN_BUTTON_WIDTH = 100;
     private Callable<Void> refreshCallback;
     private Shell shell;
-
     private FormToolkit toolKit;
 
     public MainForm(Shell shell, Display display)
@@ -57,7 +57,6 @@ public class MainForm
         toolKit = new FormToolkit(this.display);
         refreshCallback = new Callable<Void>()
         {
-
             @Override
             public Void call() throws Exception
             {
@@ -94,7 +93,7 @@ public class MainForm
 
     public void refreshForm()
     {
-
+        expenseTableWidget.refresh();
     }
 
     public void setExpensesInputProvider(ExpenseInputProvider expensesInputProvider)
@@ -122,7 +121,7 @@ public class MainForm
         TabItem incomeTab = new TabItem(tablFolder, SWT.NONE);
         incomeTab.setText(messages.getMessage(Messages.Keys.INCOMES));
 
-        MoneyActionTableWidget expenseTableWidget = new MoneyActionTableWidget(tablFolder);
+        expenseTableWidget = new MoneyActionTableWidget(tablFolder);
         expenseTableWidget.setMoneyActionInputProvider(expensesInputProvider);
         expenseTableWidget.setDateInterval(dateIntervalPicker.getFromDate(), dateIntervalPicker.getToDate());
         expenseTableWidget.bind();

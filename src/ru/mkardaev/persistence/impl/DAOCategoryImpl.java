@@ -131,7 +131,7 @@ public class DAOCategoryImpl implements DAOCategory
     }
 
     @Override
-    public void update(Category category) throws SQLException
+    public void update(Category category) throws ApException
     {
         try (Connection connection = getConnection())
         {
@@ -145,7 +145,7 @@ public class DAOCategoryImpl implements DAOCategory
         catch (SQLException e)
         {
             logger.error("Error update category", e);
-            throw e;
+            throw new ApException("Error update category", e);
         }
     }
 

@@ -36,7 +36,7 @@ public class AddIncomeForm extends MoneyActionFormBase
         Category category = (Category) ((StructuredSelection) categoryCombo.getSelection()).getFirstElement();
         Account account = ApplicationContext.getContext().getData(ApplicationContext.CURRENT_ACCOUNT);
         Long value = Long.valueOf(valueText.getText());
-        String description = desriptionText.getText();
+        String description = descriptionText.getText();
 
         Income income = ServicesFactory.getInstance().getMoneyActionFactory().createIncome(account, category, value);
         income.setDescription(description);

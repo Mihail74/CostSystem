@@ -2,14 +2,13 @@ package ru.mkardaev.ui.widget;
 
 import java.text.DateFormat;
 import java.util.Date;
+import java.util.concurrent.Callable;
 
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
-import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.swt.SWT;
@@ -23,6 +22,8 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 import ru.mkardaev.exception.ApException;
 import ru.mkardaev.factories.ServicesFactory;
 import ru.mkardaev.ui.MoneyActionUIModel;
+import ru.mkardaev.ui.form.EditExpenseForm;
+import ru.mkardaev.ui.services.FormRegistry;
 import ru.mkardaev.ui.utils.category.ExpenseInputProvider;
 import ru.mkardaev.ui.utils.category.MoneyActionUIModelSorter;
 import ru.mkardaev.utils.DateUtils;
@@ -36,6 +37,17 @@ public class MoneyActionTableWidget
     private ExpenseInputProvider moneyActionInputProvider;
     private Composite parent;
 
+    private Callable<Void> refreshCallback = new Callable<Void>()
+    {
+
+        @Override
+        public Void call() throws Exception
+        {
+            refresh();
+            return null;
+        }
+
+    };
     private TableViewer tableViewer;
     private FormToolkit toolKit;
 
@@ -61,17 +73,7 @@ public class MoneyActionTableWidget
         table.setLinesVisible(true);
 
         createColumn();
-
-        try
-        {
-            tableViewer.setInput(moneyActionInputProvider.getInput(DateUtils.getStartDayOfDate(beginDate),
-                    DateUtils.getEndDayOfDate(endDate)));
-        }
-        catch (ApException e)
-        {
-            // TODO ошибка при загрузке данных
-            e.printStackTrace();
-        }
+        initTableData();
 
         for (int i = 0, n = table.getColumnCount(); i < n; i++)
         {
@@ -83,22 +85,13 @@ public class MoneyActionTableWidget
             @Override
             public void doubleClick(DoubleClickEvent getSelection)
             {
-                // IStructuredSelection selection = tableViewer.getStructuredSelection();
-                // Object firstElement = selection.getFirstElement();
-                // int x = 5;
-                // x++;
-
-            }
-        });
-        tableViewer.addSelectionChangedListener(new ISelectionChangedListener()
-        {
-            @Override
-            public void selectionChanged(SelectionChangedEvent event)
-            {
-                IStructuredSelection selection = (IStructuredSelection) event.getSelection();
-                Object firstElement = selection.getFirstElement();
-                int x = 5;
-                x++;
+                IStructuredSelection selection = tableViewer.getStructuredSelection();
+                MoneyActionUIModel action = (MoneyActionUIModel) selection.getFirstElement();
+                EditExpenseForm form = FormRegistry.getInstance()
+                        .<EditExpenseForm> getForm(FormRegistry.EDIT_EXPENSE_FORM);
+                form.init(action.getMoneyAction());
+                form.setSaveCallback(refreshCallback);
+                form.bind();
             }
         });
     }
@@ -106,6 +99,12 @@ public class MoneyActionTableWidget
     public Control getControl()
     {
         return tableViewer.getControl();
+    }
+
+    public void refresh()
+    {
+        initTableData();
+        tableViewer.refresh();
     }
 
     public void setDateInterval(Date beginDate, Date endDate)
@@ -212,5 +211,19 @@ public class MoneyActionTableWidget
                 tableViewer.refresh();
             }
         });
+    }
+
+    private void initTableData()
+    {
+        try
+        {
+            tableViewer.setInput(moneyActionInputProvider.getInput(DateUtils.getStartDayOfDate(beginDate),
+                    DateUtils.getEndDayOfDate(endDate)));
+        }
+        catch (ApException e)
+        {
+            // TODO ошибка при загрузке данных
+            e.printStackTrace();
+        }
     }
 }

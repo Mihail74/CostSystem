@@ -150,7 +150,7 @@ public class DAOMoneyActionImpl implements DAOMoneyAction
     }
 
     @Override
-    public void update(MoneyAction moneyAction) throws SQLException
+    public void update(MoneyAction moneyAction) throws ApException
     {
         try (Connection connection = getConnection())
         {
@@ -167,8 +167,8 @@ public class DAOMoneyActionImpl implements DAOMoneyAction
         }
         catch (SQLException e)
         {
-            logger.error("Error update category", e);
-            throw e;
+            logger.error("Error update money action", e);
+            throw new ApException("Error update money action", e);
         }
 
     }

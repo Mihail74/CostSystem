@@ -6,7 +6,6 @@ import ru.mkardaev.command.DtObject;
 import ru.mkardaev.factories.ServicesFactory;
 import ru.mkardaev.model.Account;
 import ru.mkardaev.model.Category;
-import ru.mkardaev.model.Expense;
 import ru.mkardaev.resources.ApplicationContext;
 import ru.mkardaev.ui.utils.InputProvider;
 import ru.mkardaev.utils.Messages;
@@ -19,7 +18,6 @@ import ru.mkardaev.utils.Messages;
  */
 public class AddExpenseForm extends MoneyActionFormBase
 {
-
     public AddExpenseForm(InputProvider categoryInputProvider)
     {
         super(categoryInputProvider);
@@ -37,13 +35,13 @@ public class AddExpenseForm extends MoneyActionFormBase
         Category category = (Category) ((StructuredSelection) categoryCombo.getSelection()).getFirstElement();
         Account account = ApplicationContext.getContext().getData(ApplicationContext.CURRENT_ACCOUNT);
         Long value = Long.valueOf(valueText.getText());
-        String description = desriptionText.getText();
+        String description = descriptionText.getText();
 
-        Expense expense = ServicesFactory.getInstance().getMoneyActionFactory().createExpense(account, category, value);
-        expense.setDescription(description);
+        moneyAction = ServicesFactory.getInstance().getMoneyActionFactory().createExpense(account, category, value);
+        moneyAction.setDescription(description);
 
         DtObject dtObject = new DtObject();
-        dtObject.putProperty(ApplicationContext.EXPENSE, expense);
+        dtObject.putProperty(ApplicationContext.EXPENSE, moneyAction);
         saveCommand.setDtObject(dtObject);
     }
 }
