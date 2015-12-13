@@ -11,6 +11,14 @@ import ru.mkardaev.model.MoneyAction;
  */
 public class MoneyActionUIModel
 {
+    public class tableColumnNumbers
+    {
+        public static final int COLUMN_CATEGORY = 1;
+        public static final int COLUMN_DATE = 0;
+        public static final int COLUMN_DESCRIPTION = 3;
+        public static final int COLUMN_VALUE = 2;
+    }
+
     private Category category;
     private MoneyAction moneyAction;
 

@@ -23,8 +23,8 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 import ru.mkardaev.exception.ApException;
 import ru.mkardaev.factories.ServicesFactory;
 import ru.mkardaev.ui.MoneyActionUIModel;
-import ru.mkardaev.ui.utils.MoneyActionSorter;
 import ru.mkardaev.ui.utils.category.ExpenseInputProvider;
+import ru.mkardaev.ui.utils.category.MoneyActionUIModelSorter;
 import ru.mkardaev.utils.DateUtils;
 import ru.mkardaev.utils.Messages;
 
@@ -54,7 +54,7 @@ public class MoneyActionTableWidget
         }
         tableViewer = new TableViewer(parent, SWT.SINGLE | SWT.FULL_SELECTION);
         tableViewer.setContentProvider(ArrayContentProvider.getInstance());
-        tableViewer.setSorter(new MoneyActionSorter());
+        tableViewer.setSorter(new MoneyActionUIModelSorter());
 
         Table table = tableViewer.getTable();
         table.setHeaderVisible(true);
@@ -66,7 +66,6 @@ public class MoneyActionTableWidget
         {
             tableViewer.setInput(moneyActionInputProvider.getInput(DateUtils.getStartDayOfDate(beginDate),
                     DateUtils.getEndDayOfDate(endDate)));
-            // tableViewer.refresh();
         }
         catch (ApException e)
         {
@@ -124,6 +123,8 @@ public class MoneyActionTableWidget
     {
         TableViewerColumn dateColumn = new TableViewerColumn(tableViewer, SWT.NONE);
         dateColumn.getColumn().setText(messages.getMessage(Messages.Keys.CREATION_DATE));
+
+        // Label providers
         dateColumn.setLabelProvider(new ColumnLabelProvider()
         {
             @Override
@@ -170,12 +171,45 @@ public class MoneyActionTableWidget
             }
         });
 
+        // Column Sort
         dateColumn.getColumn().addSelectionListener(new SelectionAdapter()
         {
             @Override
             public void widgetSelected(SelectionEvent event)
             {
-                // for sort
+                ((MoneyActionUIModelSorter) tableViewer.getSorter())
+                        .doSort(MoneyActionUIModel.tableColumnNumbers.COLUMN_DATE);
+                tableViewer.refresh();
+            }
+        });
+        categoryColumn.getColumn().addSelectionListener(new SelectionAdapter()
+        {
+            @Override
+            public void widgetSelected(SelectionEvent event)
+            {
+                ((MoneyActionUIModelSorter) tableViewer.getSorter())
+                        .doSort(MoneyActionUIModel.tableColumnNumbers.COLUMN_CATEGORY);
+                tableViewer.refresh();
+            }
+        });
+        valueColumn.getColumn().addSelectionListener(new SelectionAdapter()
+        {
+            @Override
+            public void widgetSelected(SelectionEvent event)
+            {
+                ((MoneyActionUIModelSorter) tableViewer.getSorter())
+                        .doSort(MoneyActionUIModel.tableColumnNumbers.COLUMN_VALUE);
+                tableViewer.refresh();
+            }
+        });
+        descriptionColumn.getColumn().addSelectionListener(new SelectionAdapter()
+        {
+            @Override
+            public void widgetSelected(SelectionEvent event)
+            {
+                ((MoneyActionUIModelSorter) tableViewer.getSorter())
+                        .doSort(MoneyActionUIModel.tableColumnNumbers.COLUMN_DESCRIPTION);
+                tableViewer.refresh();
             }
         });
     }

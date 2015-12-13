@@ -54,6 +54,10 @@ public abstract class MoneyAction implements java.io.Serializable
 
     public String getDescription()
     {
+        if (description == null)
+        {
+            description = "";
+        }
         return description;
     }
 
