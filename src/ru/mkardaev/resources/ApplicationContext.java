@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Контекст приложения, используется для хранения данных во время работы приложения.
+ * Контекст приложения, импользуемый для хранения данных во время работы приложения.
  * 
  * @author Mihail
  *
@@ -15,6 +15,7 @@ public class ApplicationContext
     public static final String CURRENT_PERSON = "currentPerson";
     public static final String EXPENSE = "expense";
     public static final String INCOME = "icnome";
+    public static final String MONEY_ACTION_ID = "moneyActionId";
 
     private static ApplicationContext instance = new ApplicationContext();
 
@@ -44,5 +45,4 @@ public class ApplicationContext
     {
         return instance;
     }
-
 }

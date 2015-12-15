@@ -47,7 +47,7 @@ public class DAOMoneyActionImpl implements DAOMoneyAction
                 stmt.setLong(1, moneyAction.getAccountId());
                 stmt.setLong(2, moneyAction.getCategoryId());
                 stmt.setLong(3, DateUtils.convertToGMT0LongFromDefaultTimeZone(moneyAction.getCreationDate()));
-                stmt.setLong(4, moneyAction.getValue());
+                stmt.setDouble(4, moneyAction.getValue());
                 stmt.setString(5, moneyAction.getDescription());
                 stmt.setLong(6, moneyAction instanceof Income ? MoneyAction.INCOME_TYPE : MoneyAction.EXPENSE_TYPE);
                 stmt.executeUpdate();
@@ -72,7 +72,7 @@ public class DAOMoneyActionImpl implements DAOMoneyAction
     }
 
     @Override
-    public void delete(long moneyActionId) throws SQLException
+    public void delete(long moneyActionId) throws ApException
     {
         try (Connection connection = getConnection())
         {
@@ -84,8 +84,8 @@ public class DAOMoneyActionImpl implements DAOMoneyAction
         }
         catch (SQLException e)
         {
-            logger.error("Error money action", e);
-            throw e;
+            logger.error("Error delete money action", e);
+            throw new ApException("Error delete money action", e);
         }
     }
 
@@ -135,8 +135,8 @@ public class DAOMoneyActionImpl implements DAOMoneyAction
                     while (rs.next())
                     {
                         result.add(moneyActionFactory.createMoneyAction(rs.getLong(7), rs.getLong(1), rs.getLong(2),
-                                rs.getLong(3), DateUtils.convertToDateWithDefaultTimeZone(rs.getLong(4)), rs.getLong(5),
-                                rs.getString(6)));
+                                rs.getLong(3), DateUtils.convertToDateWithDefaultTimeZone(rs.getLong(4)),
+                                rs.getFloat(5), rs.getString(6)));
                     }
                 }
             }
@@ -159,7 +159,7 @@ public class DAOMoneyActionImpl implements DAOMoneyAction
                 stmt.setLong(1, moneyAction.getAccountId());
                 stmt.setLong(2, moneyAction.getCategoryId());
                 stmt.setLong(3, DateUtils.convertToGMT0LongFromDefaultTimeZone(moneyAction.getCreationDate()));
-                stmt.setLong(4, moneyAction.getValue());
+                stmt.setDouble(4, moneyAction.getValue());
                 stmt.setString(5, moneyAction.getDescription());
                 stmt.setLong(6, moneyAction.getId());
                 stmt.executeUpdate();

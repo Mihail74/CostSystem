@@ -11,7 +11,7 @@ public abstract class MoneyAction implements java.io.Serializable
     public static final int INCOME_TYPE = 1;
     private static final long serialVersionUID = 1L;
 
-    protected long value;
+    protected double value;
     private long accountId;
     private long categoryId;
     private Date creationDate;
@@ -23,7 +23,7 @@ public abstract class MoneyAction implements java.io.Serializable
 
     }
 
-    public MoneyAction(long accountId, long categoryId, long value)
+    public MoneyAction(long accountId, long categoryId, double value)
     {
         this.accountId = accountId;
         this.value = value;
@@ -31,7 +31,7 @@ public abstract class MoneyAction implements java.io.Serializable
         this.creationDate = new Date();
     }
 
-    public MoneyAction(long accountId, long categoryId, long value, Date creationDate)
+    public MoneyAction(long accountId, long categoryId, double value, Date creationDate)
     {
         this(accountId, categoryId, value);
         this.creationDate = creationDate;
@@ -66,7 +66,7 @@ public abstract class MoneyAction implements java.io.Serializable
         return id;
     }
 
-    public long getValue()
+    public double getValue()
     {
         return value;
     }
@@ -96,7 +96,7 @@ public abstract class MoneyAction implements java.io.Serializable
         this.id = id;
     }
 
-    public void setValue(long value)
+    public void setValue(double value)
     {
         this.value = value;
     }

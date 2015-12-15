@@ -12,32 +12,32 @@ import ru.mkardaev.model.MoneyAction;
 public class MoneyActionFactoryImpl implements MoneyActionFactory
 {
     @Override
-    public Expense createExpense(Account account, Category category, long value)
+    public Expense createExpense(Account account, Category category, double value)
     {
         return new Expense(account.getId(), category.getId(), value);
     }
 
     @Override
-    public Expense createExpense(Account account, Category category, long value, Date creationDate)
+    public Expense createExpense(Account account, Category category, double value, Date creationDate)
     {
         return new Expense(account.getId(), category.getId(), value, creationDate);
     }
 
     @Override
-    public Income createIncome(Account account, Category category, long value)
+    public Income createIncome(Account account, Category category, double value)
     {
         return new Income(account.getId(), category.getId(), value);
     }
 
     @Override
-    public Income createIncome(Account account, Category category, long value, Date creationDate)
+    public Income createIncome(Account account, Category category, double value, Date creationDate)
     {
         return new Income(account.getId(), category.getId(), value, creationDate);
     }
 
     @Override
     public MoneyAction createMoneyAction(long type, long id, long accountId, long categoryId, Date creationDate,
-            long value, String description)
+            double value, String description)
     {
         MoneyAction result = null;
         if (MoneyAction.EXPENSE_TYPE == type)

@@ -22,7 +22,7 @@ import ru.mkardaev.utils.Messages;
 public class EditExpenseForm extends MoneyActionFormBase
 {
 
-    public EditExpenseForm(InputProvider categoryInputProvider)
+    EditExpenseForm(InputProvider categoryInputProvider)
     {
         super(categoryInputProvider);
     }
@@ -64,7 +64,7 @@ public class EditExpenseForm extends MoneyActionFormBase
         moneyAction.setCategoryId(category.getId());
         moneyAction.setCreationDate(DateUtils.getDate(creationDatePicker.getYear(), creationDatePicker.getMonth(),
                 creationDatePicker.getDay()));
-        moneyAction.setValue(Long.valueOf(valueText.getText()));
+        moneyAction.setValue(Double.valueOf(valueText.getText()));
         moneyAction.setDescription(descriptionText.getText());
 
         DtObject dtObject = new DtObject();

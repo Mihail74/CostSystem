@@ -27,7 +27,7 @@ public interface DAO<T>
      * @param objectId - id удаляемого объекта
      * @throws SQLException
      */
-    void delete(long objectId) throws SQLException;
+    void delete(long objectId) throws ApException;
 
     /**
      * Достаёт объект из базы данных по его id.

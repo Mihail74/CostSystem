@@ -25,9 +25,9 @@ import ru.mkardaev.exception.ApException;
 import ru.mkardaev.factories.ServicesFactory;
 import ru.mkardaev.model.MoneyAction;
 import ru.mkardaev.resources.Resources;
+import ru.mkardaev.ui.utils.CategoryLabelProvider;
+import ru.mkardaev.ui.utils.CategorySorter;
 import ru.mkardaev.ui.utils.InputProvider;
-import ru.mkardaev.ui.utils.category.CategoryLabelProvider;
-import ru.mkardaev.ui.utils.category.CategorySorter;
 import ru.mkardaev.utils.DateUtils;
 import ru.mkardaev.utils.Messages;
 
@@ -62,7 +62,7 @@ public abstract class MoneyActionFormBase
      */
     private Callable<Void> saveCallback;
 
-    public MoneyActionFormBase(InputProvider categoryInputProvider)
+    MoneyActionFormBase(InputProvider categoryInputProvider)
     {
         messages = ServicesFactory.getInstance().getMessages();
         this.categoryInputProvider = categoryInputProvider;
@@ -73,7 +73,7 @@ public abstract class MoneyActionFormBase
         Display display = Display.getDefault();
         dialogShell = new Shell(display, SWT.APPLICATION_MODAL | SWT.SHELL_TRIM);
         dialogShell.setLayout(new GridLayout(1, true));
-        dialogShell.setImage(new Image(display, Resources.ICON_PATH));
+        dialogShell.setImage(new Image(display, Resources.FORM_ICON_PATH));
 
         createFormContent(dialogShell);
         createButtons(dialogShell);

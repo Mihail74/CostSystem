@@ -29,11 +29,11 @@ public interface ExpenseStatisticsService
     /**
      * @return суммарные расходы account в период со startDate по endDate
      */
-    Long getExpenseValue(Account account, Date startDate, Date endDate) throws ApException;
+    double getExpenseValue(Account account, Date startDate, Date endDate) throws ApException;
 
     /**
      * 
      * @return суммарные расходы account в период со startDate по endDate для категории category для account
      */
-    Long getExpenseValue(Account account, Date startDate, Date endDate, Category category) throws ApException;
+    double getExpenseValue(Account account, Date startDate, Date endDate, Category category) throws ApException;
 }

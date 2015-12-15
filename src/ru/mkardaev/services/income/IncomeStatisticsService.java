@@ -24,11 +24,11 @@ public interface IncomeStatisticsService
     /**
      * @return суммарные доходы в период со startDate по endDate для account
      */
-    Long getIncomeValue(Account account, Date startDate, Date endDate) throws ApException;
+    double getIncomeValue(Account account, Date startDate, Date endDate) throws ApException;
 
     /**
      * 
      * @return суммарные доходы в период со startDate по endDate для категории category для account
      */
-    Long getIncomeValue(Account account, Date startDate, Date endDate, Category category) throws ApException;
+    double getIncomeValue(Account account, Date startDate, Date endDate, Category category) throws ApException;
 }

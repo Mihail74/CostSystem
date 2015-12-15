@@ -62,7 +62,7 @@ public class DAOCategoryImpl implements DAOCategory
     }
 
     @Override
-    public void delete(long categoryId) throws SQLException
+    public void delete(long categoryId) throws ApException
     {
         try (Connection connection = getConnection())
         {
@@ -75,7 +75,7 @@ public class DAOCategoryImpl implements DAOCategory
         catch (SQLException e)
         {
             logger.error("Error delete category", e);
-            throw e;
+            throw new ApException("Error delete category", e);
         }
     }
 

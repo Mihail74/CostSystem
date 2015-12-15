@@ -34,14 +34,14 @@ public class ExpenseStatisticsServiceImpl implements ExpenseStatisticsService
     }
 
     @Override
-    public Long getExpenseValue(Account account, Date startDate, Date endDate) throws ApException
+    public double getExpenseValue(Account account, Date startDate, Date endDate) throws ApException
     {
         List<Expense> expenses = getExpenses(account, startDate, endDate);
         return getTotalExpenseValue(expenses);
     }
 
     @Override
-    public Long getExpenseValue(Account account, Date startDate, Date endDate, Category category) throws ApException
+    public double getExpenseValue(Account account, Date startDate, Date endDate, Category category) throws ApException
     {
         List<Expense> expenses = getExpenses(account, startDate, endDate, category);
         return getTotalExpenseValue(expenses);
@@ -51,9 +51,9 @@ public class ExpenseStatisticsServiceImpl implements ExpenseStatisticsService
      * @param expenses - список затрат
      * @return суммарную величину затрат
      */
-    private Long getTotalExpenseValue(List<Expense> expenses)
+    private double getTotalExpenseValue(List<Expense> expenses)
     {
-        Long totalExpenseValue = 0L;
+        double totalExpenseValue = 0L;
 
         for (Expense expense : expenses)
         {

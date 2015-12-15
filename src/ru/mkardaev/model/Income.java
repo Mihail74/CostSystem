@@ -11,12 +11,12 @@ public class Income extends MoneyAction
         super();
     }
 
-    public Income(long accountId, long categoryId, long value)
+    public Income(long accountId, long categoryId, double value)
     {
         super(accountId, categoryId, value);
     }
 
-    public Income(long accountId, long categoryId, long value, Date creationDate)
+    public Income(long accountId, long categoryId, double value, Date creationDate)
     {
         super(accountId, categoryId, value, creationDate);
     }

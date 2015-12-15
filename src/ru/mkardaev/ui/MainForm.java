@@ -19,12 +19,12 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 import ru.mkardaev.factories.ServicesFactory;
 import ru.mkardaev.ui.form.AddExpenseForm;
 import ru.mkardaev.ui.form.AddIncomeForm;
-import ru.mkardaev.ui.services.FormRegistry;
-import ru.mkardaev.ui.utils.category.ExpenseInputProvider;
-import ru.mkardaev.ui.utils.category.IncomeInputProvider;
-import ru.mkardaev.ui.widget.DateIntervalPickerWidget;
-import ru.mkardaev.ui.widget.MoneyActionTableWidget;
-import ru.mkardaev.ui.widget.TotalMoneyActionsValueWidget;
+import ru.mkardaev.ui.form.FormRegistry;
+import ru.mkardaev.ui.utils.ExpenseInputProvider;
+import ru.mkardaev.ui.utils.IncomeInputProvider;
+import ru.mkardaev.ui.widgets.DateIntervalPickerWidget;
+import ru.mkardaev.ui.widgets.MoneyActionTableWidget;
+import ru.mkardaev.ui.widgets.TotalMoneyActionsValueWidget;
 import ru.mkardaev.utils.Messages;
 
 /**
@@ -43,6 +43,7 @@ public class MainForm
     private MoneyActionTableWidget expenseTableWidget;
     private Form form;
     private IncomeInputProvider incomesInputProvider;
+    private MoneyActionTableWidget incomeTableWidget;
     private Messages messages;
     private int MIN_BUTTON_WIDTH = 100;
     private Callable<Void> refreshCallback;
@@ -94,6 +95,7 @@ public class MainForm
     public void refreshForm()
     {
         expenseTableWidget.refresh();
+        incomeTableWidget.refresh();
     }
 
     public void setExpensesInputProvider(ExpenseInputProvider expensesInputProvider)
@@ -127,11 +129,11 @@ public class MainForm
         expenseTableWidget.bind();
         expenseTab.setControl(expenseTableWidget.getControl());
 
-        Composite composite2 = new Composite(tablFolder, SWT.NONE);
-        composite2.setLayout(new GridLayout(1, true));
-        composite2.setLayoutData(new GridData(SWT.FILL));
-        incomeTab.setControl(composite2);
-
+        incomeTableWidget = new MoneyActionTableWidget(tablFolder);
+        incomeTableWidget.setMoneyActionInputProvider(incomesInputProvider);
+        incomeTableWidget.setDateInterval(dateIntervalPicker.getFromDate(), dateIntervalPicker.getToDate());
+        incomeTableWidget.bind();
+        incomeTab.setControl(incomeTableWidget.getControl());
     }
 
     /**

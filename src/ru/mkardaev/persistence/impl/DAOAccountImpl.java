@@ -58,7 +58,7 @@ public class DAOAccountImpl implements DAOAccount
     }
 
     @Override
-    public void delete(long accountId) throws SQLException
+    public void delete(long accountId) throws ApException
     {
         try (Connection connection = getConnection())
         {
@@ -71,7 +71,7 @@ public class DAOAccountImpl implements DAOAccount
         catch (SQLException e)
         {
             logger.error("Error delete account", e);
-            throw e;
+            throw new ApException("Error delete account", e);
         }
     }
 

@@ -18,7 +18,7 @@ import ru.mkardaev.utils.Messages;
  */
 public class AddExpenseForm extends MoneyActionFormBase
 {
-    public AddExpenseForm(InputProvider categoryInputProvider)
+    AddExpenseForm(InputProvider categoryInputProvider)
     {
         super(categoryInputProvider);
     }
@@ -34,7 +34,7 @@ public class AddExpenseForm extends MoneyActionFormBase
     {
         Category category = (Category) ((StructuredSelection) categoryCombo.getSelection()).getFirstElement();
         Account account = ApplicationContext.getContext().getData(ApplicationContext.CURRENT_ACCOUNT);
-        Long value = Long.valueOf(valueText.getText());
+        double value = Double.valueOf(valueText.getText());
         String description = descriptionText.getText();
 
         moneyAction = ServicesFactory.getInstance().getMoneyActionFactory().createExpense(account, category, value);

@@ -59,7 +59,7 @@ public class ConnectionService
                         + "account_id BIGINT REFERENCES account(id),"
                         + "category_id BIGINT REFERENCES category(id),"
                         + "creation_date BIGINT NOT NULL,"
-                        + "value BIGINT NOT NULL,"
+                        + "value DOUBLE NOT NULL,"
                         + "description VARCHAR(255),"
                         + "type BIGINT NOT NULL)");
         //@formatter:on

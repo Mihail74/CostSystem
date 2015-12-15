@@ -31,14 +31,14 @@ public class IncomeStatisticsServiceImpl implements IncomeStatisticsService
     }
 
     @Override
-    public Long getIncomeValue(Account account, Date startDate, Date endDate) throws ApException
+    public double getIncomeValue(Account account, Date startDate, Date endDate) throws ApException
     {
         List<Income> expenses = getIncomes(account, startDate, endDate);
         return getTotalIncomeValue(expenses);
     }
 
     @Override
-    public Long getIncomeValue(Account account, Date startDate, Date endDate, Category category) throws ApException
+    public double getIncomeValue(Account account, Date startDate, Date endDate, Category category) throws ApException
     {
         List<Income> expenses = getIncomes(account, startDate, endDate, category);
         return getTotalIncomeValue(expenses);
@@ -48,9 +48,9 @@ public class IncomeStatisticsServiceImpl implements IncomeStatisticsService
      * @param incomes - список доходов
      * @return суммарную величину дохода
      */
-    private Long getTotalIncomeValue(List<Income> incomes)
+    private double getTotalIncomeValue(List<Income> incomes)
     {
-        Long totalIncomeValue = 0L;
+        double totalIncomeValue = 0L;
 
         for (Income income : incomes)
         {

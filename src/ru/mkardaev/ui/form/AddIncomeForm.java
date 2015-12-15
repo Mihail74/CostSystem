@@ -19,7 +19,7 @@ import ru.mkardaev.utils.Messages;
  */
 public class AddIncomeForm extends MoneyActionFormBase
 {
-    public AddIncomeForm(InputProvider categoryInputProvider)
+    AddIncomeForm(InputProvider categoryInputProvider)
     {
         super(categoryInputProvider);
     }
@@ -35,7 +35,7 @@ public class AddIncomeForm extends MoneyActionFormBase
     {
         Category category = (Category) ((StructuredSelection) categoryCombo.getSelection()).getFirstElement();
         Account account = ApplicationContext.getContext().getData(ApplicationContext.CURRENT_ACCOUNT);
-        Long value = Long.valueOf(valueText.getText());
+        double value = Double.valueOf(valueText.getText());
         String description = descriptionText.getText();
 
         Income income = ServicesFactory.getInstance().getMoneyActionFactory().createIncome(account, category, value);
