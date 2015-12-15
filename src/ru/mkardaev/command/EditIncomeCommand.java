@@ -6,10 +6,14 @@ import ru.mkardaev.model.MoneyAction;
 import ru.mkardaev.persistence.DAOMoneyAction;
 import ru.mkardaev.resources.ApplicationContext;
 
-public class EditIncomeCommand implements ICommand
+/**
+ * Команда редактирования дохода
+ * 
+ * @author Mihail
+ *
+ */
+public class EditIncomeCommand extends CommandAdapter implements ICommand
 {
-
-    private DtObject dtObject;
     private DAOMoneyAction moneyActionDAO;
 
     public EditIncomeCommand()
@@ -22,11 +26,4 @@ public class EditIncomeCommand implements ICommand
     {
         moneyActionDAO.update(dtObject.<MoneyAction> getProperty(ApplicationContext.INCOME));
     }
-
-    @Override
-    public void setDtObject(DtObject dtObject)
-    {
-        this.dtObject = dtObject;
-    }
-
 }

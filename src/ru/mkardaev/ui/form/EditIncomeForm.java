@@ -13,16 +13,9 @@ import ru.mkardaev.ui.utils.InputProvider;
 import ru.mkardaev.utils.DateUtils;
 import ru.mkardaev.utils.Messages;
 
-/**
- * Форма редактирования расхода
- * 
- * @author Mihail
- *
- */
-public class EditExpenseForm extends MoneyActionFormBase
+public class EditIncomeForm extends MoneyActionFormBase
 {
-
-    EditExpenseForm(InputProvider categoryInputProvider)
+    EditIncomeForm(InputProvider categoryInputProvider)
     {
         super(categoryInputProvider);
     }
@@ -53,6 +46,7 @@ public class EditExpenseForm extends MoneyActionFormBase
         }
         catch (ApException e)
         {
+            // TODO: Нормальное сообщение об ошибке
             e.printStackTrace();
         }
     }
@@ -68,8 +62,7 @@ public class EditExpenseForm extends MoneyActionFormBase
         moneyAction.setDescription(descriptionText.getText());
 
         DtObject dtObject = new DtObject();
-        dtObject.putProperty(ApplicationContext.EXPENSE, moneyAction);
+        dtObject.putProperty(ApplicationContext.INCOME, moneyAction);
         saveCommand.setDtObject(dtObject);
     }
-
 }

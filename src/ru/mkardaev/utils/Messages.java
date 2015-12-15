@@ -29,6 +29,7 @@ public class Messages
         public static final String CREATION_DATE = "creationDate";
         public static final String DESCRIPTION = "description";
         public static final String EDIT_EXPENSE_FORM_TITLE = "editExpenseFormTitle";
+        public static final String EDIT_INCOME_FORM_TITLE = "editIncomeFormTitle";
         public static final String EXPENSES = "expenses";
         public static final String FROM_DATE_LABEL = "fromDateLabel";
         public static final String INCOMES = "incomes";

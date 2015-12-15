@@ -16,6 +16,7 @@ public class ApplicationContext
     public static final String EXPENSE = "expense";
     public static final String INCOME = "icnome";
     public static final String MONEY_ACTION_ID = "moneyActionId";
+    public static final String MONEY_ACTION_UI_MODEL = "moneyActionUIModel";
 
     private static ApplicationContext instance = new ApplicationContext();
 

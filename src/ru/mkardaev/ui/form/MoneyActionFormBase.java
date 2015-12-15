@@ -32,33 +32,35 @@ import ru.mkardaev.utils.DateUtils;
 import ru.mkardaev.utils.Messages;
 
 /**
- * Базовый класс формы Добавления/редактирования
+ * Базовый класс формы Добавления/редактирования доходов/расходов
  * 
  * @author Mihail
  *
  */
 public abstract class MoneyActionFormBase
 {
-    protected Button cancelButton;
+    private int MIN_BUTTON_WIDTH = 100;
+
     protected ComboViewer categoryCombo;
-    protected InputProvider categoryInputProvider;
+    protected Text valueText;
     protected DateTime creationDatePicker;
     protected Text descriptionText;
-    protected Shell dialogShell;
-    protected Messages messages;
-    protected MoneyAction moneyAction;
+
     protected Button okButton;
+    protected Button cancelButton;
+
+    protected Shell dialogShell;
+    private Point dialogSize = new Point(400, 250);
+    protected Messages messages;
+
+    protected MoneyAction moneyAction;
+    protected InputProvider categoryInputProvider;
     /**
-     * Действия, которые необходимо выполнить при сохранении
+     * Команда, которые необходимо выполнить при сохранении
      */
     protected ICommand saveCommand;
-    protected Text valueText;
-
-    private Point dialogSize = new Point(400, 250);
-
-    private int MIN_BUTTON_WIDTH = 100;
     /**
-     * CallBack сохранения
+     * CallBack, который необходимо выполнить после сохранения
      */
     private Callable<Void> saveCallback;
 
@@ -240,6 +242,7 @@ public abstract class MoneyActionFormBase
         }
         catch (Exception e1)
         {
+            // TODO: Нормальное сообщение об ошибке
             e1.printStackTrace();
         }
         try
@@ -251,6 +254,7 @@ public abstract class MoneyActionFormBase
         }
         catch (Exception e1)
         {
+            // TODO: Нормальное сообщение об ошибке
             e1.printStackTrace();
         }
         dialogShell.dispose();

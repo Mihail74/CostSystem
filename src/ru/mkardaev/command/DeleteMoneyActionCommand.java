@@ -5,9 +5,14 @@ import ru.mkardaev.factories.ServicesFactory;
 import ru.mkardaev.persistence.DAOMoneyAction;
 import ru.mkardaev.resources.ApplicationContext;
 
-public class DeleteMoneyActionCommand implements ICommand
+/**
+ * Команда удаления MoneyAction
+ * 
+ * @author Mihail
+ *
+ */
+public class DeleteMoneyActionCommand extends CommandAdapter implements ICommand
 {
-    private DtObject dtObject;
     private DAOMoneyAction moneyActionDAO;
 
     public DeleteMoneyActionCommand()
@@ -19,11 +24,5 @@ public class DeleteMoneyActionCommand implements ICommand
     public void perform() throws ApException
     {
         moneyActionDAO.delete(dtObject.<Long> getProperty(ApplicationContext.MONEY_ACTION_ID));
-    }
-
-    @Override
-    public void setDtObject(DtObject dtObject)
-    {
-        this.dtObject = dtObject;
     }
 }

@@ -4,7 +4,6 @@ import java.text.DateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.Callable;
 
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.DoubleClickEvent;
@@ -28,22 +27,26 @@ import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableItem;
-import org.eclipse.ui.forms.widgets.FormToolkit;
 
 import ru.mkardaev.command.DeleteMoneyActionCommand;
 import ru.mkardaev.command.DtObject;
+import ru.mkardaev.command.ICommand;
 import ru.mkardaev.exception.ApException;
 import ru.mkardaev.factories.ServicesFactory;
 import ru.mkardaev.resources.ApplicationContext;
 import ru.mkardaev.resources.Resources;
-import ru.mkardaev.ui.form.EditExpenseForm;
-import ru.mkardaev.ui.form.FormRegistry;
 import ru.mkardaev.ui.models.MoneyActionUIModel;
 import ru.mkardaev.ui.utils.InputProvider;
 import ru.mkardaev.ui.utils.MoneyActionUIModelSorter;
 import ru.mkardaev.utils.DateUtils;
 import ru.mkardaev.utils.Messages;
 
+/**
+ * Виджет таблицы, отображающей доходы/расходы
+ * 
+ * @author Mihail
+ *
+ */
 public class MoneyActionTableWidget
 {
     /**
@@ -70,33 +73,29 @@ public class MoneyActionTableWidget
     }
 
     private static final String MONEY_VALUE_PRINT_FORMAT = "%.2f";
+
     private Date beginDate;
     private Date endDate;
+
     private Messages messages;
+
     private InputProvider moneyActionInputProvider;
+    private ICommand doubleClickTableCommand;
 
     private Composite parent;
-    private Callable<Void> refreshCallback = new Callable<Void>()
-    {
-
-        @Override
-        public Void call() throws Exception
-        {
-            refresh();
-            return null;
-        }
-
-    };
     private TableViewer tableViewer;
-    private FormToolkit toolKit;
 
     public MoneyActionTableWidget(Composite parent)
     {
         this.parent = parent;
-        toolKit = new FormToolkit(parent.getDisplay());
         messages = ServicesFactory.getInstance().getMessages();
     }
 
+    /**
+     * Производит построение виджета. До начала построения необходимо установить виджету интервал времени для которого необходимо отображать данны и
+     * InputProvider, предоставляющий данные для таблицы, используя методы {@link #setDateInterval(Date, Date)},
+     * {@link #setMoneyActionInputProvider(InputProvider)}
+     */
     public void bind()
     {
         if (endDate == null || beginDate == null || moneyActionInputProvider == null)
@@ -111,29 +110,41 @@ public class MoneyActionTableWidget
         table.setHeaderVisible(true);
         table.setLinesVisible(true);
 
-        createColumn();
+        createColumns();
         initTableData();
+
+        tableViewer.addDoubleClickListener(new IDoubleClickListener()
+        {
+            @Override
+            public void doubleClick(DoubleClickEvent getSelection)
+            {
+                if (doubleClickTableCommand != null)
+                {
+                    IStructuredSelection selection = tableViewer.getStructuredSelection();
+                    MoneyActionUIModel action = (MoneyActionUIModel) selection.getFirstElement();
+
+                    DtObject dtObject = new DtObject();
+                    dtObject.putProperty(ApplicationContext.MONEY_ACTION_UI_MODEL, action);
+
+                    doubleClickTableCommand.setDtObject(dtObject);
+                    try
+                    {
+                        doubleClickTableCommand.perform();
+                    }
+                    catch (ApException e)
+                    {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                    }
+                    refresh();
+                }
+            }
+        });
 
         for (int i = 0, n = table.getColumnCount(); i < n; i++)
         {
             table.getColumn(i).pack();
         }
-        tableViewer.addDoubleClickListener(new IDoubleClickListener()
-        {
-
-            @Override
-            public void doubleClick(DoubleClickEvent getSelection)
-            {
-                // TODO: Переписать на DI, чтобы можно было работать и с доходами
-                IStructuredSelection selection = tableViewer.getStructuredSelection();
-                MoneyActionUIModel action = (MoneyActionUIModel) selection.getFirstElement();
-                EditExpenseForm form = FormRegistry.getInstance()
-                        .<EditExpenseForm> getForm(FormRegistry.EDIT_EXPENSE_FORM);
-                form.init(action.getMoneyAction());
-                form.setSaveCallback(refreshCallback);
-                form.bind();
-            }
-        });
     }
 
     public Control getControl()
@@ -143,19 +154,19 @@ public class MoneyActionTableWidget
 
     public void refresh()
     {
-        tableViewer.refresh();
         initTableData();
+        tableViewer.refresh();
     }
 
     public void setDateInterval(Date beginDate, Date endDate)
     {
         this.beginDate = beginDate;
         this.endDate = endDate;
-        if (tableViewer != null)
-        {
-            initTableData();
-            refresh();
-        }
+    }
+
+    public void setDoubleClickTableCommand(ICommand doubleClickTableCommand)
+    {
+        this.doubleClickTableCommand = doubleClickTableCommand;
     }
 
     public void setMoneyActionInputProvider(InputProvider moneyActionInputProvider)
@@ -163,7 +174,7 @@ public class MoneyActionTableWidget
         this.moneyActionInputProvider = moneyActionInputProvider;
     }
 
-    private void createColumn()
+    private void createColumns()
     {
         TableViewerColumn dateColumn = new TableViewerColumn(tableViewer, SWT.NONE);
         dateColumn.getColumn().setText(messages.getMessage(Messages.Keys.CREATION_DATE));
@@ -244,8 +255,8 @@ public class MoneyActionTableWidget
                     @Override
                     public void handleEvent(Event e)
                     {
-                        // Второе условие нужно, чтобы не срабатывало нажатие на освобождённую кнопку, такое поведенеи возникает при обновлении после
-                        // удаления
+                        // Второе условие нужно чтобы не срабатывало нажатие на освобождённую кнопку, такое поведение возникает при обновлении таблицы
+                        // после удаления строки
                         if (e.type == SWT.Selection && !e.widget.isDisposed())
                         {
                             MessageBox messageBox = new MessageBox(parent.getShell(),
@@ -274,7 +285,6 @@ public class MoneyActionTableWidget
                             case SWT.NO:
                                 break;
                             }
-                            System.out.println(moneyActionId);
                         }
                     }
                 });

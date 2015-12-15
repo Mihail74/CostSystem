@@ -10,7 +10,7 @@ import ru.mkardaev.factories.ServicesFactory;
 import ru.mkardaev.utils.Messages;
 
 /**
- * Виджет величин суммарных MoneyAction
+ * Виджет отображающий суммарные доходы и расходы
  * 
  * @author Mihail
  *
@@ -20,6 +20,7 @@ public class TotalMoneyActionsValueWidget
     private Messages messages;
     private Composite parent;
     private FormToolkit toolKit;
+
     private Label totalExpenseValueLabel;
     private Label totalIncomeValueLabel;
 
@@ -34,7 +35,7 @@ public class TotalMoneyActionsValueWidget
     {
         Composite composite = toolKit.createComposite(parent);
         composite.setLayout(new GridLayout(2, true));
-        composite.setLayoutData(new GridData(GridData.FILL_BOTH));
+        composite.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
         toolKit.createLabel(composite, messages.getMessage(Messages.Keys.TOTAL_EXPENSE));
         totalExpenseValueLabel = toolKit.createLabel(composite, "");

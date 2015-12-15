@@ -6,12 +6,17 @@ import ru.mkardaev.model.MoneyAction;
 import ru.mkardaev.persistence.DAOMoneyAction;
 import ru.mkardaev.resources.ApplicationContext;
 
-public class AddIncomeCommand implements ICommand
+/**
+ * Команда сохранения дохода
+ * 
+ * @author Mihail
+ *
+ */
+public class SaveIncomeCommand extends CommandAdapter implements ICommand
 {
-    private DtObject dtObject;
     private DAOMoneyAction moneyActionDAO;
 
-    public AddIncomeCommand()
+    public SaveIncomeCommand()
     {
         moneyActionDAO = ServicesFactory.getInstance().getDaoMoneyAction();
     }
@@ -20,11 +25,5 @@ public class AddIncomeCommand implements ICommand
     public void perform() throws ApException
     {
         moneyActionDAO.create(dtObject.<MoneyAction> getProperty(ApplicationContext.INCOME));
-    }
-
-    @Override
-    public void setDtObject(DtObject dtObject)
-    {
-        this.dtObject = dtObject;
     }
 }
