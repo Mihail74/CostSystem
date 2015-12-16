@@ -6,10 +6,10 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.StructuredSelection;
 
 import ru.mkardaev.command.DtObject;
+import ru.mkardaev.command.EditExpenseCommand;
 import ru.mkardaev.exception.ApException;
 import ru.mkardaev.model.Category;
 import ru.mkardaev.resources.ApplicationContext;
-import ru.mkardaev.ui.utils.InputProvider;
 import ru.mkardaev.utils.DateUtils;
 import ru.mkardaev.utils.Messages;
 
@@ -21,10 +21,9 @@ import ru.mkardaev.utils.Messages;
  */
 public class EditExpenseForm extends MoneyActionFormBase
 {
-
-    EditExpenseForm(InputProvider categoryInputProvider)
+    public EditExpenseForm()
     {
-        super(categoryInputProvider);
+        saveCommand = new EditExpenseCommand();
     }
 
     @Override

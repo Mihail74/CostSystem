@@ -1,7 +1,6 @@
 package ru.mkardaev.ui.form;
 
 import java.util.Calendar;
-import java.util.concurrent.Callable;
 
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ComboViewer;
@@ -25,6 +24,7 @@ import ru.mkardaev.exception.ApException;
 import ru.mkardaev.factories.ServicesFactory;
 import ru.mkardaev.model.MoneyAction;
 import ru.mkardaev.resources.Resources;
+import ru.mkardaev.ui.utils.CategoryInputProvider;
 import ru.mkardaev.ui.utils.CategoryLabelProvider;
 import ru.mkardaev.ui.utils.CategorySorter;
 import ru.mkardaev.ui.utils.InputProvider;
@@ -59,15 +59,11 @@ public abstract class MoneyActionFormBase
      * Команда, которые необходимо выполнить при сохранении
      */
     protected ICommand saveCommand;
-    /**
-     * CallBack, который необходимо выполнить после сохранения
-     */
-    private Callable<Void> saveCallback;
 
-    MoneyActionFormBase(InputProvider categoryInputProvider)
+    public MoneyActionFormBase()
     {
         messages = ServicesFactory.getInstance().getMessages();
-        this.categoryInputProvider = categoryInputProvider;
+        categoryInputProvider = new CategoryInputProvider();
     }
 
     public void bind()
@@ -94,11 +90,6 @@ public abstract class MoneyActionFormBase
     public void init(MoneyAction moneyAction)
     {
         this.moneyAction = moneyAction;
-    }
-
-    public void setSaveCallback(Callable<Void> saveCallback)
-    {
-        this.saveCallback = saveCallback;
     }
 
     public void setSaveCommand(ICommand saveAction)
@@ -239,18 +230,6 @@ public abstract class MoneyActionFormBase
         try
         {
             saveCommand.perform();
-        }
-        catch (Exception e1)
-        {
-            // TODO: Нормальное сообщение об ошибке
-            e1.printStackTrace();
-        }
-        try
-        {
-            if (saveCallback != null)
-            {
-                saveCallback.call();
-            }
         }
         catch (Exception e1)
         {

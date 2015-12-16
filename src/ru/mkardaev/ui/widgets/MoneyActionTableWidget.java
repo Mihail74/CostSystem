@@ -35,6 +35,7 @@ import ru.mkardaev.exception.ApException;
 import ru.mkardaev.factories.ServicesFactory;
 import ru.mkardaev.resources.ApplicationContext;
 import ru.mkardaev.resources.Resources;
+import ru.mkardaev.ui.HasRefresh;
 import ru.mkardaev.ui.models.MoneyActionUIModel;
 import ru.mkardaev.ui.utils.InputProvider;
 import ru.mkardaev.ui.utils.MoneyActionUIModelSorter;
@@ -47,7 +48,7 @@ import ru.mkardaev.utils.Messages;
  * @author Mihail
  *
  */
-public class MoneyActionTableWidget
+public class MoneyActionTableWidget implements HasRefresh
 {
     /**
      * Т.к. в таблице используются кнопки, то необходимо освобождать ресурсы при переинициализации кнопок, например при обновлении таблицы. Для этого
@@ -152,6 +153,7 @@ public class MoneyActionTableWidget
         return tableViewer.getControl();
     }
 
+    @Override
     public void refresh()
     {
         initTableData();

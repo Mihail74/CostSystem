@@ -12,9 +12,6 @@ public class MoneyActionUIModelSorter extends ViewerSorter
     private int column;
     private int direction;
 
-    /**
-     * Compares the object for sorting
-     */
     @Override
     public int compare(Viewer viewer, Object e1, Object e2)
     {
@@ -22,7 +19,6 @@ public class MoneyActionUIModelSorter extends ViewerSorter
         MoneyActionUIModel action1 = (MoneyActionUIModel) e1;
         MoneyActionUIModel action2 = (MoneyActionUIModel) e2;
 
-        // Determine which column and do the appropriate sort
         switch (column) {
         case MoneyActionUIModel.tableColumnNumbers.COLUMN_DATE:
             result = action1.getMoneyAction().getCreationDate().compareTo(action2.getMoneyAction().getCreationDate());

@@ -6,18 +6,18 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.StructuredSelection;
 
 import ru.mkardaev.command.DtObject;
+import ru.mkardaev.command.EditIncomeCommand;
 import ru.mkardaev.exception.ApException;
 import ru.mkardaev.model.Category;
 import ru.mkardaev.resources.ApplicationContext;
-import ru.mkardaev.ui.utils.InputProvider;
 import ru.mkardaev.utils.DateUtils;
 import ru.mkardaev.utils.Messages;
 
 public class EditIncomeForm extends MoneyActionFormBase
 {
-    EditIncomeForm(InputProvider categoryInputProvider)
+    public EditIncomeForm()
     {
-        super(categoryInputProvider);
+        saveCommand = new EditIncomeCommand();
     }
 
     @Override

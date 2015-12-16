@@ -3,12 +3,12 @@ package ru.mkardaev.ui.form;
 import org.eclipse.jface.viewers.StructuredSelection;
 
 import ru.mkardaev.command.DtObject;
+import ru.mkardaev.command.SaveIncomeCommand;
 import ru.mkardaev.factories.ServicesFactory;
 import ru.mkardaev.model.Account;
 import ru.mkardaev.model.Category;
 import ru.mkardaev.model.Income;
 import ru.mkardaev.resources.ApplicationContext;
-import ru.mkardaev.ui.utils.InputProvider;
 import ru.mkardaev.utils.Messages;
 
 /**
@@ -19,9 +19,9 @@ import ru.mkardaev.utils.Messages;
  */
 public class AddIncomeForm extends MoneyActionFormBase
 {
-    AddIncomeForm(InputProvider categoryInputProvider)
+    public AddIncomeForm()
     {
-        super(categoryInputProvider);
+        saveCommand = new SaveIncomeCommand();
     }
 
     @Override

@@ -3,11 +3,11 @@ package ru.mkardaev.ui.form;
 import org.eclipse.jface.viewers.StructuredSelection;
 
 import ru.mkardaev.command.DtObject;
+import ru.mkardaev.command.SaveExpenseCommand;
 import ru.mkardaev.factories.ServicesFactory;
 import ru.mkardaev.model.Account;
 import ru.mkardaev.model.Category;
 import ru.mkardaev.resources.ApplicationContext;
-import ru.mkardaev.ui.utils.InputProvider;
 import ru.mkardaev.utils.Messages;
 
 /**
@@ -18,9 +18,9 @@ import ru.mkardaev.utils.Messages;
  */
 public class AddExpenseForm extends MoneyActionFormBase
 {
-    AddExpenseForm(InputProvider categoryInputProvider)
+    public AddExpenseForm()
     {
-        super(categoryInputProvider);
+        saveCommand = new SaveExpenseCommand();
     }
 
     @Override

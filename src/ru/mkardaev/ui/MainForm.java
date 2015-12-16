@@ -1,7 +1,5 @@
 package ru.mkardaev.ui;
 
-import java.util.concurrent.Callable;
-
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -22,9 +20,9 @@ import ru.mkardaev.command.OpenEditIncomeFormCommand;
 import ru.mkardaev.factories.ServicesFactory;
 import ru.mkardaev.ui.form.AddExpenseForm;
 import ru.mkardaev.ui.form.AddIncomeForm;
-import ru.mkardaev.ui.form.FormRegistry;
 import ru.mkardaev.ui.utils.ExpenseInputProvider;
 import ru.mkardaev.ui.utils.IncomeInputProvider;
+import ru.mkardaev.ui.utils.InputProvider;
 import ru.mkardaev.ui.widgets.DateIntervalPickerWidget;
 import ru.mkardaev.ui.widgets.MoneyActionTableWidget;
 import ru.mkardaev.ui.widgets.TotalMoneyActionsValueWidget;
@@ -36,7 +34,7 @@ import ru.mkardaev.utils.Messages;
  * @author Mihail
  *
  */
-public class MainForm
+public class MainForm implements HasRefresh
 {
     private int MIN_BUTTON_WIDTH = 100;
 
@@ -51,13 +49,12 @@ public class MainForm
 
     private TotalMoneyActionsValueWidget totalMoneyActionsWidget;
     private DateIntervalPickerWidget dateIntervalPicker;
-    private Callable<Void> refreshCallback;
 
     private MoneyActionTableWidget expenseTableWidget;
     private MoneyActionTableWidget incomeTableWidget;
 
-    private ExpenseInputProvider expensesInputProvider;
-    private IncomeInputProvider incomesInputProvider;
+    private InputProvider expensesInputProvider;
+    private InputProvider incomesInputProvider;
 
     private Messages messages;
 
@@ -67,16 +64,6 @@ public class MainForm
         this.display = display;
         messages = ServicesFactory.getInstance().getMessages();
         toolKit = new FormToolkit(this.display);
-        refreshCallback = new Callable<Void>()
-        {
-            @Override
-            public Void call() throws Exception
-            {
-                refreshForm();
-                return null;
-            }
-
-        };
     }
 
     /**
@@ -93,17 +80,8 @@ public class MainForm
         createTable();
     }
 
-    public ExpenseInputProvider getExpensesInputProvider()
-    {
-        return expensesInputProvider;
-    }
-
-    public IncomeInputProvider getIncomesInputProvider()
-    {
-        return incomesInputProvider;
-    }
-
-    public void refreshForm()
+    @Override
+    public void refresh()
     {
         expenseTableWidget.refresh();
         incomeTableWidget.refresh();
@@ -160,10 +138,9 @@ public class MainForm
             {
                 if (e.type == SWT.Selection)
                 {
-                    AddExpenseForm form = FormRegistry.getInstance()
-                            .<AddExpenseForm> getForm(FormRegistry.ADD_EXPENSE_FORM);
-                    form.setSaveCallback(refreshCallback);
+                    AddExpenseForm form = new AddExpenseForm();
                     form.bind();
+                    refresh();
                 }
             }
         });
@@ -175,10 +152,9 @@ public class MainForm
             {
                 if (e.type == SWT.Selection)
                 {
-                    AddIncomeForm form = FormRegistry.getInstance()
-                            .<AddIncomeForm> getForm(FormRegistry.ADD_INCOME_FORM);
-                    form.setSaveCallback(refreshCallback);
+                    AddIncomeForm form = new AddIncomeForm();
                     form.bind();
+                    refresh();
                 }
             }
         });
@@ -186,6 +162,7 @@ public class MainForm
 
     private void createDatePickerComposite(Composite toolComposite)
     {
+        // TODO: Вариант сделать модель в этом классе и отдать её в пикер, на изменение данных повесить refresh данного класса
         dateIntervalPicker = new DateIntervalPickerWidget(toolComposite);
         dateIntervalPicker.bind();
     }
