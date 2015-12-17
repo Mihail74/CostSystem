@@ -16,7 +16,11 @@ public class ApplicationContext
     public static final String EXPENSE = "expense";
     public static final String INCOME = "icnome";
     public static final String MONEY_ACTION_ID = "moneyActionId";
-    public static final String MONEY_ACTION_UI_MODEL = "moneyActionUIModel";
+    public static final String MONEY_ACTION_MODEL = "moneyActionModel";
+    public static final String FROM_DATE = "fromDate";
+    public static final String TO_DATE = "toDate";
+    public static final String TOTAL_INCOME_VALUE = "totalIncomeValue";
+    public static final String TOTAL_EXPENSE_VALUE = "totalExpenseValue";
 
     private static ApplicationContext instance = new ApplicationContext();
 

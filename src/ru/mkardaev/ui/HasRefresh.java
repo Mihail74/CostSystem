@@ -8,5 +8,8 @@ package ru.mkardaev.ui;
  */
 public interface HasRefresh
 {
+    /**
+     * Производит обновление всех полей
+     */
     void refresh();
 }

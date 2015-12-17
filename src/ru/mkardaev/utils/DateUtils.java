@@ -93,6 +93,7 @@ public class DateUtils
     {
         String TimeZoneId = ApplicationContext.getContext().<String> getData(Property.Keys.TIME_ZONE);
         Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone(TimeZoneId));
+        calendar.setTime(date);
         calendar.set(Calendar.HOUR_OF_DAY, 23);
         calendar.set(Calendar.MINUTE, 59);
         calendar.set(Calendar.SECOND, 59);
@@ -110,6 +111,7 @@ public class DateUtils
     {
         String TimeZoneId = ApplicationContext.getContext().<String> getData(Property.Keys.TIME_ZONE);
         Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone(TimeZoneId));
+        calendar.setTime(date);
         calendar.set(Calendar.HOUR_OF_DAY, 0);
         calendar.set(Calendar.MINUTE, 0);
         calendar.set(Calendar.SECOND, 0);

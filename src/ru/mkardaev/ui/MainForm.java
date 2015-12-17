@@ -7,7 +7,6 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
-import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.TabFolder;
@@ -20,6 +19,7 @@ import ru.mkardaev.command.OpenEditIncomeFormCommand;
 import ru.mkardaev.factories.ServicesFactory;
 import ru.mkardaev.ui.form.AddExpenseForm;
 import ru.mkardaev.ui.form.AddIncomeForm;
+import ru.mkardaev.ui.models.DateInterval;
 import ru.mkardaev.ui.utils.ExpenseInputProvider;
 import ru.mkardaev.ui.utils.IncomeInputProvider;
 import ru.mkardaev.ui.utils.InputProvider;
@@ -40,7 +40,6 @@ public class MainForm implements HasRefresh
 
     private Button addExpenseButton;
     private Button addIncomeButton;
-    private Label balanceValue;
 
     private Display display;
     private Form form;
@@ -49,6 +48,7 @@ public class MainForm implements HasRefresh
 
     private TotalMoneyActionsValueWidget totalMoneyActionsWidget;
     private DateIntervalPickerWidget dateIntervalPicker;
+    private DateInterval dateInteraval = new DateInterval();
 
     private MoneyActionTableWidget expenseTableWidget;
     private MoneyActionTableWidget incomeTableWidget;
@@ -83,8 +83,18 @@ public class MainForm implements HasRefresh
     @Override
     public void refresh()
     {
-        expenseTableWidget.refresh();
-        incomeTableWidget.refresh();
+        if (totalMoneyActionsWidget != null)
+        {
+            totalMoneyActionsWidget.refresh();
+        }
+        if (expenseTableWidget != null)
+        {
+            expenseTableWidget.refresh();
+        }
+        if (incomeTableWidget != null)
+        {
+            incomeTableWidget.refresh();
+        }
     }
 
     public void setExpensesInputProvider(ExpenseInputProvider expensesInputProvider)
@@ -100,16 +110,18 @@ public class MainForm implements HasRefresh
     private void crateTotalMoneyActionsValueComposite(Composite toolComposite)
     {
         totalMoneyActionsWidget = new TotalMoneyActionsValueWidget(toolComposite);
+        totalMoneyActionsWidget.setDateInterval(dateInteraval);
         totalMoneyActionsWidget.bind();
     }
 
     private void createBalanceComposite(Composite toolComposite)
     {
+        // Данный функцинал не требуется, однако чтобы остлось пустое место оставлю composite
         Composite balanceComposite = toolKit.createComposite(toolComposite);
         balanceComposite.setLayout(new GridLayout(2, true));
         balanceComposite.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-        toolKit.createLabel(balanceComposite, messages.getMessage(Messages.Keys.ACCOUNT_BALANCE));
-        balanceValue = toolKit.createLabel(balanceComposite, "");
+        // toolKit.createLabel(balanceComposite, messages.getMessage(Messages.Keys.ACCOUNT_BALANCE));
+        // balanceValue = toolKit.createLabel(balanceComposite, "");
     }
 
     private void createButtonComposite(Composite toolComposite)
@@ -162,8 +174,9 @@ public class MainForm implements HasRefresh
 
     private void createDatePickerComposite(Composite toolComposite)
     {
-        // TODO: Вариант сделать модель в этом классе и отдать её в пикер, на изменение данных повесить refresh данного класса
         dateIntervalPicker = new DateIntervalPickerWidget(toolComposite);
+        dateIntervalPicker.setDateInterval(dateInteraval);
+        dateIntervalPicker.setParentForm(this);
         dateIntervalPicker.bind();
     }
 
@@ -184,15 +197,17 @@ public class MainForm implements HasRefresh
 
         expenseTableWidget = new MoneyActionTableWidget(tablFolder);
         expenseTableWidget.setMoneyActionInputProvider(expensesInputProvider);
-        expenseTableWidget.setDateInterval(dateIntervalPicker.getFromDate(), dateIntervalPicker.getToDate());
+        expenseTableWidget.setDateInterval(dateInteraval);
         expenseTableWidget.setDoubleClickTableCommand(new OpenEditExpenseFormCommand());
+        expenseTableWidget.setParentForm(this);
         expenseTableWidget.bind();
         expenseTab.setControl(expenseTableWidget.getControl());
 
         incomeTableWidget = new MoneyActionTableWidget(tablFolder);
         incomeTableWidget.setMoneyActionInputProvider(incomesInputProvider);
-        incomeTableWidget.setDateInterval(dateIntervalPicker.getFromDate(), dateIntervalPicker.getToDate());
+        incomeTableWidget.setDateInterval(dateInteraval);
         incomeTableWidget.setDoubleClickTableCommand(new OpenEditIncomeFormCommand());
+        incomeTableWidget.setParentForm(this);
         incomeTableWidget.bind();
         incomeTab.setControl(incomeTableWidget.getControl());
     }

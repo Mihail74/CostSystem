@@ -1,7 +1,6 @@
 package ru.mkardaev.ui.widgets;
 
 import java.text.DateFormat;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -36,6 +35,7 @@ import ru.mkardaev.factories.ServicesFactory;
 import ru.mkardaev.resources.ApplicationContext;
 import ru.mkardaev.resources.Resources;
 import ru.mkardaev.ui.HasRefresh;
+import ru.mkardaev.ui.models.DateInterval;
 import ru.mkardaev.ui.models.MoneyActionUIModel;
 import ru.mkardaev.ui.utils.InputProvider;
 import ru.mkardaev.ui.utils.MoneyActionUIModelSorter;
@@ -66,6 +66,7 @@ public class MoneyActionTableWidget implements HasRefresh
                 {
                     if ((item != null) && (!item.isDisposed()))
                     {
+                        ((Button) item).getImage().dispose();
                         item.dispose();
                     }
                 }
@@ -75,8 +76,7 @@ public class MoneyActionTableWidget implements HasRefresh
 
     private static final String MONEY_VALUE_PRINT_FORMAT = "%.2f";
 
-    private Date beginDate;
-    private Date endDate;
+    private DateInterval dateInterval;
 
     private Messages messages;
 
@@ -84,6 +84,7 @@ public class MoneyActionTableWidget implements HasRefresh
     private ICommand doubleClickTableCommand;
 
     private Composite parent;
+    private HasRefresh parentForm;
     private TableViewer tableViewer;
 
     public MoneyActionTableWidget(Composite parent)
@@ -94,12 +95,12 @@ public class MoneyActionTableWidget implements HasRefresh
 
     /**
      * Производит построение виджета. До начала построения необходимо установить виджету интервал времени для которого необходимо отображать данны и
-     * InputProvider, предоставляющий данные для таблицы, используя методы {@link #setDateInterval(Date, Date)},
+     * InputProvider, предоставляющий данные для таблицы, используя методы {@link #setDateInterval(DateInterval))},
      * {@link #setMoneyActionInputProvider(InputProvider)}
      */
     public void bind()
     {
-        if (endDate == null || beginDate == null || moneyActionInputProvider == null)
+        if (dateInterval == null || moneyActionInputProvider == null)
         {
             return;
         }
@@ -125,7 +126,7 @@ public class MoneyActionTableWidget implements HasRefresh
                     MoneyActionUIModel action = (MoneyActionUIModel) selection.getFirstElement();
 
                     DtObject dtObject = new DtObject();
-                    dtObject.putProperty(ApplicationContext.MONEY_ACTION_UI_MODEL, action);
+                    dtObject.putProperty(ApplicationContext.MONEY_ACTION_MODEL, action.getMoneyAction());
 
                     doubleClickTableCommand.setDtObject(dtObject);
                     try
@@ -137,7 +138,14 @@ public class MoneyActionTableWidget implements HasRefresh
                         // TODO Auto-generated catch block
                         e.printStackTrace();
                     }
-                    refresh();
+                    if (parentForm != null)
+                    {
+                        parentForm.refresh();
+                    }
+                    else
+                    {
+                        refresh();
+                    }
                 }
             }
         });
@@ -160,10 +168,14 @@ public class MoneyActionTableWidget implements HasRefresh
         tableViewer.refresh();
     }
 
-    public void setDateInterval(Date beginDate, Date endDate)
+    /**
+     * Устанавливает интервал дат для которых будут отображаться доходы/расходы
+     * 
+     * @param dateInterval
+     */
+    public void setDateInterval(DateInterval dateInterval)
     {
-        this.beginDate = beginDate;
-        this.endDate = endDate;
+        this.dateInterval = dateInterval;
     }
 
     public void setDoubleClickTableCommand(ICommand doubleClickTableCommand)
@@ -174,6 +186,16 @@ public class MoneyActionTableWidget implements HasRefresh
     public void setMoneyActionInputProvider(InputProvider moneyActionInputProvider)
     {
         this.moneyActionInputProvider = moneyActionInputProvider;
+    }
+
+    /**
+     * Устанавливает для виджета родительскую форму, имеющую метод refresh. При изменении данных на виджете будет вызываться parentForm.refresh()
+     * 
+     * @param parentForm
+     */
+    public void setParentForm(HasRefresh parentForm)
+    {
+        this.parentForm = parentForm;
     }
 
     private void createColumns()
@@ -276,7 +298,14 @@ public class MoneyActionTableWidget implements HasRefresh
                                 try
                                 {
                                     delCommand.perform();
-                                    refresh();
+                                    if (parentForm != null)
+                                    {
+                                        parentForm.refresh();
+                                    }
+                                    else
+                                    {
+                                        refresh();
+                                    }
                                 }
                                 catch (ApException e1)
                                 {
@@ -346,8 +375,9 @@ public class MoneyActionTableWidget implements HasRefresh
     {
         try
         {
-            tableViewer.setInput(moneyActionInputProvider.getInput(DateUtils.getStartDayOfDate(beginDate),
-                    DateUtils.getEndDayOfDate(endDate)));
+            tableViewer
+                    .setInput(moneyActionInputProvider.getInput(DateUtils.getStartDayOfDate(dateInterval.getFromDate()),
+                            DateUtils.getEndDayOfDate(dateInterval.getToDate())));
         }
         catch (ApException e)
         {

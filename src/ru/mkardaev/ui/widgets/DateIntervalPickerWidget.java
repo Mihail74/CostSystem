@@ -5,6 +5,8 @@ import java.util.Date;
 import java.util.TimeZone;
 
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -14,6 +16,8 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 
 import ru.mkardaev.factories.ServicesFactory;
 import ru.mkardaev.resources.ApplicationContext;
+import ru.mkardaev.ui.HasRefresh;
+import ru.mkardaev.ui.models.DateInterval;
 import ru.mkardaev.utils.Messages;
 import ru.mkardaev.utils.Property;
 
@@ -30,6 +34,9 @@ public class DateIntervalPickerWidget
     private Composite parent;
     private DateTime toDateTimePicker;
     private FormToolkit toolKit;
+    private HasRefresh parentForm;
+
+    private DateInterval dateInterval;
 
     public DateIntervalPickerWidget(Composite parent)
     {
@@ -46,6 +53,21 @@ public class DateIntervalPickerWidget
 
         Label fromLabel = toolKit.createLabel(composite, messages.getMessage(Messages.Keys.FROM_DATE_LABEL));
         fromDateTimePicker = new DateTime(composite, SWT.DROP_DOWN);
+        fromDateTimePicker.addSelectionListener(new SelectionListener()
+        {
+            @Override
+            public void widgetDefaultSelected(SelectionEvent arg0)
+            {
+            }
+
+            @Override
+            public void widgetSelected(SelectionEvent arg0)
+            {
+                DateTime newValue = ((DateTime) arg0.getSource());
+                dateInterval.setFromDate(getDate(newValue));
+                refreshParent();
+            }
+        });
 
         Label toLabel = toolKit.createLabel(composite, messages.getMessage(Messages.Keys.TO_DATE_LABEL));
         toDateTimePicker = new DateTime(composite, SWT.DROP_DOWN);
@@ -55,24 +77,63 @@ public class DateIntervalPickerWidget
         fromDateTimePicker.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
         toLabel.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
         toDateTimePicker.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+        toDateTimePicker.addSelectionListener(new SelectionListener()
+        {
+            @Override
+            public void widgetDefaultSelected(SelectionEvent arg0)
+            {
+            }
+
+            @Override
+            public void widgetSelected(SelectionEvent arg0)
+            {
+                DateTime newValue = ((DateTime) arg0.getSource());
+                dateInterval.setToDate(getDate(newValue));
+                refreshParent();
+            }
+        });
+        dateInterval.setFromDate(getDate(fromDateTimePicker));
+        dateInterval.setToDate(getDate(toDateTimePicker));
+        refreshParent();
     }
 
-    public Date getFromDate()
+    public DateInterval getDateInterval()
     {
-        return getDate(fromDateTimePicker.getYear(), fromDateTimePicker.getMonth(), fromDateTimePicker.getDay());
+        return dateInterval;
     }
 
-    public Date getToDate()
+    public void setDateInterval(DateInterval dateInterval)
     {
-        return getDate(toDateTimePicker.getYear(), toDateTimePicker.getMonth(), toDateTimePicker.getDay());
+        this.dateInterval = dateInterval;
     }
 
-    private Date getDate(int year, int month, int day)
+    /**
+     * Устанавливает для виджета родительскую форму, имеющую метод refresh. При изменении данных на виджете будет вызываться parentForm.refresh()
+     * 
+     * @param parentForm
+     */
+    public void setParentForm(HasRefresh parentForm)
     {
+        this.parentForm = parentForm;
+    }
+
+    private Date getDate(DateTime dateTime)
+    {
+        int year = dateTime.getYear();
+        int month = dateTime.getMonth();
+        int day = dateTime.getDay();
         String TimeZoneId = ApplicationContext.getContext().<String> getData(Property.Keys.TIME_ZONE);
         Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone(TimeZoneId));
         calendar.set(year, month, day);
         return calendar.getTime();
+    }
+
+    private void refreshParent()
+    {
+        if (parentForm != null)
+        {
+            parentForm.refresh();
+        }
     }
 
 }
