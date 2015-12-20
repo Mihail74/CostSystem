@@ -1,15 +1,23 @@
 package ru.mkardaev.ui.form;
 
+import java.util.Arrays;
 import java.util.Calendar;
+import java.util.List;
 
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ComboViewer;
+import org.eclipse.jface.viewers.ISelectionChangedListener;
+import org.eclipse.jface.viewers.SelectionChangedEvent;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.VerifyEvent;
+import org.eclipse.swt.events.VerifyListener;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.DateTime;
 import org.eclipse.swt.widgets.Display;
@@ -22,6 +30,7 @@ import org.eclipse.swt.widgets.Text;
 import ru.mkardaev.command.ICommand;
 import ru.mkardaev.exception.ApException;
 import ru.mkardaev.factories.ServicesFactory;
+import ru.mkardaev.model.Category;
 import ru.mkardaev.model.MoneyAction;
 import ru.mkardaev.resources.Resources;
 import ru.mkardaev.ui.utils.CategoryInputProvider;
@@ -71,7 +80,8 @@ public abstract class MoneyActionFormBase
         Display display = Display.getDefault();
         dialogShell = new Shell(display, SWT.APPLICATION_MODAL | SWT.SHELL_TRIM);
         dialogShell.setLayout(new GridLayout(1, true));
-        dialogShell.setImage(new Image(display, Resources.FORM_ICON_PATH));
+        Image formImage = new Image(display, Resources.FORM_ICON_PATH);
+        dialogShell.setImage(formImage);
 
         createFormContent(dialogShell);
         createButtons(dialogShell);
@@ -85,6 +95,7 @@ public abstract class MoneyActionFormBase
                 display.sleep();
             }
         }
+        formImage.dispose();
     }
 
     public void init(MoneyAction moneyAction)
@@ -165,15 +176,43 @@ public abstract class MoneyActionFormBase
         categoryCombo.setContentProvider(ArrayContentProvider.getInstance());
         categoryCombo.setLabelProvider(new CategoryLabelProvider());
         categoryCombo.setSorter(new CategorySorter());
+        categoryCombo.addSelectionChangedListener(new ISelectionChangedListener()
+        {
+            @Override
+            public void selectionChanged(SelectionChangedEvent event)
+            {
+                StructuredSelection selection = (StructuredSelection) event.getSelection();
+                if (selection.getFirstElement() instanceof Category)
+                {
+                    Category selectedCategory = (Category) selection.getFirstElement();
+                    if (selectedCategory.getId() == Category.NEW_CATEGORY_ID)
+                    {
+                        AddCategoryForm form = new AddCategoryForm();
+                        form.bind();
+                        categoryCombo.getCombo().clearSelection();
+                        refresh();
+                    }
+                }
 
-        try
+            }
+        });
+        categoryCombo.getControl().addListener(SWT.Verify, new Listener()
         {
-            categoryCombo.setInput(categoryInputProvider.getInput());
-        }
-        catch (ApException e)
-        {
-            // TODO: Сделать нормальное сообщение об ошибке
-        }
+
+            @Override
+            public void handleEvent(Event e)
+            {
+                String currentText = ((Combo) e.widget).getText();
+                String newText = currentText.substring(0, e.start) + e.text + currentText.substring(e.end);
+                List<String> availableString = Arrays.asList(((Combo) categoryCombo.getControl()).getItems());
+                if (!"".equals(newText) && !availableString.contains(newText))
+                {
+                    e.doit = false;
+                }
+
+            }
+        });
+        refresh();
     }
 
     /**
@@ -193,7 +232,30 @@ public abstract class MoneyActionFormBase
         Label valueLabel = new Label(composite, SWT.NONE);
         valueLabel.setText(messages.getMessage(Messages.Keys.VALUE));
         valueText = new Text(composite, SWT.BORDER);
+        valueText.addVerifyListener(new VerifyListener()
+        {
 
+            @Override
+            public void verifyText(VerifyEvent e)
+            {
+                valueText.setToolTipText("");
+                String currentText = ((Text) e.widget).getText();
+                String newText = currentText.substring(0, e.start) + e.text + currentText.substring(e.end);
+                if ("".equals(newText))
+                {
+                    return;
+                }
+                try
+                {
+                    Double.parseDouble(newText);
+                }
+                catch (NumberFormatException ex)
+                {
+                    valueText.setToolTipText(messages.getMessage(Messages.Keys.SHOULD_BE_NUMBER));
+                    e.doit = false;
+                }
+            }
+        });
         Label creationDateLabel = new Label(composite, SWT.NONE);
         creationDateLabel.setText(messages.getMessage(Messages.Keys.CREATION_DATE));
         creationDatePicker = new DateTime(composite, SWT.DROP_DOWN);
@@ -221,6 +283,19 @@ public abstract class MoneyActionFormBase
         descriptionText.setLayoutData(new GridData(GridData.FILL_BOTH));
     }
 
+    private void refresh()
+    {
+        try
+        {
+            categoryCombo.setInput(categoryInputProvider.getInput());
+        }
+        catch (ApException e)
+        {
+            MessageBoxFactory.getErrorMessageBox(dialogShell, messages.getMessage(Messages.Keys.ERROR),
+                    messages.getMessage(Messages.Keys.ERROR_ON_LOAD_DATA)).open();
+        }
+    }
+
     /**
      * Метод, выполняющийся при сохранении
      */
@@ -233,7 +308,8 @@ public abstract class MoneyActionFormBase
         }
         catch (Exception e1)
         {
-            // TODO: Нормальное сообщение об ошибке
+            MessageBoxFactory.getErrorMessageBox(dialogShell, messages.getMessage(Messages.Keys.ERROR),
+                    messages.getMessage(Messages.Keys.ERROR_ON_SAVE)).open();
             e1.printStackTrace();
         }
         dialogShell.dispose();

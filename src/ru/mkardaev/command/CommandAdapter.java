@@ -10,7 +10,6 @@ import ru.mkardaev.exception.ApException;
  */
 public class CommandAdapter implements ICommand
 {
-    @SuppressWarnings("unused")
     protected DtObject dtObject;
 
     @Override

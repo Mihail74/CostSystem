@@ -5,7 +5,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 public class Category
 {
-
+    public static long NEW_CATEGORY_ID = -1L;
     private long id;
     private String title;
 

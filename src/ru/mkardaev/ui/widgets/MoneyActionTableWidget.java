@@ -35,6 +35,7 @@ import ru.mkardaev.factories.ServicesFactory;
 import ru.mkardaev.resources.ApplicationContext;
 import ru.mkardaev.resources.Resources;
 import ru.mkardaev.ui.HasRefresh;
+import ru.mkardaev.ui.form.MessageBoxFactory;
 import ru.mkardaev.ui.models.DateInterval;
 import ru.mkardaev.ui.models.MoneyActionUIModel;
 import ru.mkardaev.ui.utils.InputProvider;
@@ -135,7 +136,10 @@ public class MoneyActionTableWidget implements HasRefresh
                     }
                     catch (ApException e)
                     {
-                        // TODO Auto-generated catch block
+                        MessageBoxFactory
+                                .getErrorMessageBox(parent.getShell(), messages.getMessage(Messages.Keys.ERROR),
+                                        messages.getMessage(Messages.Keys.ERROR_ON_LOAD_DATA))
+                                .open();
                         e.printStackTrace();
                     }
                     if (parentForm != null)
@@ -269,7 +273,6 @@ public class MoneyActionTableWidget implements HasRefresh
                 else
                 {
                     button = new Button((Composite) cell.getViewerRow().getControl(), SWT.NONE);
-                    // TODO: иконку надо вынести отдельно
                     button.setImage(new Image(Display.getDefault(), Resources.DELETE_ICON_PATH));
                     buttons.put(cell.getElement(), button);
                 }
@@ -283,11 +286,9 @@ public class MoneyActionTableWidget implements HasRefresh
                         // после удаления строки
                         if (e.type == SWT.Selection && !e.widget.isDisposed())
                         {
-                            MessageBox messageBox = new MessageBox(parent.getShell(),
-                                    SWT.ICON_WARNING | SWT.YES | SWT.NO);
-
-                            messageBox.setText("Подтверждение удаление");
-                            messageBox.setMessage("Вы действительно хотите удалить затрату?");
+                            MessageBox messageBox = MessageBoxFactory.getErrorMessageBox(parent.getShell(),
+                                    messages.getMessage(Messages.Keys.CONFIRM_DELETE),
+                                    messages.getMessage(Messages.Keys.DO_YOU_SURE));
                             int buttonID = messageBox.open();
                             switch (buttonID) {
                             case SWT.YES:
@@ -309,7 +310,9 @@ public class MoneyActionTableWidget implements HasRefresh
                                 }
                                 catch (ApException e1)
                                 {
-                                    // TODO Auto-generated catch block
+                                    MessageBoxFactory.getErrorMessageBox(parent.getShell(),
+                                            messages.getMessage(Messages.Keys.ERROR),
+                                            messages.getMessage(Messages.Keys.ERROR_ON_SAVE)).open();
                                     e1.printStackTrace();
                                 }
                                 break;
@@ -381,7 +384,8 @@ public class MoneyActionTableWidget implements HasRefresh
         }
         catch (ApException e)
         {
-            // TODO ошибка при загрузке данных
+            MessageBoxFactory.getErrorMessageBox(parent.getShell(), messages.getMessage(Messages.Keys.ERROR),
+                    messages.getMessage(Messages.Keys.ERROR_ON_LOAD_DATA)).open();
             e.printStackTrace();
         }
     }

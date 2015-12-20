@@ -19,8 +19,8 @@ public class Main
     {
         initializeAllServices();
         initializeApplicationContext();
-        // ServicesFactory.getInstance().getDaoCategory().create(new Category("test"));
-        // ServicesFactory.getInstance().getDaoCategory().create(new Category("test2"));
+        // ServicesFactory.getInstance().getDaoCategory().create(new Category("тест"));
+        // ServicesFactory.getInstance().getDaoCategory().create(new Category("тест2"));
         ApplicationGUI applicationGUI = new ApplicationGUI();
         applicationGUI.run();
     }

@@ -11,4 +11,10 @@ public class CategoryFactoryImpl implements CategoryFactory
         return new Category(id, title);
     }
 
+    @Override
+    public Category createCategory(String title)
+    {
+        return new Category(title);
+    }
+
 }

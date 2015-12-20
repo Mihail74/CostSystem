@@ -21,6 +21,7 @@ public class ApplicationContext
     public static final String TO_DATE = "toDate";
     public static final String TOTAL_INCOME_VALUE = "totalIncomeValue";
     public static final String TOTAL_EXPENSE_VALUE = "totalExpenseValue";
+    public static final String CATEGORY = "category";
 
     private static ApplicationContext instance = new ApplicationContext();
 

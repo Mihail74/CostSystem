@@ -1,5 +1,7 @@
 package ru.mkardaev.command;
 
+import org.apache.log4j.Logger;
+
 import ru.mkardaev.exception.ApException;
 import ru.mkardaev.factories.ServicesFactory;
 import ru.mkardaev.model.MoneyAction;
@@ -14,6 +16,7 @@ import ru.mkardaev.resources.ApplicationContext;
  */
 public class EditExpenseCommand extends CommandAdapter implements ICommand
 {
+    final static Logger logger = Logger.getLogger(EditExpenseCommand.class);
     private DAOMoneyAction moneyActionDAO;
 
     public EditExpenseCommand()
@@ -24,6 +27,8 @@ public class EditExpenseCommand extends CommandAdapter implements ICommand
     @Override
     public void perform() throws ApException
     {
-        moneyActionDAO.update(dtObject.<MoneyAction> getProperty(ApplicationContext.EXPENSE));
+        MoneyAction moneyAction = dtObject.<MoneyAction> getProperty(ApplicationContext.EXPENSE);
+        moneyActionDAO.update(moneyAction);
+        logger.info(String.format("Update MoneyAction id = %d", moneyAction.getId()));
     }
 }

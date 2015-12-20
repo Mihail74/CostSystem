@@ -11,7 +11,7 @@ import ru.mkardaev.exception.ApException;
 public interface InputProvider
 {
     /**
-     * Метод получения данных на клиенте
+     * Метод получения данных на формах
      * 
      * @param args - аргументы
      * @return

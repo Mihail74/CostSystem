@@ -46,7 +46,8 @@ public class EditIncomeForm extends MoneyActionFormBase
         }
         catch (ApException e)
         {
-            // TODO: Нормальное сообщение об ошибке
+            MessageBoxFactory.getErrorMessageBox(dialogShell, messages.getMessage(Messages.Keys.ERROR),
+                    messages.getMessage(Messages.Keys.ERROR_ON_LOAD_DATA)).open();
             e.printStackTrace();
         }
     }

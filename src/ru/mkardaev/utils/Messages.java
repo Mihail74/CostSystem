@@ -18,6 +18,7 @@ public class Messages
      */
     public static class Keys
     {
+        public static final String NEW_CATEGORY = "newCategory";
         public static final String ACCOUNT_BALANCE = "accountBalance";
         public static final String ADD_EXPENSE = "addExpense";
         public static final String ADD_EXPENSE_FORM_TITLE = "addExpenseFormTitle";
@@ -39,6 +40,15 @@ public class Messages
         public static final String TOTAL_EXPENSE = "totalExpense";
         public static final String TOTAL_INCOME = "totalIncome";
         public static final String VALUE = "value";
+        public static final String ADD_CATEGORY = "addCategory";
+        public static final String TITLE = "title";
+        public static final String SHOULD_BE_NUMBER = "shouldBeNumber";
+        public static final String TITLE_SHOULD_BE_NOT_EMPTY = "titleShouldBeNotEmpty";
+        public static final String CONFIRM_DELETE = "confirmDelete";
+        public static final String DO_YOU_SURE = "doYouSure";
+        public static final String ERROR = "error";
+        public static final String ERROR_ON_SAVE = "errorOnSave";
+        public static final String ERROR_ON_LOAD_DATA = "errorOnLoadData";
     }
 
     private static Locale defaultLocale;
