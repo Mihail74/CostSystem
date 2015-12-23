@@ -48,7 +48,7 @@ public class AddCategoryForm
         dialogShell = new Shell(display, SWT.APPLICATION_MODAL | SWT.SHELL_TRIM);
         dialogShell.setLayout(new GridLayout(1, true));
 
-        Image formImage = new Image(display, Resources.FORM_ICON_PATH);
+        Image formImage = new Image(display, getClass().getResourceAsStream(Resources.FORM_ICON_PATH));
         dialogShell.setImage(formImage);
         dialogShell.setText(messages.getMessage(Messages.Keys.ADD_CATEGORY));
 

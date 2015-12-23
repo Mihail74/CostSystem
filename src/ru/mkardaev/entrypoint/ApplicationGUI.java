@@ -34,7 +34,7 @@ public class ApplicationGUI
         Shell shell = new Shell(display, SWT.SHELL_TRIM);
         shell.setLayout(new GridLayout(1, true));
         shell.setText(messages.getMessage(Messages.Keys.APPLICATION_TITLE));
-        Image formImage = new Image(display, Resources.FORM_ICON_PATH);
+        Image formImage = new Image(display, getClass().getResourceAsStream(Resources.FORM_ICON_PATH));
         shell.setImage(formImage);
 
         MainForm mainForm = new MainForm(shell, display);

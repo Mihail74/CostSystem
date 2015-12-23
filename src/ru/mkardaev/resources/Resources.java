@@ -8,11 +8,11 @@ package ru.mkardaev.resources;
  */
 public class Resources
 {
-    public static final String DELETE_ICON_PATH = "delete.png";
+    public static final String DELETE_ICON_PATH = "/delete.png";
     /**
      * Путь к иконке для приложения
      */
-    public static final String FORM_ICON_PATH = "icon.png";
+    public static final String FORM_ICON_PATH = "/icon.png";
     /**
      * Название файла конфигурации
      */

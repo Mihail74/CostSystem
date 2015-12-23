@@ -278,7 +278,8 @@ public class MoneyActionTableWidget implements HasRefresh
                 else
                 {
                     button = new Button((Composite) cell.getViewerRow().getControl(), SWT.NONE);
-                    button.setImage(new Image(Display.getDefault(), Resources.DELETE_ICON_PATH));
+                    button.setImage(new Image(Display.getDefault(),
+                            getClass().getResourceAsStream(Resources.DELETE_ICON_PATH)));
                     buttons.put(cell.getElement(), button);
                 }
                 long moneyActionId = ((MoneyActionUIModel) cell.getElement()).getMoneyAction().getId();
