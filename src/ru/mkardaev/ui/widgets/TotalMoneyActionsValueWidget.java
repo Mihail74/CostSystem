@@ -7,8 +7,8 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
 import ru.mkardaev.command.DtObject;
-import ru.mkardaev.command.GetTotalMoneyActionValues;
 import ru.mkardaev.command.ICommand;
+import ru.mkardaev.command.moneyAction.GetTotalMoneyActionValues;
 import ru.mkardaev.exception.ApException;
 import ru.mkardaev.factories.ServicesFactory;
 import ru.mkardaev.resources.ApplicationContext;
@@ -35,8 +35,12 @@ public class TotalMoneyActionsValueWidget implements HasRefresh
     private Label totalIncomeValueLabel;
     private DateInterval dateInterval;
 
+    // Команда, которая будет выполняться при изменении dateInterval.
     private ICommand updateValuesCommand;
 
+    /**
+     * @param parent - composite на котором будет отображаться виджет
+     */
     public TotalMoneyActionsValueWidget(Composite parent)
     {
         this.parent = parent;
@@ -45,19 +49,23 @@ public class TotalMoneyActionsValueWidget implements HasRefresh
         updateValuesCommand = new GetTotalMoneyActionValues();
     }
 
+    /**
+     * Создает и отображает виджет
+     */
     public void bind()
     {
         Composite composite = toolKit.createComposite(parent);
         composite.setLayout(new GridLayout(2, true));
-        composite.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
         toolKit.createLabel(composite, messages.getMessage(Messages.Keys.TOTAL_EXPENSE));
         totalExpenseValueLabel = toolKit.createLabel(composite, "");
-        totalExpenseValueLabel.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
         toolKit.createLabel(composite, messages.getMessage(Messages.Keys.TOTAL_INCOME));
         totalIncomeValueLabel = toolKit.createLabel(composite, "");
+
+        composite.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
         totalIncomeValueLabel.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+        totalExpenseValueLabel.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
     }
 
     @Override
@@ -66,11 +74,18 @@ public class TotalMoneyActionsValueWidget implements HasRefresh
         updateValues();
     }
 
+    /**
+     * Задать интервал дат, для которых необходимо отображать суммарные расходы/доходы
+     * 
+     */
     public void setDateInterval(DateInterval dateInterval)
     {
         this.dateInterval = dateInterval;
     }
 
+    /**
+     * Обновляет поля на виджете
+     */
     private void updateValues()
     {
         if (dateInterval != null)
@@ -87,10 +102,6 @@ public class TotalMoneyActionsValueWidget implements HasRefresh
 
                 totalIncomeValueLabel.setText(String.format(MONEY_VALUE_PRINT_FORMAT, incomesValue));
                 totalExpenseValueLabel.setText(String.format(MONEY_VALUE_PRINT_FORMAT, expensesValue));
-
-                totalIncomeValueLabel.redraw();
-                parent.getShell().layout();
-
             }
             catch (ApException e)
             {

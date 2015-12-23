@@ -10,7 +10,6 @@ import ru.mkardaev.model.MoneyAction;
 
 public interface MoneyActionFactory
 {
-
     /**
      * Создаёт затрату с текущей датой создания.
      * 

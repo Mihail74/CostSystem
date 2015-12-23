@@ -1,8 +1,5 @@
 package ru.mkardaev.model;
 
-import javax.xml.bind.annotation.XmlRootElement;
-
-@XmlRootElement
 public class Category
 {
     public static long NEW_CATEGORY_ID = -1L;

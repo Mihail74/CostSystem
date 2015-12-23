@@ -26,5 +26,4 @@ public class Income extends MoneyAction
     {
         return String.format("Income: %d", getId());
     }
-
 }

@@ -26,5 +26,4 @@ public class Expense extends MoneyAction
     {
         return String.format("Expense: %d", this.getId());
     }
-
 }

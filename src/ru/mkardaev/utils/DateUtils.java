@@ -60,6 +60,11 @@ public class DateUtils
         return convertToGMT0Long(date, TimeZone.getTimeZone(properties.getProperty(Property.Keys.TIME_ZONE)));
     }
 
+    /**
+     * Возвращает Calendar с заданной датой.
+     * 
+     * @return
+     */
     public static Calendar getCaledar(Date date)
     {
         String TimeZoneId = ApplicationContext.getContext().<String> getData(Property.Keys.TIME_ZONE);
@@ -68,11 +73,22 @@ public class DateUtils
         return calendar;
     }
 
+    /**
+     * 
+     * @return Calendar с текущей датой
+     */
     public static Calendar getCurrentDate()
     {
         return getCaledar(new Date());
     }
 
+    /**
+     * 
+     * @param year
+     * @param month
+     * @param day
+     * @return Возвращает Date с заданными годом, месяцем, днём
+     */
     public static Date getDate(int year, int month, int day)
     {
         String TimeZoneId = ApplicationContext.getContext().<String> getData(Property.Keys.TIME_ZONE);
@@ -84,10 +100,9 @@ public class DateUtils
     }
 
     /**
-     * Возвращает время конца дня, т.е. для даты устанавливается время 23:59:59
      * 
      * @param date
-     * @return
+     * @return Возвращает конца дня, т.е. для даты устанавливается время 23:59:59
      */
     public static Date getEndDayOfDate(Date date)
     {
@@ -102,10 +117,9 @@ public class DateUtils
     }
 
     /**
-     * Возвращает время, убирая часы минуты и секунды. Т.е. возвращает начало дня
      * 
      * @param date
-     * @return
+     * @return Возвращает начало дня, т.е. выставляет часы минуты и секунды в 0.
      */
     public static Date getStartDayOfDate(Date date)
     {

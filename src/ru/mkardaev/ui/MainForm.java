@@ -14,15 +14,15 @@ import org.eclipse.swt.widgets.TabItem;
 import org.eclipse.ui.forms.widgets.Form;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
-import ru.mkardaev.command.OpenEditExpenseFormCommand;
-import ru.mkardaev.command.OpenEditIncomeFormCommand;
+import ru.mkardaev.command.expense.OpenEditExpenseFormCommand;
+import ru.mkardaev.command.income.OpenEditIncomeFormCommand;
 import ru.mkardaev.factories.ServicesFactory;
-import ru.mkardaev.ui.form.AddExpenseForm;
-import ru.mkardaev.ui.form.AddIncomeForm;
+import ru.mkardaev.ui.form.expense.AddExpenseForm;
+import ru.mkardaev.ui.form.income.AddIncomeForm;
 import ru.mkardaev.ui.models.DateInterval;
-import ru.mkardaev.ui.utils.ExpenseInputProvider;
-import ru.mkardaev.ui.utils.IncomeInputProvider;
-import ru.mkardaev.ui.utils.InputProvider;
+import ru.mkardaev.ui.providers.input.ExpenseInputProvider;
+import ru.mkardaev.ui.providers.input.IncomeInputProvider;
+import ru.mkardaev.ui.providers.input.InputProvider;
 import ru.mkardaev.ui.widgets.DateIntervalPickerWidget;
 import ru.mkardaev.ui.widgets.MoneyActionTableWidget;
 import ru.mkardaev.ui.widgets.TotalMoneyActionsValueWidget;
@@ -67,9 +67,9 @@ public class MainForm implements HasRefresh
     }
 
     /**
-     * Запускает процесс построения формы
+     * Строит, а затем открывает форму.
      */
-    public void bind()
+    public void open()
     {
         form = toolKit.createForm(shell);
         form.setLayoutData(new GridData(GridData.FILL_BOTH));
@@ -107,6 +107,11 @@ public class MainForm implements HasRefresh
         this.incomesInputProvider = incomesInputProvider;
     }
 
+    /**
+     * Создаёт виджет суммарных расходов/доходов
+     * 
+     * @param toolComposite
+     */
     private void crateTotalMoneyActionsValueComposite(Composite toolComposite)
     {
         totalMoneyActionsWidget = new TotalMoneyActionsValueWidget(toolComposite);
@@ -114,16 +119,11 @@ public class MainForm implements HasRefresh
         totalMoneyActionsWidget.bind();
     }
 
-    private void createBalanceComposite(Composite toolComposite)
-    {
-        // Данный функцинал не требуется, однако чтобы остлось пустое место оставлю composite
-        Composite balanceComposite = toolKit.createComposite(toolComposite);
-        balanceComposite.setLayout(new GridLayout(2, true));
-        balanceComposite.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-        // toolKit.createLabel(balanceComposite, messages.getMessage(Messages.Keys.ACCOUNT_BALANCE));
-        // balanceValue = toolKit.createLabel(balanceComposite, "");
-    }
-
+    /**
+     * Создаёт composite с кнопками добавления расходов и доходов
+     * 
+     * @param toolComposite
+     */
     private void createButtonComposite(Composite toolComposite)
     {
         Composite buttonComposite = toolKit.createComposite(toolComposite);
@@ -151,7 +151,7 @@ public class MainForm implements HasRefresh
                 if (e.type == SWT.Selection)
                 {
                     AddExpenseForm form = new AddExpenseForm();
-                    form.bind();
+                    form.open();
                     refresh();
                 }
             }
@@ -165,19 +165,36 @@ public class MainForm implements HasRefresh
                 if (e.type == SWT.Selection)
                 {
                     AddIncomeForm form = new AddIncomeForm();
-                    form.bind();
+                    form.open();
                     refresh();
                 }
             }
         });
     }
 
+    /**
+     * Создаёт виджет выбора интервала дат
+     * 
+     * @param toolComposite
+     */
     private void createDatePickerComposite(Composite toolComposite)
     {
         dateIntervalPicker = new DateIntervalPickerWidget(toolComposite);
         dateIntervalPicker.setDateInterval(dateInteraval);
         dateIntervalPicker.setParentForm(this);
         dateIntervalPicker.bind();
+    }
+
+    /**
+     * Создаёт пустой composite
+     * 
+     * @param toolComposite
+     */
+    private void createEmptyComposite(Composite toolComposite)
+    {
+        Composite balanceComposite = toolKit.createComposite(toolComposite);
+        balanceComposite.setLayout(new GridLayout(2, true));
+        balanceComposite.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
     }
 
     /**
@@ -214,8 +231,6 @@ public class MainForm implements HasRefresh
 
     /**
      * Создаёт верхную часть формы(над таблицей)
-     * 
-     * @param form
      */
     private void createToolComposite()
     {
@@ -224,7 +239,7 @@ public class MainForm implements HasRefresh
         toolComposite.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
         crateTotalMoneyActionsValueComposite(toolComposite);
-        createBalanceComposite(toolComposite);
+        createEmptyComposite(toolComposite);
         createDatePickerComposite(toolComposite);
         createButtonComposite(toolComposite);
     }

@@ -45,6 +45,10 @@ public class DateIntervalPickerWidget
         messages = ServicesFactory.getInstance().getMessages();
     }
 
+    /**
+     * Производит построение и последующее отображение виджета. Перед построением виджета необходимо установить модель интервала дат, см.
+     * {@link #setDateInterval(DateInterval)}
+     */
     public void bind()
     {
         Composite composite = toolKit.createComposite(parent);
@@ -61,9 +65,9 @@ public class DateIntervalPickerWidget
             }
 
             @Override
-            public void widgetSelected(SelectionEvent arg0)
+            public void widgetSelected(SelectionEvent event)
             {
-                DateTime newValue = ((DateTime) arg0.getSource());
+                DateTime newValue = ((DateTime) event.getSource());
                 dateInterval.setFromDate(getDate(newValue));
                 refreshParent();
             }
@@ -72,11 +76,11 @@ public class DateIntervalPickerWidget
         Label toLabel = toolKit.createLabel(composite, messages.getMessage(Messages.Keys.TO_DATE_LABEL));
         toDateTimePicker = new DateTime(composite, SWT.DROP_DOWN);
 
-        // для autoresize
         fromLabel.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
         fromDateTimePicker.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
         toLabel.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
         toDateTimePicker.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+
         toDateTimePicker.addSelectionListener(new SelectionListener()
         {
             @Override
@@ -102,13 +106,18 @@ public class DateIntervalPickerWidget
         return dateInterval;
     }
 
+    /**
+     * Устанавливает модель интервала дат в которую будут записываться выбранные даты.
+     * 
+     * @param dateInterval
+     */
     public void setDateInterval(DateInterval dateInterval)
     {
         this.dateInterval = dateInterval;
     }
 
     /**
-     * Устанавливает для виджета родительскую форму, имеющую метод refresh. При изменении данных на виджете будет вызываться parentForm.refresh()
+     * Устанавливает для виджета родительскую форму, имеющую метод refresh. При изменении выбранных дат будет вызываться parentForm.refresh()
      * 
      * @param parentForm
      */
@@ -117,6 +126,12 @@ public class DateIntervalPickerWidget
         this.parentForm = parentForm;
     }
 
+    /**
+     * Возвращает выбранную в виджете дату
+     * 
+     * @param dateTime - виджет выбора даты
+     * @return date
+     */
     private Date getDate(DateTime dateTime)
     {
         int year = dateTime.getYear();
@@ -128,6 +143,9 @@ public class DateIntervalPickerWidget
         return calendar.getTime();
     }
 
+    /**
+     * Производит обновление родителя при изменении модели выбранного интервала дат.
+     */
     private void refreshParent()
     {
         if (parentForm != null)

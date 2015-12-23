@@ -11,7 +11,7 @@ import ru.mkardaev.exception.ApException;
 public interface ICommand
 {
     /**
-     * Запускает выполнение комнды
+     * Запускает выполнение комнды. Результаты выполнения команды записываются в dtObject
      * 
      * @throws ApException
      */

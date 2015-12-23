@@ -9,8 +9,8 @@ import org.eclipse.swt.widgets.Shell;
 import ru.mkardaev.factories.ServicesFactory;
 import ru.mkardaev.resources.Resources;
 import ru.mkardaev.ui.MainForm;
-import ru.mkardaev.ui.utils.ExpenseInputProvider;
-import ru.mkardaev.ui.utils.IncomeInputProvider;
+import ru.mkardaev.ui.providers.input.ExpenseInputProvider;
+import ru.mkardaev.ui.providers.input.IncomeInputProvider;
 import ru.mkardaev.utils.Messages;
 
 /**
@@ -34,14 +34,15 @@ public class ApplicationGUI
         Shell shell = new Shell(display, SWT.SHELL_TRIM);
         shell.setLayout(new GridLayout(1, true));
         shell.setText(messages.getMessage(Messages.Keys.APPLICATION_TITLE));
-        shell.setImage(new Image(display, Resources.FORM_ICON_PATH));
+        Image formImage = new Image(display, Resources.FORM_ICON_PATH);
+        shell.setImage(formImage);
 
         MainForm mainForm = new MainForm(shell, display);
         mainForm.setExpensesInputProvider(new ExpenseInputProvider(ServicesFactory.getInstance().getDaoCategory(),
                 ServicesFactory.getInstance().getDaoMoneyAction()));
         mainForm.setIncomesInputProvider(new IncomeInputProvider(ServicesFactory.getInstance().getDaoCategory(),
                 ServicesFactory.getInstance().getDaoMoneyAction()));
-        mainForm.bind();
+        mainForm.open();
 
         shell.pack();
         shell.open();
@@ -53,5 +54,6 @@ public class ApplicationGUI
             }
         }
         display.dispose();
+        formImage.dispose();
     }
 }

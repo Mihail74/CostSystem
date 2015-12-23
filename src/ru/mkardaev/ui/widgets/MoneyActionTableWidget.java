@@ -27,9 +27,9 @@ import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableItem;
 
-import ru.mkardaev.command.DeleteMoneyActionCommand;
 import ru.mkardaev.command.DtObject;
 import ru.mkardaev.command.ICommand;
+import ru.mkardaev.command.moneyAction.DeleteMoneyActionCommand;
 import ru.mkardaev.exception.ApException;
 import ru.mkardaev.factories.ServicesFactory;
 import ru.mkardaev.resources.ApplicationContext;
@@ -38,8 +38,8 @@ import ru.mkardaev.ui.HasRefresh;
 import ru.mkardaev.ui.form.MessageBoxFactory;
 import ru.mkardaev.ui.models.DateInterval;
 import ru.mkardaev.ui.models.MoneyActionUIModel;
-import ru.mkardaev.ui.utils.InputProvider;
-import ru.mkardaev.ui.utils.MoneyActionUIModelSorter;
+import ru.mkardaev.ui.models.sorters.MoneyActionUIModelSorter;
+import ru.mkardaev.ui.providers.input.InputProvider;
 import ru.mkardaev.utils.DateUtils;
 import ru.mkardaev.utils.Messages;
 
@@ -95,8 +95,8 @@ public class MoneyActionTableWidget implements HasRefresh
     }
 
     /**
-     * Производит построение виджета. До начала построения необходимо установить виджету интервал времени для которого необходимо отображать данны и
-     * InputProvider, предоставляющий данные для таблицы, используя методы {@link #setDateInterval(DateInterval))},
+     * Производит построение виджета. До начала построения необходимо установить виджету интервал времени для которого необходимо отображать данные и
+     * InputProvider, предоставляющий данные для таблицы, используя методы {@link #setDateInterval(DateInterval)},
      * {@link #setMoneyActionInputProvider(InputProvider)}
      */
     public void bind()
@@ -173,7 +173,7 @@ public class MoneyActionTableWidget implements HasRefresh
     }
 
     /**
-     * Устанавливает интервал дат для которых будут отображаться доходы/расходы
+     * Устанавливает модель интервала времени для которого будут отображаться доходы/расходы
      * 
      * @param dateInterval
      */
@@ -182,11 +182,17 @@ public class MoneyActionTableWidget implements HasRefresh
         this.dateInterval = dateInterval;
     }
 
+    /**
+     * Задает команду, которая будет выполняться при двойном клике на строке таблицы
+     */
     public void setDoubleClickTableCommand(ICommand doubleClickTableCommand)
     {
         this.doubleClickTableCommand = doubleClickTableCommand;
     }
 
+    /**
+     * Задает провайдер данных для таблицы
+     */
     public void setMoneyActionInputProvider(InputProvider moneyActionInputProvider)
     {
         this.moneyActionInputProvider = moneyActionInputProvider;
@@ -207,7 +213,6 @@ public class MoneyActionTableWidget implements HasRefresh
         TableViewerColumn dateColumn = new TableViewerColumn(tableViewer, SWT.NONE);
         dateColumn.getColumn().setText(messages.getMessage(Messages.Keys.CREATION_DATE));
 
-        // Label providers
         dateColumn.setLabelProvider(new ColumnLabelProvider()
         {
             @Override
@@ -331,7 +336,6 @@ public class MoneyActionTableWidget implements HasRefresh
 
         });
 
-        // Column Sort
         dateColumn.getColumn().addSelectionListener(new SelectionAdapter()
         {
             @Override

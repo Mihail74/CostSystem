@@ -33,10 +33,11 @@ import ru.mkardaev.factories.ServicesFactory;
 import ru.mkardaev.model.Category;
 import ru.mkardaev.model.MoneyAction;
 import ru.mkardaev.resources.Resources;
-import ru.mkardaev.ui.utils.CategoryInputProvider;
-import ru.mkardaev.ui.utils.CategoryLabelProvider;
-import ru.mkardaev.ui.utils.CategorySorter;
-import ru.mkardaev.ui.utils.InputProvider;
+import ru.mkardaev.ui.form.category.AddCategoryForm;
+import ru.mkardaev.ui.models.sorters.CategorySorter;
+import ru.mkardaev.ui.providers.input.CategoryInputProvider;
+import ru.mkardaev.ui.providers.input.InputProvider;
+import ru.mkardaev.ui.providers.label.CategoryLabelProvider;
 import ru.mkardaev.utils.DateUtils;
 import ru.mkardaev.utils.Messages;
 
@@ -65,7 +66,7 @@ public abstract class MoneyActionFormBase
     protected MoneyAction moneyAction;
     protected InputProvider categoryInputProvider;
     /**
-     * Команда, которые необходимо выполнить при сохранении
+     * Команда, которую выполняетя при сохранении
      */
     protected ICommand saveCommand;
 
@@ -75,7 +76,15 @@ public abstract class MoneyActionFormBase
         categoryInputProvider = new CategoryInputProvider();
     }
 
-    public void bind()
+    public void init(MoneyAction moneyAction)
+    {
+        this.moneyAction = moneyAction;
+    }
+
+    /**
+     * Создаёт и открывает форму.
+     */
+    public void open()
     {
         Display display = Display.getDefault();
         dialogShell = new Shell(display, SWT.APPLICATION_MODAL | SWT.SHELL_TRIM);
@@ -98,16 +107,14 @@ public abstract class MoneyActionFormBase
         formImage.dispose();
     }
 
-    public void init(MoneyAction moneyAction)
-    {
-        this.moneyAction = moneyAction;
-    }
-
     public void setSaveCommand(ICommand saveAction)
     {
         this.saveCommand = saveAction;
     }
 
+    /**
+     * Метод инициализации дополнительных настроек, например заголовка формы и т.п.
+     */
     protected abstract void initializeValue();
 
     /**
@@ -234,7 +241,6 @@ public abstract class MoneyActionFormBase
         valueText = new Text(composite, SWT.BORDER);
         valueText.addVerifyListener(new VerifyListener()
         {
-
             @Override
             public void verifyText(VerifyEvent e)
             {
@@ -306,11 +312,11 @@ public abstract class MoneyActionFormBase
         {
             saveCommand.perform();
         }
-        catch (Exception e1)
+        catch (ApException ex)
         {
             MessageBoxFactory.getErrorMessageBox(dialogShell, messages.getMessage(Messages.Keys.ERROR),
                     messages.getMessage(Messages.Keys.ERROR_ON_SAVE)).open();
-            e1.printStackTrace();
+            ex.printStackTrace();
         }
         dialogShell.dispose();
     }
