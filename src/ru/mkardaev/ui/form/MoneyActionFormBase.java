@@ -309,7 +309,7 @@ public abstract class MoneyActionFormBase
     {
         if (!validate())
         {
-            okButton.setToolTipText("Необходимо заполнить все поля");
+            okButton.setToolTipText(messages.getMessage(Messages.Keys.NOT_FULL_REQUIRED_FIELDS));
             return;
         }
         onApply();
@@ -328,7 +328,6 @@ public abstract class MoneyActionFormBase
 
     private boolean validate()
     {
-        // TODO Auto-generated method stub
-        return false;
+        return !(valueText.getText().isEmpty() || categoryCombo.getSelection().isEmpty());
     }
 }

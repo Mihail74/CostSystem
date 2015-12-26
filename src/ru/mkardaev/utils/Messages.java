@@ -49,6 +49,7 @@ public class Messages
         public static final String ERROR = "error";
         public static final String ERROR_ON_SAVE = "errorOnSave";
         public static final String ERROR_ON_LOAD_DATA = "errorOnLoadData";
+        public static final String NOT_FULL_REQUIRED_FIELDS = "notFullRequiredFields";
     }
 
     private static Locale defaultLocale;
