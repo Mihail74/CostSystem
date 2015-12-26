@@ -307,6 +307,11 @@ public abstract class MoneyActionFormBase
      */
     private void save()
     {
+        if (!validate())
+        {
+            okButton.setToolTipText("Необходимо заполнить все поля");
+            return;
+        }
         onApply();
         try
         {
@@ -319,5 +324,11 @@ public abstract class MoneyActionFormBase
             ex.printStackTrace();
         }
         dialogShell.dispose();
+    }
+
+    private boolean validate()
+    {
+        // TODO Auto-generated method stub
+        return false;
     }
 }
