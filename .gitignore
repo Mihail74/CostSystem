@@ -1,0 +1,19 @@
+#*******************************************************************
+#java specific
+*.class
+#*******************************************************************
+#eclipse specific
+.project
+*/.project
+
+.settings
+*/.settings
+
+.externalToolBuilders
+*/.externalToolBuilders
+
+.classpath
+*/.classpath
+#*******************************************************************
+*.log
+CS
