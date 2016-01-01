@@ -137,10 +137,12 @@ public class ConnectionService
 
         try (Statement stmt = getConnection().createStatement())
         {
-            ResultSet rs = stmt.executeQuery("SELECT id, value FROM account FETCH FIRST 1 ROWS ONLY");
-            if (rs.next())
+            try (ResultSet rs = stmt.getGeneratedKeys())
             {
-                currentAccount = accountFactory.createAccount(rs.getLong(1), rs.getLong(2));
+                if (rs.next())
+                {
+                    currentAccount = accountFactory.createAccount(rs.getLong(1), rs.getLong(2));
+                }
             }
         }
         try (Statement stmt = getConnection().createStatement())
@@ -160,6 +162,7 @@ public class ConnectionService
             {
                 currentPerson = personFactory.createPerson(rs.getLong(1), rs.getLong(2));
             }
+            rs.close();
         }
 
         if (currentAccount == null)
@@ -168,9 +171,11 @@ public class ConnectionService
                     Statement.RETURN_GENERATED_KEYS))
             {
                 stmt.executeUpdate();
-                ResultSet rs = stmt.getGeneratedKeys();
-                rs.next();
-                currentAccount = accountFactory.createAccount(rs.getLong(1), 0L);
+                try (ResultSet rs = stmt.getGeneratedKeys())
+                {
+                    rs.next();
+                    currentAccount = accountFactory.createAccount(rs.getLong(1), 0L);
+                }
             }
         }
         if (currentPerson == null)
@@ -180,9 +185,11 @@ public class ConnectionService
                     Statement.RETURN_GENERATED_KEYS))
             {
                 stmt.executeUpdate();
-                ResultSet rs = stmt.getGeneratedKeys();
-                rs.next();
-                currentPerson = personFactory.createPerson(rs.getLong(1), currentAccount.getId());
+                try (ResultSet rs = stmt.getGeneratedKeys())
+                {
+                    rs.next();
+                    currentPerson = personFactory.createPerson(rs.getLong(1), currentAccount.getId());
+                }
             }
         }
         ApplicationContext.getContext().putData(ApplicationContext.CURRENT_ACCOUNT, currentAccount);
@@ -196,17 +203,12 @@ public class ConnectionService
     {
         List<String> existingTables = new ArrayList<>();
         DatabaseMetaData meta = con.getMetaData();
-        ResultSet res = meta.getTables(null, null, null, new String[] { "TABLE" });
-        try
+        try (ResultSet res = meta.getTables(null, null, null, new String[] { "TABLE" }))
         {
             while (res.next())
             {
                 existingTables.add(res.getString("TABLE_NAME").toLowerCase());
             }
-        }
-        finally
-        {
-            res.close();
         }
         return existingTables;
     }
